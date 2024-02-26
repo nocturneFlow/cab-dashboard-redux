@@ -1,0 +1,97 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url  	    = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model Taxipark {
+  id            String           @id @default(uuid())
+  name          String
+  userId        String
+  tables        Table[]          @relation("TaxiparkToTable")
+  createdAt     DateTime         @default(now())
+  updatedAt     DateTime         @updatedAt
+}
+
+model Table {
+  id          String             @id @default(uuid())
+  label       String
+  taxiparkId  String
+  taxipark    Taxipark           @relation("TaxiparkToTable", fields: [taxiparkId], references: [id])
+  application ApplicationTable[] @relation("TableToApplication")
+  costs       CostsTable[]       @relation("TableToCosts")
+
+  @@index([taxiparkId])
+}
+
+model ApplicationTable {
+  id          String             @id @default(uuid())
+  tableId     String
+  table       Table              @relation("TableToApplication", fields: [tableId], references: [id])
+  manager     String
+  taxipark    String
+  fullname    String
+  carNumber   String
+  schedule    Schedule
+  lineTime    Int
+  createdAt     DateTime         @default(now())
+  updatedAt     DateTime         @updatedAt
+}
+
+model CostsTable {
+  id          String             @id @default(uuid())
+  tableId     String
+  table       Table              @relation("TableToCosts", fields: [tableId], references: [id])
+  carNumber   String
+  taxipark    String
+  manager     String
+  fullname    String
+  createdAt     DateTime         @default(now())
+  updatedAt     DateTime         @updatedAt
+}
+
+enum Schedule {
+  Day
+  Night
+  Shift
+  Dayoff
+  Simple
+}
+
+enum PaymentType {
+  Kaspi
+  Cashier
+}
+
+enum BenefitType {
+  Kaspi
+  Cash
+  Noncash
+}
+
+enum CostItem {
+  Vulcanisation
+  Washing
+  Oil
+  Evacuator
+  Customer  
+  Antifreeze
+  Carpark
+  Petrol
+  Lightbulb
+  NonFreeze
+  Balance
+  Accident
+  HouseholdExpenses
+  CigaretteLigher
+  TyreService
+  Tip
+  Repair
+}
