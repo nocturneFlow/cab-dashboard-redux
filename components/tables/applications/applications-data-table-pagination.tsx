@@ -37,6 +37,7 @@ import {
 } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { AddApplicationModal } from "@/components/modals/add-application-modal";
+import { DatePickerWithRange } from "@/components/modals/date-picker";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -83,13 +84,7 @@ export function ApplicationsDataTable<TData, TValue>({
           }
           className="max-w-sm"
         />
-        {/* <Button
-          onClick={() =>
-            router.push(`/${params.taxiparkId}/tables/applications/new`)
-          }
-        >
-          <Plus className="w-4 h-4" />
-        </Button> */}
+        <DatePickerWithRange />
         <AddApplicationModal />
       </div>
       <div className="rounded-md border">

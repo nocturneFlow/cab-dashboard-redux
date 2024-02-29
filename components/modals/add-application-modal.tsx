@@ -16,22 +16,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import {
-  Carousel,
-  CarouselApi,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from "@/components/ui/carousel";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -41,28 +25,6 @@ import { ScrollArea } from "../ui/scroll-area";
 import { Separator } from "../ui/separator";
 
 export const AddApplicationModal = () => {
-  const [api, setApi] = React.useState<CarouselApi>();
-  const [current, setCurrent] = React.useState(0);
-  const [count, setCount] = React.useState(0);
-
-  React.useEffect(() => {
-    if (!api) {
-      return;
-    }
-
-    setCount(api.scrollSnapList().length);
-    setCurrent(api.selectedScrollSnap() + 1);
-
-    api.on("select", () => {
-      console.log("current");
-      setCurrent(api.selectedScrollSnap() + 1);
-    });
-  }, [api]);
-
-  const tags = Array.from({ length: 50 }).map(
-    (_, i, a) => `v1.2.0-beta.${a.length - i}`
-  );
-
   return (
     <Dialog>
       <DialogTrigger asChild>

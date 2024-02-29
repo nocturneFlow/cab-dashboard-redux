@@ -15,7 +15,8 @@ import {
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
 
-import { CarTaxiFront } from "lucide-react";
+import { CarTaxiFront, GanttChart } from "lucide-react";
+import { Button } from "./ui/button";
 
 export function MainNav({
   className,
@@ -27,39 +28,64 @@ export function MainNav({
   const tables: { title: string; href: string; description: string }[] = [
     {
       title: "Заявки",
-      href: `/${params.taxiparkId}/tables/applications`,
+      href: `/tables/applications`,
       description: "Текст для пояснения о таблице с заявками",
     },
     {
       title: "Отчеты",
-      href: `/${params.taxiparkId}/tables/reports`,
+      href: `/tables/reports`,
       description: "Текст для пояснения о таблице с отчетами",
     },
     {
       title: "Водители",
-      href: `/${params.taxiparkId}/tables/drivers`,
+      href: `/tables/drivers`,
       description: "Текст для пояснения о таблице с водителями",
     },
     {
       title: "Машины",
-      href: `/${params.taxiparkId}/tables/cars`,
+      href: `/tables/cars`,
       description: "Текст для пояснения о таблице с машинами",
     },
     {
       title: "Зарплата",
-      href: `/${params.taxiparkId}/tables/salaries`,
+      href: `/tables/salaries`,
       description: "Текст для пояснения о таблице с зарплатами",
     },
     {
       title: "Штрафы",
-      href: `/${params.taxiparkId}/tables/penalties`,
+      href: `/tables/penalties`,
       description: "Текст для пояснения о таблице с штрафами",
+    },
+  ];
+
+  const dashboard: { title: string; href: string; description: string }[] = [
+    {
+      title: "Элемент 1",
+      href: `/dashboard/1`,
+      description: "Текст для пояснения о таблице с отчетами",
+    },
+    {
+      title: "Элемент 2",
+      href: `/dashboard/2`,
+      description: "Текст для пояснения о таблице с водителями",
+    },
+    {
+      title: "Элемент 3",
+      href: `/dashboard/3`,
+      description: "Текст для пояснения о таблице с машинами",
     },
   ];
 
   return (
     <NavigationMenu className="pl-5">
       <NavigationMenuList>
+        <NavigationMenuItem className="pr-4">
+          <NavigationMenuLink asChild>
+            <a href={`/`}>
+              <GanttChart size="32px" />
+            </a>
+          </NavigationMenuLink>
+        </NavigationMenuItem>
         <NavigationMenuItem>
           <NavigationMenuTrigger>Сводка</NavigationMenuTrigger>
           <NavigationMenuContent>
@@ -68,10 +94,10 @@ export function MainNav({
                 <NavigationMenuLink asChild>
                   <a
                     className="flex h-full w-full select-none flex-col justify-end rounded-md bg-gradient-to-b from-muted/50 to-muted p-6 no-underline outline-none focus:shadow-md"
-                    href={`/${params.taxiparkId}`}
+                    href={`/`}
                   >
                     <CarTaxiFront className="h-6 w-6" />
-                    <div className="mb-2 mt-4 text-lg font-medium">Сводка</div>
+                    <div className="mb-2 mt-4 text-lg font-medium">Главная</div>
                     <p className="text-sm leading-tight text-muted-foreground">
                       Интерактивный дэшборд, который позволяет вам быстро
                       просматривать ключевые показатели
@@ -79,15 +105,15 @@ export function MainNav({
                   </a>
                 </NavigationMenuLink>
               </li>
-              <ListItem href="" title="Элемент 1">
-                Текст для элемента 1
-              </ListItem>
-              <ListItem href="" title="Элемент 2">
-                Текст для элемента 2
-              </ListItem>
-              <ListItem href="" title="Элемент 3">
-                Текст для элемента 3
-              </ListItem>
+              {dashboard.map((dashboard) => (
+                <ListItem
+                  key={dashboard.title}
+                  title={dashboard.title}
+                  href={dashboard.href}
+                >
+                  {dashboard.description}
+                </ListItem>
+              ))}
             </ul>
           </NavigationMenuContent>
         </NavigationMenuItem>
@@ -108,7 +134,7 @@ export function MainNav({
           </NavigationMenuContent>
         </NavigationMenuItem>
         <NavigationMenuItem>
-          <Link href={`/${params.taxiparkId}/settings`} legacyBehavior passHref>
+          <Link href={`/settings`} legacyBehavior passHref>
             <NavigationMenuLink className={navigationMenuTriggerStyle()}>
               Настройки
             </NavigationMenuLink>
