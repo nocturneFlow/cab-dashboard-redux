@@ -16,7 +16,6 @@ import {
 } from "@/components/ui/navigation-menu";
 
 import { CarTaxiFront, GanttChart } from "lucide-react";
-import { Button } from "./ui/button";
 
 export function MainNav({
   className,
@@ -37,9 +36,9 @@ export function MainNav({
       description: "Текст для пояснения о таблице с отчетами",
     },
     {
-      title: "Водители",
-      href: `/tables/drivers`,
-      description: "Текст для пояснения о таблице с водителями",
+      title: "Касса Менеджера",
+      href: `/tables/kassa`,
+      description: "Текст для пояснения о таблице с кассой менеджера",
     },
     {
       title: "Машины",
@@ -55,6 +54,21 @@ export function MainNav({
       title: "Штрафы",
       href: `/tables/penalties`,
       description: "Текст для пояснения о таблице с штрафами",
+    },
+    {
+      title: "Масло",
+      href: `/tables/oil`,
+      description: "Текст для пояснения о таблице с маслом",
+    },
+    {
+      title: "Расходы Менеджера",
+      href: `/tables/expenses`,
+      description: "Текст для пояснения о таблице с расходами",
+    },
+    {
+      title: "Сверка Кассы",
+      href: `/tables/CashReconciliation`,
+      description: "Текст для пояснения о таблице со сверкой кассы",
     },
   ];
 

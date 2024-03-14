@@ -4,7 +4,7 @@ import * as React from "react";
 import { CalendarIcon } from "@radix-ui/react-icons";
 import { addDays, format } from "date-fns";
 import { DateRange } from "react-day-picker";
-
+import { ru } from "date-fns/locale";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
@@ -18,8 +18,8 @@ export function DatePickerWithRange({
   className,
 }: React.HTMLAttributes<HTMLDivElement>) {
   const [date, setDate] = React.useState<DateRange | undefined>({
-    from: new Date(2022, 0, 20),
-    to: addDays(new Date(2022, 0, 20), 20),
+    from: new Date(),
+    to: addDays(new Date(), 20),
   });
 
   return (
@@ -38,11 +38,11 @@ export function DatePickerWithRange({
             {date?.from ? (
               date.to ? (
                 <>
-                  {format(date.from, "LLL dd, y")} -{" "}
-                  {format(date.to, "LLL dd, y")}
+                  {format(date.from, "LLL dd, y", { locale: ru })} -{" "}
+                  {format(date.to, "LLL dd, y", { locale: ru })}
                 </>
               ) : (
-                format(date.from, "LLL dd, y")
+                format(date.from, "LLL dd, y", { locale: ru })
               )
             ) : (
               <span>Pick a date</span>
@@ -56,10 +56,9 @@ export function DatePickerWithRange({
             defaultMonth={date?.from}
             selected={date}
             onSelect={setDate}
-            numberOfMonths={2}
-            captionLayout="dropdown-buttons"
-            fromYear={1990}
-            toYear={2024}
+            numberOfMonths={1}
+            locale={ru}
+            // captionLayout="dropdown-buttons"
           />
         </PopoverContent>
       </Popover>

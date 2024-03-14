@@ -1,16 +1,19 @@
 import type { Metadata } from "next";
-import { Open_Sans } from "next/font/google";
+import { Manrope, Open_Sans } from "next/font/google";
 import { ClerkProvider } from "@clerk/nextjs";
 import { dark } from "@clerk/themes";
 import { ruRU } from "@clerk/localizations";
-import { ToasterProvider } from "@/providers/toast-provider";
+import { Toaster } from "@/components/ui/toaster";
 import { ThemeProvider } from "@/components/theme-provider";
+
 import "./globals.css";
 
-const openSans = Open_Sans({ subsets: ["latin"] });
+const font = Open_Sans({
+  subsets: ["latin"],
+});
 
 export const metadata: Metadata = {
-  title: "Nomad Taxi",
+  title: "TaxiDashboard",
   description: "Создано командой студентов IITU",
 };
 
@@ -31,14 +34,14 @@ export default function RootLayout({
       }}
     >
       <html lang="en">
-        <body className={openSans.className}>
+        <body className={font.className}>
           <ThemeProvider
             attribute="class"
             defaultTheme="system"
             enableSystem
             disableTransitionOnChange
           >
-            <ToasterProvider />
+            <Toaster />
             {children}
           </ThemeProvider>
         </body>

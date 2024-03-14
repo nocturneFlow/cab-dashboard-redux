@@ -1,5 +1,3 @@
-"use client";
-
 import * as React from "react";
 import {
   ColumnDef,
@@ -21,27 +19,36 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Plus } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import { Label } from "@/components/ui/label";
 import { AddApplicationModal } from "@/components/modals/add-application-modal";
 import { DatePickerWithRange } from "@/components/modals/date-picker";
+import GetAllApplications, {
+  Application,
+  Car,
+} from "@/app/(taxipark)/(routes)/tables/components/columns/applications";
+import { DataTablePagination } from "./data-table-pagination";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { useState } from "react";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
+  onEdit: (application: Application) => void;
 }
 
 export function ApplicationsDataTable<TData, TValue>({
@@ -68,19 +75,38 @@ export function ApplicationsDataTable<TData, TValue>({
     },
   });
 
-  const router = useRouter();
-  const params = useParams();
+  const [expandedRowIds, setExpandedRowIds] = React.useState<Set<string>>(
+    new Set()
+  );
+
+  const toggleRow = (rowId: string) => {
+    const newExpandedRowIds = new Set(expandedRowIds);
+    if (newExpandedRowIds.has(rowId)) {
+      newExpandedRowIds.delete(rowId);
+    } else {
+      newExpandedRowIds.add(rowId);
+    }
+    setExpandedRowIds(newExpandedRowIds);
+  };
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
 
   return (
-    <div>
+    <div className="space-y-4">
       <div className="flex items-center justify-between py-4">
         <Input
-          placeholder="Поиск по номеру машины.."
-          value={
-            (table.getColumn("carNumber")?.getFilterValue() as string) ?? ""
-          }
+          placeholder="Поиск по номеру машины..."
+          value={(table.getColumn("car")?.getFilterValue() as string) ?? ""}
           onChange={(event) =>
-            table.getColumn("carNumber")?.setFilterValue(event.target.value)
+            table.getColumn("car")?.setFilterValue(event.target.value)
           }
           className="max-w-sm"
         />
@@ -137,24 +163,7 @@ export function ApplicationsDataTable<TData, TValue>({
           </TableBody>
         </Table>
       </div>
-      <div className="flex items-center justify-end space-x-2 py-4">
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => table.previousPage()}
-          disabled={!table.getCanPreviousPage()}
-        >
-          Назад
-        </Button>
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => table.nextPage()}
-          disabled={!table.getCanNextPage()}
-        >
-          Вперед
-        </Button>
-      </div>
+      <DataTablePagination table={table} />
     </div>
   );
 }
