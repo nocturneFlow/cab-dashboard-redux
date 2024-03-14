@@ -26,11 +26,24 @@ import { useState, useEffect } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
 
 interface Driver {
   id: string;
   first_name: string;
   last_name: string;
+}
+
+interface Car {
+  id: string;
+  model: string;
+  plate_number: string;
 }
 
 const formSchema = z.object({
@@ -40,10 +53,12 @@ const formSchema = z.object({
   last_name: z.string().min(1, {
     message: "Поле должно быть заполнено.",
   }),
+  car: z.string().nonempty("Поле должно быть выбрано."),
 });
 
 export const AddDriverModal = () => {
   const [drivers, setDrivers] = useState<Driver[]>([]);
+  const [cars, setCars] = useState<Car[]>([]);
   const { toast } = useToast();
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -51,6 +66,7 @@ export const AddDriverModal = () => {
     defaultValues: {
       first_name: "",
       last_name: "",
+      car: "",
     },
   });
 
@@ -67,14 +83,37 @@ export const AddDriverModal = () => {
     }
   };
 
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = async () => {
+    try {
+      const response = await fetch(
+        "http://localhost:8080/applications/addApplication"
+      );
+      if (!response.ok) {
+        throw new Error("Failed to fetch data");
+      }
+      const data = await response.json();
+      setCars(data.cars);
+      setDrivers(data.drivers);
+      console.log("Received data:", data);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
       const first_name = values.first_name;
       const last_name = values.last_name;
+      const carId = values.car.split(" ")[0];
 
       const dataToSend = {
         first_name: first_name,
         last_name: last_name,
+        car_id: carId,
       };
 
       const response = await fetch("http://localhost:8080/drivers/addDriver", {
@@ -153,6 +192,37 @@ export const AddDriverModal = () => {
                       />
                     </FormControl>
                     <FormDescription>Введите фамилию водителя.</FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="car"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Номер машины</FormLabel>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
+                      <FormControl>
+                        <SelectTrigger id="carNumber">
+                          <SelectValue placeholder="Выбрать" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent position="popper">
+                        {cars.map((car) => (
+                          <SelectItem
+                            key={car.id}
+                            value={`${car.id} ${car.model}`}
+                          >
+                            {`${car.plate_number}`}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <FormDescription></FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}
