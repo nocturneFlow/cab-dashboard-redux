@@ -1,7 +1,6 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
-
 import React, { useState } from "react";
 import { ApplicationsDataTable } from "@/components/tables/applications/applications-data-table-pagination";
 import { fetchApplicationsData } from "../../applications/action/fetchApplicationData";
@@ -44,14 +43,8 @@ import {
   PanelBottomOpen,
   PenLine,
 } from "lucide-react";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
+import { CellAction } from "../cell-action";
+import { EditApplicationModal } from "@/components/modals/edit-application-modal";
 
 export interface Car {
   id: number;
@@ -130,7 +123,6 @@ export interface Application {
   };
   expenseApl: ExpenseApl;
   onDelete: (id: number) => void;
-  onEdit: (application: Application) => void;
 }
 
 export const columns: ColumnDef<Application>[] = [
@@ -184,14 +176,14 @@ export const columns: ColumnDef<Application>[] = [
           <div>
             <Sheet>
               <SheetTrigger>
-                <Button variant="ghost">
+                <Button variant="ghost" className="h-8 w-8 p-0">
                   <PanelBottomOpen className="w-4 h-4" />
                 </Button>
               </SheetTrigger>
               <SheetContent className="backdrop-blur">
                 <SheetHeader>
                   <SheetDescription className="p-20 ">
-                    <Accordion type="single" collapsible>
+                    <Accordion type="multiple">
                       <AccordionItem value="item-1">
                         <AccordionTrigger>
                           <SheetTitle>Яндекс</SheetTitle>
@@ -358,10 +350,7 @@ export const columns: ColumnDef<Application>[] = [
           <DropdownMenuContent>
             <DropdownMenuLabel>Действие</DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
-              <PenLine className="w-4 h-4" />
-              <span className="pl-2">Изменить</span>
-            </DropdownMenuItem>
+            <EditApplicationModal data={row.original} />
             <DropdownMenuItem
               onClick={() => row.original.onDelete(row.original.id)}
             >
@@ -373,48 +362,21 @@ export const columns: ColumnDef<Application>[] = [
       );
     },
   },
+  // {
+  //   id: "actionsTwo",
+  //   cell: ({ row }) => <CellAction data={row.original} />,
+  // },
 ];
 
 export default function GetAllApplications() {
   const [dataApplications, setDataApplications] = React.useState<Application[]>(
     []
   );
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [currentApplication, setCurrentApplication] =
-    useState<Application | null>(null);
-  const [updatedData, setUpdatedData] = useState<Application | null>(null);
-
-  // ...
-
-  const handleOpenModal = (application: Application) => {
-    setCurrentApplication(application);
-    setIsModalOpen(true);
-  };
-
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
-  };
-
-  const handleSave = () => {
-    if (currentApplication && updatedData) {
-      handleUpdate(currentApplication.id, updatedData);
-    }
-    setIsModalOpen(false);
-  };
-
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setUpdatedData({
-      ...updatedData,
-      [event.target.name]: event.target.value,
-      id: updatedData?.id ?? null,
-    });
-  };
 
   React.useEffect(() => {
     async function fetchDataApplications() {
       try {
         const applicationsData = await fetchApplicationsData(); // Получение данных из вашего API
-
         // Преобразование даты в удобочитаемый формат
         const formattedApplicationsData = applicationsData.map(
           (application) => ({
@@ -436,17 +398,6 @@ export default function GetAllApplications() {
     fetchDataApplications();
   }, []);
 
-  const handleUpdate = async (id: number, updatedData: Application) => {
-    try {
-      await updateApplication(id, updatedData); // Call API to update application
-      setDataApplications((prevData) =>
-        prevData.map((app) => (app.id === id ? updatedData : app))
-      );
-    } catch (error) {
-      console.error("Error updating application:", error);
-    }
-  };
-
   const handleDelete = async (id: number) => {
     try {
       await deleteApplication(id); // Call API to delete application
@@ -465,7 +416,6 @@ export default function GetAllApplications() {
         ...application,
         onDelete: handleDelete,
       }))}
-      onEdit={handleOpenModal}
     />
   );
 }

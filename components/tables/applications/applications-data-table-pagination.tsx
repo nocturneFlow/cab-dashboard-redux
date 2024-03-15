@@ -2,6 +2,7 @@ import * as React from "react";
 import {
   ColumnDef,
   ColumnFiltersState,
+  Row,
   SortingState,
   flexRender,
   getCoreRowModel,
@@ -19,36 +20,19 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "@/components/ui/collapsible";
 
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useParams, useRouter } from "next/navigation";
 import { AddApplicationModal } from "@/components/modals/add-application-modal";
 import { DatePickerWithRange } from "@/components/modals/date-picker";
-import GetAllApplications, {
-  Application,
-  Car,
-} from "@/app/(taxipark)/(routes)/tables/components/columns/applications";
+import { Application } from "@/app/(taxipark)/(routes)/tables/components/columns/applications";
 import { DataTablePagination } from "./data-table-pagination";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+
 import { useState } from "react";
+import { Button } from "@/components/ui/button";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
-  onEdit: (application: Application) => void;
 }
 
 export function ApplicationsDataTable<TData, TValue>({
@@ -74,30 +58,6 @@ export function ApplicationsDataTable<TData, TValue>({
       columnFilters,
     },
   });
-
-  const [expandedRowIds, setExpandedRowIds] = React.useState<Set<string>>(
-    new Set()
-  );
-
-  const toggleRow = (rowId: string) => {
-    const newExpandedRowIds = new Set(expandedRowIds);
-    if (newExpandedRowIds.has(rowId)) {
-      newExpandedRowIds.delete(rowId);
-    } else {
-      newExpandedRowIds.add(rowId);
-    }
-    setExpandedRowIds(newExpandedRowIds);
-  };
-
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const openModal = () => {
-    setIsModalOpen(true);
-  };
-
-  const closeModal = () => {
-    setIsModalOpen(false);
-  };
 
   return (
     <div className="space-y-4">

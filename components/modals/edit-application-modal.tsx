@@ -27,13 +27,15 @@ import {
 import { useToast } from "@/components/ui/use-toast";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, ArrowRight, Plus } from "lucide-react";
+import { ArrowLeft, ArrowRight, Edit } from "lucide-react";
 import * as React from "react";
 import { useState, useEffect } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { cn } from "@/lib/utils";
+import { DropdownMenu, DropdownMenuItem } from "../ui/dropdown-menu";
+import { Application } from "@/app/(taxipark)/(routes)/tables/components/columns/applications";
 
 interface Manager {
   id: string;
@@ -224,7 +226,17 @@ const fifthPageSchema = z.object({
     }),
 });
 
-export const AddApplicationModal = () => {
+interface Props {
+  // isOpen: boolean;
+  // onClose: () => void;
+  data: Application;
+}
+
+export const EditApplicationModal: React.FC<Props> = ({
+  // isOpen,
+  // onClose,
+  data,
+}) => {
   const [managers, setManagers] = useState<Manager[]>([]);
   const [cars, setCars] = useState<Car[]>([]);
   const [drivers, setDrivers] = useState<Driver[]>([]);
@@ -232,6 +244,15 @@ export const AddApplicationModal = () => {
   const [expenseItemApls, setExpenseItemApls] = useState<ExpenseItemApl[]>([]);
   const [loading, setLoading] = useState(true);
   const [formStep, setFormStep] = React.useState(0);
+  // const [isOpen, setIsOpen] = useState(false);
+
+  // const openModal = () => {
+  //   setIsOpen(true);
+  // };
+
+  // const closeModal = () => {
+  //   setIsOpen(false);
+  // };
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -397,7 +418,7 @@ export const AddApplicationModal = () => {
       }; // Создание объекта с необходимыми данными
 
       const response = await fetch(
-        "http://localhost:8080/applications/addApplication",
+        `http://localhost:8080/applications/${data.id}/editApplication`,
         {
           method: "POST",
           headers: {
@@ -428,446 +449,455 @@ export const AddApplicationModal = () => {
   }
 
   return (
-    <Dialog>
-      <DialogTrigger>
-        <Button variant="outline">
-          <Plus className="w-4 h-4 mr-2 mt-0.5" />
-          Добавить заявку
-        </Button>
-      </DialogTrigger>
-      <DialogContent className="h-auto">
-        <DialogHeader>
-          <DialogTitle>Добавить заявку</DialogTitle>
-          <DialogDescription>
-            Внесите изменения в заявку здесь. Нажмите кнопку добавить, когда
-            закончите.
-          </DialogDescription>
-        </DialogHeader>
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3">
-            <div
-              className={cn("space-y-3", {
-                hidden: formStep != 0,
-              })}
-            >
-              {/* manager */}
-              <FormField
-                control={form.control}
-                name="manager"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Менеджер</FormLabel>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
-                      <FormControl>
-                        <SelectTrigger id="manager">
-                          <SelectValue placeholder="Выбрать" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent position="popper">
-                        {managers.map((manager) => (
-                          <SelectItem
-                            key={manager.id}
-                            value={`${manager.id} ${manager.firstName} ${manager.lastName}`}
-                          >
-                            {`${manager.firstName} ${manager.lastName}`}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    <FormDescription></FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              {/* car number */}
-              <FormField
-                control={form.control}
-                name="plateNumber"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Номер машины</FormLabel>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
-                      <FormControl>
-                        <SelectTrigger id="carNumber">
-                          <SelectValue placeholder="Выбрать" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent position="popper">
-                        {cars.map((car) => (
-                          <SelectItem
-                            key={car.id}
-                            value={`${car.id} ${car.plate_number}`}
-                          >
-                            {`${car.plate_number}`}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    <FormDescription></FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              {/* driver */}
-              <FormField
-                control={form.control}
-                name="driver"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Водитель</FormLabel>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
-                      <FormControl>
-                        <SelectTrigger id="driver">
-                          <SelectValue placeholder="Выбрать" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent position="popper">
-                        {drivers.map((driver) => (
-                          <SelectItem
-                            key={driver.id}
-                            value={`${driver.id} ${driver.firstName} ${driver.lastName}`}
-                          >
-                            {`${driver.firstName} ${driver.lastName}`}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    <FormDescription></FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              {/* schedule */}
-              <FormField
-                control={form.control}
-                name="schedule"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>График</FormLabel>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
-                      <FormControl>
-                        <SelectTrigger id="schedule">
-                          <SelectValue placeholder="Выбрать" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent position="popper">
-                        {schedules.map((schedule) => (
-                          <SelectItem
-                            key={schedule.id}
-                            value={`${schedule.id} ${schedule.schedule}`}
-                          >
-                            {`${schedule.schedule}`}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    <FormDescription></FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-            <div
-              className={cn("space-y-3", {
-                hidden: formStep != 1,
-              })}
-            >
-              {/* time on line */}
-              <FormField
-                control={form.control}
-                name="timeLine"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Время на линии</FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder="Пример: 20"
-                        {...field}
-                        autoComplete="off"
-                      />
-                    </FormControl>
-                    <FormDescription></FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-            <div
-              className={cn("space-y-3", {
-                hidden: formStep != 2,
-              })}
-            >
-              {/* yandex.cash */}
-              <FormField
-                control={form.control}
-                name="yandexCash"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Яндекс.наличные</FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder="Введите количество"
-                        {...field}
-                        autoComplete="off"
-                      />
-                    </FormControl>
-                    <FormDescription></FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              {/* yandex.noncash */}
-              <FormField
-                control={form.control}
-                name="yandexNoncash"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Яндекс.безналичные</FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder="Введите количество"
-                        {...field}
-                        autoComplete="off"
-                      />
-                    </FormControl>
-                    <FormDescription></FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-            <div
-              className={cn("space-y-3", {
-                hidden: formStep != 3,
-              })}
-            >
-              {/* cashier cash */}
-              <FormField
-                control={form.control}
-                name="cashierCash"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Касса - наличные</FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder="Введите количество"
-                        {...field}
-                        autoComplete="off"
-                      />
-                    </FormControl>
-                    <FormDescription></FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              {/* cashier noncash/kaspi */}
-              <FormField
-                control={form.control}
-                name="cashierKaspi"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Касса - kaspi</FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder="Введите количество"
-                        {...field}
-                        autoComplete="off"
-                      />
-                    </FormControl>
-                    <FormDescription></FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-            <div
-              className={cn("space-y-3", {
-                hidden: formStep != 4,
-              })}
-            >
-              {/* costs gas */}
-              <FormField
-                control={form.control}
-                name="costsGas"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Расходы - Газ</FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder="Введите количество"
-                        {...field}
-                        autoComplete="off"
-                      />
-                    </FormControl>
-                    <FormDescription></FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              {/* costs advance */}
-              <FormField
-                control={form.control}
-                name="costsAdvance"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Расходы - Аванс</FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder="Введите к оличество"
-                        {...field}
-                        autoComplete="off"
-                      />
-                    </FormControl>
-                    <FormDescription></FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              {/* costs other */}
-              <FormField
-                control={form.control}
-                name="costsOther"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Расходы - Прочие</FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder="Введите количество"
-                        {...field}
-                        autoComplete="off"
-                      />
-                    </FormControl>
-                    <FormDescription></FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="expenseItemApl"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Статья расходов</FormLabel>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
-                      <FormControl>
-                        <SelectTrigger id="expenseitemApl">
-                          <SelectValue placeholder="Выбрать" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent position="popper">
-                        {expenseItemApls.map((expenseItemApl) => (
-                          <SelectItem
-                            key={expenseItemApl.id}
-                            value={`${expenseItemApl.id} ${expenseItemApl.expense_item_name}`}
-                          >
-                            {`${expenseItemApl.expense_item_name}`}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    <FormDescription></FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="bonus"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Бонус от компании</FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder="Введите количество"
-                        {...field}
-                        autoComplete="off"
-                      />
-                    </FormControl>
-                    <FormDescription></FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              {/* costs item */}
-            </div>
-            <DialogFooter>
-              <div className="flex gap-2 justify-end">
-                <Button
-                  type="button"
-                  variant={"ghost"}
-                  onClick={() => {
-                    setFormStep((prevStep) => Math.max(0, prevStep - 1));
-                  }}
-                  className={cn({ hidden: formStep == 0 })}
-                >
-                  <ArrowLeft className="w-4 h-4 mr-2 mt-1" />
-                  Назад
-                </Button>
-                <Button
-                  type="button"
-                  className={cn({
-                    hidden: formStep == 4,
-                  })}
-                  variant={"ghost"}
-                  onClick={() => {
-                    if (
-                      formStep === 0 &&
-                      checkFirstPageFieldsFilled() // Проверка заполненности полей первой страницы
-                    ) {
-                      setFormStep((prevStep) => prevStep + 1);
-                    } else if (
-                      formStep === 1 &&
-                      checkSecondPageFieldsFilled() // Проверка заполненности полей второй страницы
-                    ) {
-                      setFormStep((prevStep) => prevStep + 1);
-                    } else if (
-                      formStep === 2 &&
-                      checkThirdPageFieldsFilled() // Проверка заполненности полей третьей страницы
-                    ) {
-                      setFormStep((prevStep) => prevStep + 1);
-                    } else if (
-                      formStep === 3 &&
-                      checkFourthPageFieldsFilled() // Проверка заполненности полей четвертой страницы
-                    ) {
-                      setFormStep((prevStep) => prevStep + 1);
-                    } else {
-                      // Если условие не выполнено, отображаем toast с сообщением об ошибке
-                      toast({
-                        title: "Ошибка заполнения",
-                        description: "Поля не заполнены или заполнены неверно.",
-                        variant: "destructive",
-                      });
-                    }
-                  }}
-                >
-                  Далее
-                  <ArrowRight className="w-4 h-4 ml-2 mt-1" />
-                </Button>
+    <>
+      {/* {isOpen && ( */}
+      <Dialog>
+        <DialogTrigger>
+          <DropdownMenu>
+            <DropdownMenuItem>
+              <Edit className="mr-2 w-4 h-4" />
+              Изменить
+            </DropdownMenuItem>
+          </DropdownMenu>
+        </DialogTrigger>
+        <DialogContent className="h-auto">
+          <DialogHeader>
+            <DialogTitle>Добавить заявку</DialogTitle>
+            <DialogDescription>
+              Внесите изменения в заявку здесь. Нажмите кнопку добавить, когда
+              закончите.
+            </DialogDescription>
+          </DialogHeader>
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3">
+              <div
+                className={cn("space-y-3", {
+                  hidden: formStep != 0,
+                })}
+              >
+                {/* manager */}
+                <FormField
+                  control={form.control}
+                  name="manager"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Менеджер</FormLabel>
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                      >
+                        <FormControl>
+                          <SelectTrigger id="manager">
+                            <SelectValue placeholder="Выбрать" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent position="popper">
+                          {managers.map((manager) => (
+                            <SelectItem
+                              key={manager.id}
+                              value={`${manager.id} ${manager.firstName} ${manager.lastName}`}
+                            >
+                              {`${manager.firstName} ${manager.lastName}`}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <FormDescription></FormDescription>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                {/* car number */}
+                <FormField
+                  control={form.control}
+                  name="plateNumber"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Номер машины</FormLabel>
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                      >
+                        <FormControl>
+                          <SelectTrigger id="carNumber">
+                            <SelectValue placeholder="Выбрать" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent position="popper">
+                          {cars.map((car) => (
+                            <SelectItem
+                              key={car.id}
+                              value={`${car.id} ${car.plate_number}`}
+                            >
+                              {`${car.plate_number}`}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <FormDescription></FormDescription>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                {/* driver */}
+                <FormField
+                  control={form.control}
+                  name="driver"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Водитель</FormLabel>
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                      >
+                        <FormControl>
+                          <SelectTrigger id="driver">
+                            <SelectValue placeholder="Выбрать" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent position="popper">
+                          {drivers.map((driver) => (
+                            <SelectItem
+                              key={driver.id}
+                              value={`${driver.id} ${driver.firstName} ${driver.lastName}`}
+                            >
+                              {`${driver.firstName} ${driver.lastName}`}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <FormDescription></FormDescription>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                {/* schedule */}
+                <FormField
+                  control={form.control}
+                  name="schedule"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>График</FormLabel>
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                      >
+                        <FormControl>
+                          <SelectTrigger id="schedule">
+                            <SelectValue placeholder="Выбрать" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent position="popper">
+                          {schedules.map((schedule) => (
+                            <SelectItem
+                              key={schedule.id}
+                              value={`${schedule.id} ${schedule.schedule}`}
+                            >
+                              {`${schedule.schedule}`}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <FormDescription></FormDescription>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
               </div>
-              <DialogClose>
-                <Button type="submit" className={cn({ hidden: formStep != 4 })}>
+              <div
+                className={cn("space-y-3", {
+                  hidden: formStep != 1,
+                })}
+              >
+                {/* time on line */}
+                <FormField
+                  control={form.control}
+                  name="timeLine"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Время на линии</FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder="Пример: 20"
+                          {...field}
+                          autoComplete="off"
+                        />
+                      </FormControl>
+                      <FormDescription></FormDescription>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+              <div
+                className={cn("space-y-3", {
+                  hidden: formStep != 2,
+                })}
+              >
+                {/* yandex.cash */}
+                <FormField
+                  control={form.control}
+                  name="yandexCash"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Яндекс.наличные</FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder="Введите количество"
+                          {...field}
+                          autoComplete="off"
+                        />
+                      </FormControl>
+                      <FormDescription></FormDescription>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                {/* yandex.noncash */}
+                <FormField
+                  control={form.control}
+                  name="yandexNoncash"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Яндекс.безналичные</FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder="Введите количество"
+                          {...field}
+                          autoComplete="off"
+                        />
+                      </FormControl>
+                      <FormDescription></FormDescription>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+              <div
+                className={cn("space-y-3", {
+                  hidden: formStep != 3,
+                })}
+              >
+                {/* cashier cash */}
+                <FormField
+                  control={form.control}
+                  name="cashierCash"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Касса - наличные</FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder="Введите количество"
+                          {...field}
+                          autoComplete="off"
+                        />
+                      </FormControl>
+                      <FormDescription></FormDescription>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                {/* cashier noncash/kaspi */}
+                <FormField
+                  control={form.control}
+                  name="cashierKaspi"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Касса - kaspi</FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder="Введите количество"
+                          {...field}
+                          autoComplete="off"
+                        />
+                      </FormControl>
+                      <FormDescription></FormDescription>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+              <div
+                className={cn("space-y-3", {
+                  hidden: formStep != 4,
+                })}
+              >
+                {/* costs gas */}
+                <FormField
+                  control={form.control}
+                  name="costsGas"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Расходы - Газ</FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder="Введите количество"
+                          {...field}
+                          autoComplete="off"
+                        />
+                      </FormControl>
+                      <FormDescription></FormDescription>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                {/* costs advance */}
+                <FormField
+                  control={form.control}
+                  name="costsAdvance"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Расходы - Аванс</FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder="Введите к оличество"
+                          {...field}
+                          autoComplete="off"
+                        />
+                      </FormControl>
+                      <FormDescription></FormDescription>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                {/* costs other */}
+                <FormField
+                  control={form.control}
+                  name="costsOther"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Расходы - Прочие</FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder="Введите количество"
+                          {...field}
+                          autoComplete="off"
+                        />
+                      </FormControl>
+                      <FormDescription></FormDescription>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="expenseItemApl"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Статья расходов</FormLabel>
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                      >
+                        <FormControl>
+                          <SelectTrigger id="expenseitemApl">
+                            <SelectValue placeholder="Выбрать" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent position="popper">
+                          {expenseItemApls.map((expenseItemApl) => (
+                            <SelectItem
+                              key={expenseItemApl.id}
+                              value={`${expenseItemApl.id} ${expenseItemApl.expense_item_name}`}
+                            >
+                              {`${expenseItemApl.expense_item_name}`}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <FormDescription></FormDescription>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="bonus"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Бонус от компании</FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder="Введите количество"
+                          {...field}
+                          autoComplete="off"
+                        />
+                      </FormControl>
+                      <FormDescription></FormDescription>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                {/* costs item */}
+              </div>
+              <DialogFooter>
+                <div className="flex gap-2 justify-end">
+                  <Button
+                    type="button"
+                    variant={"ghost"}
+                    onClick={() => {
+                      setFormStep((prevStep) => Math.max(0, prevStep - 1));
+                    }}
+                    className={cn({ hidden: formStep == 0 })}
+                  >
+                    <ArrowLeft className="w-4 h-4 mr-2 mt-1" />
+                    Назад
+                  </Button>
+                  <Button
+                    type="button"
+                    className={cn({
+                      hidden: formStep == 4,
+                    })}
+                    variant={"ghost"}
+                    onClick={() => {
+                      if (
+                        formStep === 0 &&
+                        checkFirstPageFieldsFilled() // Проверка заполненности полей первой страницы
+                      ) {
+                        setFormStep((prevStep) => prevStep + 1);
+                      } else if (
+                        formStep === 1 &&
+                        checkSecondPageFieldsFilled() // Проверка заполненности полей второй страницы
+                      ) {
+                        setFormStep((prevStep) => prevStep + 1);
+                      } else if (
+                        formStep === 2 &&
+                        checkThirdPageFieldsFilled() // Проверка заполненности полей третьей страницы
+                      ) {
+                        setFormStep((prevStep) => prevStep + 1);
+                      } else if (
+                        formStep === 3 &&
+                        checkFourthPageFieldsFilled() // Проверка заполненности полей четвертой страницы
+                      ) {
+                        setFormStep((prevStep) => prevStep + 1);
+                      } else {
+                        // Если условие не выполнено, отображаем toast с сообщением об ошибке
+                        toast({
+                          title: "Ошибка заполнения",
+                          description:
+                            "Поля не заполнены или заполнены неверно.",
+                          variant: "destructive",
+                        });
+                      }
+                    }}
+                  >
+                    Далее
+                    <ArrowRight className="w-4 h-4 ml-2 mt-1" />
+                  </Button>
+                </div>
+                <Button
+                  type="submit"
+                  className={cn({ hidden: formStep != 4 })}
+                  // onClick={onClose}
+                >
                   Добавить
                 </Button>
-              </DialogClose>
-            </DialogFooter>
-          </form>
-        </Form>
-      </DialogContent>
-    </Dialog>
+              </DialogFooter>
+            </form>
+          </Form>
+        </DialogContent>
+      </Dialog>
+      {/* )} */}
+    </>
   );
 };

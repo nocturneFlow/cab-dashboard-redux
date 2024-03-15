@@ -51,6 +51,7 @@
     "react-icons": "^5.0.1",
     "react-resizable-panels": "^2.0.12",
     "react-spinners": "^0.13.8",
+    "react-table": "^7.8.0",
     "recharts": "^2.12.1",
     "tailwind-merge": "^2.2.1",
     "tailwindcss-animate": "^1.0.7",
