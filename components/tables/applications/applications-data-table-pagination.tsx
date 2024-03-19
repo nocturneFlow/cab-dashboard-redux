@@ -23,12 +23,12 @@ import {
 
 import { Input } from "@/components/ui/input";
 import { AddApplicationModal } from "@/components/modals/add-application-modal";
-import { DatePickerWithRange } from "@/components/modals/date-picker";
+
 import { Application } from "@/app/(taxipark)/(routes)/tables/components/columns/applications";
 import { DataTablePagination } from "./data-table-pagination";
-
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import { DatePickerWithRange } from "@/components/ui/date-range-picker";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];

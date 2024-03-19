@@ -1,9 +1,7 @@
 "use client";
 
-import { DatePickerWithRange } from "@/components/modals/date-picker";
 import { Heading } from "@/components/ui/heading";
 import { TbCurrencyTenge } from "react-icons/tb";
-import { Separator } from "@/components/ui/separator";
 import Autoplay from "embla-carousel-autoplay";
 import {
   Card,
@@ -20,21 +18,59 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-import {
-  ResizableHandle,
-  ResizablePanel,
-  ResizablePanelGroup,
-} from "@/components/ui/resizable";
 
 import { Overview } from "./components/overview";
 import React from "react";
 import Example from "./components/chart-one";
 import ExampleTwo from "./components/chart-two";
 import ExampleThree from "./components/treemap";
-import { AddCarModal } from "@/components/modals/add-car-modal";
+
+import { useState, useEffect } from "react";
+import { DatePickerWithRange } from "@/components/ui/date-range-picker";
+
+interface DashboardData {
+  id: string;
+  sumTimeOnLine: number;
+  sumCashAmount: number;
+  sumCashlessAmount: number;
+  sumTotalAmount: number;
+  sumSalary: number;
+  sumBonusFromCompany: number;
+  sumTotalSalary: number;
+  sumAdvance: number;
+  sumPayoutAmount: number;
+  sumFineAmount: number;
+  payouts: number;
+  deposits: number;
+  totalCalculation: number;
+}
+
+interface BackendResponse {
+  payouts: any[]; // тип данных для этого массива может быть определен позже
+  applications: any[]; // то же самое
+  fines: any[]; // и здесь
+  dashboard: DashboardData;
+}
 
 const DashboardPage = () => {
   const plugin = React.useRef(Autoplay({ delay: 2000 }));
+  const [data, setData] = useState<BackendResponse | null>(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch(
+          `http://localhost:8080/calculator/${id}/all`
+        );
+        const jsonData = await response.json();
+        setData(jsonData);
+      } catch (error) {
+        console.error("Failed to fetch data:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
   return (
     <>
       <div className="flex-col">

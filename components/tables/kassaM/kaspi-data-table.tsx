@@ -21,7 +21,7 @@ import {
 } from "@/components/ui/table";
 
 import { Button } from "@/components/ui/button";
-import { DatePickerWithRange } from "@/components/modals/date-picker";
+import { DatePickerWithRange } from "@/components/ui/date-range-picker";
 
 import {
   ContextMenu,

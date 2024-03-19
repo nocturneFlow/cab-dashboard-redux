@@ -347,6 +347,10 @@ export const EditApplicationModal: React.FC<Props> = ({
 
   const { toast } = useToast();
 
+  const { register, setValue } = useForm({
+    resolver: zodResolver(formSchema),
+  });
+
   useEffect(() => {
     fetchData();
   }, []);
@@ -367,6 +371,7 @@ export const EditApplicationModal: React.FC<Props> = ({
       setExpenseItemApls(data.expenseItemApls);
       setLoading(false);
       console.log("Received data:", data);
+      return data;
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -469,7 +474,10 @@ export const EditApplicationModal: React.FC<Props> = ({
             </DialogDescription>
           </DialogHeader>
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3">
+            <form
+              onSubmit={form.handleSubmit(onSubmit)}
+              className="space-y-8 w-full"
+            >
               <div
                 className={cn("space-y-3", {
                   hidden: formStep != 0,
@@ -623,7 +631,6 @@ export const EditApplicationModal: React.FC<Props> = ({
                           autoComplete="off"
                         />
                       </FormControl>
-                      <FormDescription></FormDescription>
                       <FormMessage />
                     </FormItem>
                   )}
