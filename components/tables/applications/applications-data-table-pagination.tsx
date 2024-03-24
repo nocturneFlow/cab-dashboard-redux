@@ -64,9 +64,9 @@ export function ApplicationsDataTable<TData, TValue>({
       <div className="flex items-center justify-between py-4">
         <Input
           placeholder="Поиск по номеру машины..."
-          value={(table.getColumn("car")?.getFilterValue() as string) ?? ""}
+          value={(table.getColumn("car_plate_number")?.getFilterValue() as string) ?? ""}
           onChange={(event) =>
-            table.getColumn("car")?.setFilterValue(event.target.value)
+            table.getColumn("car_plate_number")?.setFilterValue(event.target.value)
           }
           className="max-w-sm"
         />

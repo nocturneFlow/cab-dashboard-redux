@@ -31,11 +31,6 @@ export function MainNav({
       description: "Текст для пояснения о таблице с заявками",
     },
     {
-      title: "Отчеты",
-      href: `/tables/reports`,
-      description: "Текст для пояснения о таблице с отчетами",
-    },
-    {
       title: "Касса Менеджера",
       href: `/tables/kassa`,
       description: "Текст для пояснения о таблице с кассой менеджера",
@@ -74,8 +69,8 @@ export function MainNav({
 
   const dashboard: { title: string; href: string; description: string }[] = [
     {
-      title: "Элемент 1",
-      href: `/dashboard/1`,
+      title: "Отчеты",
+      href: `/dashboard/reports`,
       description: "Текст для пояснения о таблице с отчетами",
     },
     {

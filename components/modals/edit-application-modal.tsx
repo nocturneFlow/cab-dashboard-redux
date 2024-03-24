@@ -358,7 +358,7 @@ export const EditApplicationModal: React.FC<Props> = ({
   const fetchData = async () => {
     try {
       const response = await fetch(
-        "http://localhost:8080/applications/addApplication"
+        "https://taxi-service-68bafebbc66d.herokuapp.com/applications/addApplication"
       );
       if (!response.ok) {
         throw new Error("Failed to fetch data");
@@ -423,7 +423,7 @@ export const EditApplicationModal: React.FC<Props> = ({
       }; // Создание объекта с необходимыми данными
 
       const response = await fetch(
-        `http://localhost:8080/applications/${data.id}/editApplication`,
+        `https://taxi-service-68bafebbc66d.herokuapp.com/applications/${data.id}/editApplication`,
         {
           method: "POST",
           headers: {

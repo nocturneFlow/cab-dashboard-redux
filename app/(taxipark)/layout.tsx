@@ -1,4 +1,4 @@
-import { auth } from "@clerk/nextjs";
+import { auth } from '@clerk/nextjs/server';
 import { redirect } from "next/navigation";
 
 import Navbar from "@/components/navbar";
@@ -8,6 +8,7 @@ export default async function DashboardLayout({
 }: {
   children: React.ReactNode;
 }) {
+  auth().protect();
   const { userId } = auth();
 
   if (!userId) {

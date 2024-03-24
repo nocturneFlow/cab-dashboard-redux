@@ -14,7 +14,7 @@ const font = Open_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "TaxiDashboard",
+  title: "Cab Dashboard",
   description: "Создано командой студентов IITU",
 };
 
@@ -33,13 +33,6 @@ export default function RootLayout({
   return (
     <ClerkProvider
       localization={ruRU}
-      appearance={{
-        // baseTheme: dark,
-        variables: {
-          borderRadius: "0.5rem",
-          fontFamily: "Open Sans, sans-serif",
-        },
-      }}
     >
       <html lang="en">
         <body className={GeistSans.className}>

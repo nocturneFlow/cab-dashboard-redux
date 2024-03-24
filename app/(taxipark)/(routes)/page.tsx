@@ -60,7 +60,7 @@ const DashboardPage = () => {
     const fetchData = async () => {
       try {
         const response = await fetch(
-          `http://localhost:8080/calculator/${id}/all`
+          `https://taxi-service-68bafebbc66d.herokuapp.com/calculator/all`
         );
         const jsonData = await response.json();
         setData(jsonData);

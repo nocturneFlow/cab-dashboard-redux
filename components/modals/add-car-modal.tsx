@@ -79,7 +79,7 @@ export const AddCarModal = () => {
 
       console.log("Отправка данных на сервер:", dataToSend);
 
-      const response = await fetch("http://localhost:8080/cars/addCar", {
+      const response = await fetch("https://taxi-service-68bafebbc66d.herokuapp.com/cars/addCar", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

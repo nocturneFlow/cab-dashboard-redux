@@ -90,7 +90,7 @@ export const AddDriverModal = () => {
   const fetchData = async () => {
     try {
       const response = await fetch(
-        "http://localhost:8080/applications/addApplication"
+        "https://taxi-service-68bafebbc66d.herokuapp.com/applications/addApplication"
       );
       if (!response.ok) {
         throw new Error("Failed to fetch data");
@@ -116,7 +116,7 @@ export const AddDriverModal = () => {
         car_id: carId,
       };
 
-      const response = await fetch("http://localhost:8080/drivers/addDriver", {
+      const response = await fetch("https://taxi-service-68bafebbc66d.herokuapp.com/drivers/addDriver", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
