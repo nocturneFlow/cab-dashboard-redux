@@ -1,3 +1,5 @@
+"use client";
+
 import * as React from "react";
 import {
   ColumnDef,
@@ -10,6 +12,9 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
+
+import { Siren } from "lucide-react";
+
 import {
   Table,
   TableBody,
@@ -18,33 +23,28 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+
 import { Button } from "@/components/ui/button";
-
-import { ArrowDown, ArrowUp } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { useParams, useRouter } from "next/navigation";
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-
-import { ExpensesExpandingDataTable } from "./expenses-expanding-data-table";
-import {
-  ExpensesCash,
-  ExpensesCashColumns,
-} from "@/app/(taxipark)/(routes)/tables/components/columns/expensesCash";
-import {
-  ExpensesKaspi,
-  ExpensesKaspiColumns,
-} from "@/app/(taxipark)/(routes)/tables/components/columns/expensesKaspi";
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { AddApplicationModal } from "@/components/modals/add-application-modal";
+import { DatePickerWithRange } from "@/components/modals/date-picker";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
 }
 
-export function ExpensesDataTable<TData, TValue>({
+export function CarsDataTable<TData, TValue>({
   columns,
   data,
 }: DataTableProps<TData, TValue>) {
@@ -52,7 +52,6 @@ export function ExpensesDataTable<TData, TValue>({
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
   );
-
 
   const table = useReactTable({
     data,
@@ -69,22 +68,28 @@ export function ExpensesDataTable<TData, TValue>({
     },
   });
 
-  const [expandedRowIds, setExpandedRowIds] = React.useState<Set<string>>(
-    new Set()
-  );
-
-  const toggleRow = (rowId: string) => {
-    const newExpandedRowIds = new Set(expandedRowIds);
-    if (newExpandedRowIds.has(rowId)) {
-      newExpandedRowIds.delete(rowId);
-    } else {
-      newExpandedRowIds.add(rowId);
-    }
-    setExpandedRowIds(newExpandedRowIds);
-  };
+  const router = useRouter();
+  const params = useParams();
 
   return (
     <div>
+      <div className="flex items-center justify-between py-4">
+        <Input
+          placeholder="Поиск по номеру машины.."
+          value={
+            (table
+              .getColumn("car.plate_number")
+              ?.getFilterValue() as string) ?? ""
+          }
+          onChange={(event) =>
+            table
+              .getColumn("car.plate_number")
+              ?.setFilterValue(event.target.value)
+          }
+          className="max-w-sm"
+        />
+        <DatePickerWithRange />
+      </div>
       <div className="rounded-md border">
         <Table>
           <TableHeader>
@@ -108,46 +113,45 @@ export function ExpensesDataTable<TData, TValue>({
           <TableBody>
             {table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
-                <React.Fragment key={row.id}>
-                  <TableRow
-                    key={row.id}
-                    data-state={row.getIsSelected() && "selected"}
-                    onClick={() => toggleRow(row.id)}
-                  >
-                    {row.getVisibleCells().map((cell) => (
-                      <TableCell key={cell.id}>
-                        {flexRender(
-                          cell.column.columnDef.cell,
-                          cell.getContext()
-                        )}
-                      </TableCell>
-                    ))}
-                  </TableRow>
-                  {expandedRowIds.has(row.id) && (
-                    <TableRow>
-                      <TableCell colSpan={columns.length}>
-                        <div className="p-4">
-                          
-                        </div>
-                      </TableCell>
-                    </TableRow>
-                  )}
-                </React.Fragment>
+                <TableRow
+                  key={row.id}
+                  data-state={row.getIsSelected() && "selected"}
+                >
+                  {row.getVisibleCells().map((cell) => (
+                    <TableCell key={cell.id}>
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext()
+                      )}
+                    </TableCell>
+                  ))}
+                </TableRow>
               ))
             ) : (
               <TableRow>
                 <TableCell
                   colSpan={columns.length}
-                  className="h-24 text-center"
+                  className="h-24 items-center"
                 >
-                  No results.
+                  <div>
+                    <div className="flex items-center justify-center">
+                      <Siren
+                        className="h-6 w-6 text-muted-foreground"
+                        strokeWidth="1.25"
+                      />
+                    </div>
+                    <div className="text-center">
+                      <p className="text-sm font-semibold text-muted-foreground">
+                        Нет данных для отображения.
+                      </p>
+                    </div>
+                  </div>
                 </TableCell>
               </TableRow>
             )}
           </TableBody>
         </Table>
       </div>
-
       <div className="flex items-center justify-end space-x-2 py-4">
         <Button
           variant="outline"

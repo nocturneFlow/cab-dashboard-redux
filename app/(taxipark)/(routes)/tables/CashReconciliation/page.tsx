@@ -1,8 +1,8 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-// import GetAllCashReconciliation, {
-//   CashReconciliation,
-//   CashReconciliationColumns,
-// } from "../components/columns/cashReconciliation";
+import GetAllCashReconciliation, {
+  CashReconciliation,
+  CashReconciliationColumns,
+} from "../components/columns/cashReconciliation";
 import { Heading } from "@/components/ui/heading";
 import { Separator } from "@/components/ui/separator";
 
@@ -20,7 +20,7 @@ export default async function CashReconciliationPage() {
         <div className="flex items-center justify-center w-full pt-5">
           <Tabs defaultValue="applications" className="w-5/6">
             <TabsContent value="applications">
-              <div className="">{/* <GetAllCashReconciliation /> */}</div>
+              <div className=""><GetAllCashReconciliation /></div>
             </TabsContent>
           </Tabs>
         </div>

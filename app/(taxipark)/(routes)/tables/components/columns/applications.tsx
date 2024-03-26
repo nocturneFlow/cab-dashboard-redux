@@ -377,6 +377,8 @@ export default function GetAllApplications() {
     async function fetchDataApplications() {
       try {
         const applicationsData = await fetchApplicationsData(); // Получение данных из вашего API
+        console.log(applicationsData);
+
         // Преобразование даты в удобочитаемый формат
         const formattedApplicationsData = applicationsData.map(
           (application) => ({

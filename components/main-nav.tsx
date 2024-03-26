@@ -31,11 +31,6 @@ export function MainNav({
       description: "Текст для пояснения о таблице с заявками",
     },
     {
-      title: "Отчеты",
-      href: `/tables/reports`,
-      description: "Текст для пояснения о таблице с отчетами",
-    },
-    {
       title: "Касса Менеджера",
       href: `/tables/kassa`,
       description: "Текст для пояснения о таблице с кассой менеджера",
@@ -90,6 +85,34 @@ export function MainNav({
     },
   ];
 
+  const reports  : { title: string; href: string; description: string }[] = [
+    {
+      title: "Дополнительный Доход",
+      href: `/tables/additionalIncome`,
+      description: "Текст для пояснения о таблице с отчетами",
+    },
+    {
+      title: "Касса | Адм",
+      href: `/tables/cashierAdmin`,
+      description: "Текст для пояснения о таблице с отчетами",
+    },
+    {
+      title: "Отчет | Т",
+      href: `/tables/reportT`,
+      description: "Текст для пояснения о таблице с отчетами",
+    },
+    {
+      title: "Фильтр",
+      href: `/tables/filter`,
+      description: "Текст для пояснения о таблице с отчетами",
+    },
+    {
+      title: "Список",
+      href: `/tables/list`,
+      description: "Текст для пояснения о таблице с отчетами",
+    },
+  ];
+
   return (
     <NavigationMenu className="pl-5">
       <NavigationMenuList>
@@ -100,6 +123,7 @@ export function MainNav({
             </a>
           </NavigationMenuLink>
         </NavigationMenuItem>
+
         <NavigationMenuItem>
           <NavigationMenuTrigger>Сводка</NavigationMenuTrigger>
           <NavigationMenuContent>
@@ -131,6 +155,7 @@ export function MainNav({
             </ul>
           </NavigationMenuContent>
         </NavigationMenuItem>
+
         <NavigationMenuItem>
           <NavigationMenuTrigger>Таблицы</NavigationMenuTrigger>
           <NavigationMenuContent>
@@ -147,6 +172,24 @@ export function MainNav({
             </ul>
           </NavigationMenuContent>
         </NavigationMenuItem>
+
+        <NavigationMenuItem>
+          <NavigationMenuTrigger>Таблицы Отчетов</NavigationMenuTrigger>
+          <NavigationMenuContent>
+            <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] ">
+              {reports.map((reports) => (
+                <ListItem
+                  key={reports.title}
+                  title={reports.title}
+                  href={reports.href}
+                >
+                  {reports.description}
+                </ListItem>
+              ))}
+            </ul>
+          </NavigationMenuContent>
+        </NavigationMenuItem>
+
         <NavigationMenuItem>
           <Link href={`/settings`} legacyBehavior passHref>
             <NavigationMenuLink className={navigationMenuTriggerStyle()}>

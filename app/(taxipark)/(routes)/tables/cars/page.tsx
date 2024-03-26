@@ -1,5 +1,10 @@
 "use client";
 
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import GetAllCars, {
+  Cars,
+  CarsColumns,
+} from "../components/columns/cars";
 import { AddCarModal } from "@/components/modals/add-car-modal";
 import { AddDriverModal } from "@/components/modals/add-driver-modal";
 import { Heading } from "@/components/ui/heading";
@@ -25,7 +30,15 @@ export default function DriversPage() {
           </div>
         </div>
         <Separator />
-        <div className="flex items-center justify-center w-full pt-5"></div>
+        <div className="flex items-center justify-center w-full pt-5">
+          <Tabs defaultValue="cars" className="w-5/6">
+            <TabsContent value="cars">
+              <div className="">
+                <GetAllCars />
+              </div>
+            </TabsContent>
+          </Tabs>
+        </div>
       </div>
     </div>
   );
