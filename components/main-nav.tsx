@@ -69,8 +69,8 @@ export function MainNav({
 
   const dashboard: { title: string; href: string; description: string }[] = [
     {
-      title: "Элемент 1",
-      href: `/dashboard/1`,
+      title: "Отчеты",
+      href: `/dashboard/reports`,
       description: "Текст для пояснения о таблице с отчетами",
     },
     {

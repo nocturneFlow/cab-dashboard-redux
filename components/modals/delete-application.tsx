@@ -1,6 +1,6 @@
 export async function deleteApplication(id: number): Promise<void> {
   try {
-    const response = await fetch(`http://localhost:8080/applications/${id}`, {
+    const response = await fetch(`https://taxi-service-68bafebbc66d.herokuapp.com/applications/${id}`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",

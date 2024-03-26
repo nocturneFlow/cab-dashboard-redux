@@ -5,6 +5,7 @@ import { dark } from "@clerk/themes";
 import { ruRU } from "@clerk/localizations";
 import { Toaster } from "@/components/ui/toaster";
 import { ThemeProvider } from "@/components/theme-provider";
+import { GeistSans } from "geist/font/sans";
 
 import "./globals.css";
 
@@ -13,8 +14,15 @@ const font = Open_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "TaxiDashboard",
+  title: "Cab Dashboard",
   description: "Создано командой студентов IITU",
+};
+
+export const viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: 1,
 };
 
 export default function RootLayout({
@@ -25,16 +33,9 @@ export default function RootLayout({
   return (
     <ClerkProvider
       localization={ruRU}
-      appearance={{
-        baseTheme: dark,
-        variables: {
-          borderRadius: "1rem",
-          fontFamily: "Open Sans, sans-serif",
-        },
-      }}
     >
       <html lang="en">
-        <body className={font.className}>
+        <body className={GeistSans.className}>
           <ThemeProvider
             attribute="class"
             defaultTheme="system"
