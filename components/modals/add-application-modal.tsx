@@ -34,6 +34,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { cn } from "@/lib/utils";
+import GetAllApplications from "@/app/(taxipark)/(routes)/tables/components/columns/applications";
 
 interface Manager {
   id: string;
@@ -416,6 +417,7 @@ export const AddApplicationModal = () => {
       console.log(dataToSend);
       form.reset();
       setFormStep(0);
+      <GetAllApplications />;
     } catch (error) {
       console.error("Error submitting form:", error);
       toast({

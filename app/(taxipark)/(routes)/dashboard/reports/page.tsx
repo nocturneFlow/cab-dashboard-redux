@@ -1,26 +1,28 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Heading } from "@/components/ui/heading";
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { Separator } from "@/components/ui/separator";
-import { DatePickerWithRange } from "@/components/ui/date-range-picker";
 import {
+  Coins,
+  HandCoins,
   Landmark,
-  Minus,
   Percent,
   TrendingDown,
   TrendingUp,
 } from "lucide-react";
+import PieChartReportsIncome from "@/components/charts/pie-chart-reports-income";
 
-interface CarDetailModel {
+export interface CarDetailModel {
   plate_number: string;
   total_applications: number;
   total_hours_online: number;
@@ -40,7 +42,7 @@ interface CarDetailModel {
   total_variable_costs: number;
 }
 
-interface MyInterface {
+export interface MyInterface {
   day_amount_profit: number;
   night_amount_profit: number;
   amount_total: number;
@@ -94,33 +96,33 @@ const ReportsPage = () => {
 
   return (
     <>
-      <div className="flex-col">
-        <div className="flex-1 space-y-4 p-8 pt-6">
-          <div className="flex items-center justify-between">
-            <Heading title="Отчеты" description="" />
-            <DatePickerWithRange />
-          </div>
-          <Separator />
-          {data && (
+      {data && (
+        <>
+          <div className="space-y-4">
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
               <Card>
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                   <CardTitle className="text-sm font-medium">Доход</CardTitle>
-                  <Landmark
-                    strokeWidth="2"
-                    className="h-4 w-4 text-muted-foreground"
-                  />
+                  <HandCoins className="h-4 w-4 text-muted-foreground" />
                 </CardHeader>
                 <Separator className="mt-3 mb-3" />
-                <CardContent>
-                  <div className="text-2xl font-bold">{data.amount_total}</div>
+                <CardContent className="space-y-2">
+                  <div className="text-2xl font-bold">
+                    {data.amount_total
+                      .toFixed(2)
+                      .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                  </div>
                   <p className="text-xs text-muted-foreground">Итого</p>
-                  <div className="text-2xl font-bold pt-3">
-                    {data.day_amount_profit}
+                  <div className="text-2xl font-bold">
+                    {data.day_amount_profit
+                      .toFixed(2)
+                      .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
                   </div>
                   <p className="text-xs text-muted-foreground">День</p>
-                  <div className="text-2xl font-bold pt-3">
-                    {data.night_amount_profit}
+                  <div className="text-2xl font-bold">
+                    {data.night_amount_profit
+                      .toFixed(2)
+                      .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
                   </div>
                   <p className="text-xs text-muted-foreground">Ночь</p>
                 </CardContent>
@@ -130,14 +132,15 @@ const ReportsPage = () => {
                   <CardTitle className="text-sm font-medium">
                     Дополнительный Доход
                   </CardTitle>
-                  <TrendingUp
-                    strokeWidth="2"
-                    className="h-4 w-4 text-muted-foreground"
-                  />
+                  <Coins className="h-4 w-4 text-muted-foreground" />
                 </CardHeader>
                 <Separator className="mt-3 mb-3" />
-                <CardContent>
-                  <div className="text-2xl font-bold">{data.variable_cost}</div>
+                <CardContent className="space-y-2">
+                  <div className="text-2xl font-bold">
+                    {data.variable_cost
+                      .toFixed(2)
+                      .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                  </div>
                 </CardContent>
               </Card>
               <Card>
@@ -153,13 +156,17 @@ const ReportsPage = () => {
                   </div>
                 </CardHeader>
                 <Separator className="mt-3 mb-3" />
-                <CardContent>
+                <CardContent className="space-y-2">
                   <div className="text-2xl font-bold">
-                    {data.taxopark_commission}
+                    {data.taxopark_commission
+                      .toFixed(2)
+                      .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
                   </div>
                   <p className="text-xs text-muted-foreground">Таксопарк</p>
-                  <div className="text-2xl font-bold pt-3">
-                    {data.yandex_commission}
+                  <div className="text-2xl font-bold">
+                    {data.yandex_commission
+                      .toFixed(2)
+                      .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
                   </div>
                   <p className="text-xs text-muted-foreground">Яндекс</p>
                 </CardContent>
@@ -175,14 +182,24 @@ const ReportsPage = () => {
                   />
                 </CardHeader>
                 <Separator className="mt-3 mb-3" />
-                <CardContent>
-                  <div className="text-2xl font-bold">{data.gas_expense}</div>
+                <CardContent className="space-y-2">
+                  <div className="text-2xl font-bold">
+                    {data.gas_expense
+                      .toFixed(2)
+                      .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                  </div>
                   <p className="text-xs text-muted-foreground">ГСМ</p>
-                  <div className="text-2xl font-bold pt-3">
-                    {data.other_expense}
+                  <div className="text-2xl font-bold">
+                    {data.other_expense
+                      .toFixed(2)
+                      .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
                   </div>
                   <p className="text-xs text-muted-foreground">Прочие</p>
-                  <div className="text-2xl font-bold pt-3">{data.salary}</div>
+                  <div className="text-2xl font-bold">
+                    {data.salary
+                      .toFixed(2)
+                      .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                  </div>
                   <p className="text-xs text-muted-foreground">
                     Зарплата факт.
                   </p>
@@ -199,15 +216,23 @@ const ReportsPage = () => {
                   />
                 </CardHeader>
                 <Separator className="mt-3 mb-3" />
-                <CardContent>
-                  <div className="text-2xl font-bold">{data.car_parts}</div>
+                <CardContent className="space-y-2">
+                  <div className="text-2xl font-bold">
+                    {data.car_parts
+                      .toFixed(2)
+                      .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                  </div>
                   <p className="text-xs text-muted-foreground">Запчасти</p>
-                  <div className="text-2xl font-bold pt-3">
-                    {data.car_service}
+                  <div className="text-2xl font-bold">
+                    {data.car_service
+                      .toFixed(2)
+                      .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
                   </div>
                   <p className="text-xs text-muted-foreground">Услуги</p>
-                  <div className="text-2xl font-bold pt-3">
-                    {data.car_maintenance}
+                  <div className="text-2xl font-bold">
+                    {data.car_maintenance
+                      .toFixed(2)
+                      .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
                   </div>
                   <p className="text-xs text-muted-foreground">Мойка</p>
                 </CardContent>
@@ -225,25 +250,166 @@ const ReportsPage = () => {
                   </div>
                 </CardHeader>
                 <Separator className="mt-3 mb-3" />
-                <CardContent>
+                <CardContent className="space-y-2">
                   <div className="text-2xl font-bold">
-                    {data.cash_adm_expense}
+                    {data.cash_adm_expense
+                      .toFixed(2)
+                      .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
                   </div>
                   <p className="text-xs text-muted-foreground">Наличные</p>
-                  <div className="text-2xl font-bold pt-3">
-                    {data.cashless_adm_expense}
+                  <div className="text-2xl font-bold">
+                    {data.cashless_adm_expense
+                      .toFixed(2)
+                      .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
                   </div>
                   <p className="text-xs text-muted-foreground">Каспи</p>
-                  <div className="text-2xl font-bold pt-3">
-                    {data.total_adm_expense}
+                  <div className="text-2xl font-bold">
+                    {data.total_adm_expense
+                      .toFixed(2)
+                      .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
                   </div>
                   <p className="text-xs text-muted-foreground">Итого</p>
                 </CardContent>
               </Card>
             </div>
-          )}
-        </div>
-      </div>
+            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-">
+              <Card className="col-span-7">
+                <CardHeader>
+                  <CardTitle>Прибыль</CardTitle>
+                </CardHeader>
+                <Separator className="mb-4" />
+                <CardContent className="space-y-2">
+                  <Table>
+                    <TableHeader>
+                      <TableRow className="text-sm font-medium">
+                        <TableHead>Валовая прибыль</TableHead>
+                        <TableHead>Операционная прибыль</TableHead>
+                        <TableHead>Налоги</TableHead>
+                        <TableHead>Финансовые расходы</TableHead>
+                        <TableHead>Чистая прибыль</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      <TableRow className="text-2xl font-bold">
+                        <TableCell>
+                          <span
+                            style={{
+                              color:
+                                data.gross_profit < 0 ? "#FF6B6B" : "#66DE93",
+                            }}
+                          >
+                            {data.gross_profit
+                              .toFixed(2)
+                              .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                          </span>
+                        </TableCell>
+                        <TableCell>
+                          <span
+                            style={{
+                              color:
+                                data.operating_profit < 0
+                                  ? "#FF6B6B"
+                                  : "#66DE93",
+                            }}
+                          >
+                            {data.operating_profit
+                              .toFixed(2)
+                              .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                          </span>
+                        </TableCell>
+                        <TableCell>
+                          {data.tax
+                            .toFixed(2)
+                            .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                        </TableCell>
+                        <TableCell>
+                          {data.financial_expense
+                            .toFixed(2)
+                            .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                        </TableCell>
+                        <TableCell>
+                          <span
+                            style={{
+                              color:
+                                data.net_profit < 0 ? "#FF6B6B" : "#66DE93",
+                            }}
+                          >
+                            {data.net_profit
+                              .toFixed(2)
+                              .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                          </span>
+                        </TableCell>
+                      </TableRow>
+                    </TableBody>
+                  </Table>
+                </CardContent>
+              </Card>
+            </div>
+            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
+              <Card className="col-span-3">
+                <CardHeader>
+                  <CardTitle>Автомобили</CardTitle>
+                </CardHeader>
+                <Separator className="mb-4" />
+                <CardContent className="space-y-2">
+                  <Table>
+                    <TableHeader>
+                      <TableRow className="text-sm font-medium">
+                        <TableHead>Дневное количество</TableHead>
+                        <TableHead>Ночное количество</TableHead>
+                        <TableHead>Общее количество</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      <TableRow className="text-2xl font-bold">
+                        <TableCell>{data.car_day_amount}</TableCell>
+                        <TableCell>{data.car_night_amount}</TableCell>
+                        <TableCell>{data.car_total_amount}</TableCell>
+                      </TableRow>
+                    </TableBody>
+                  </Table>
+                </CardContent>
+              </Card>
+              <Card className="col-span-4">
+                <CardHeader>
+                  <CardTitle>Средний чек</CardTitle>
+                </CardHeader>
+                <Separator className="mb-4" />
+                <CardContent className="space-y-2">
+                  <Table>
+                    <TableHeader>
+                      <TableRow className="text-sm font-medium">
+                        <TableHead>Дневной</TableHead>
+                        <TableHead>Ночной</TableHead>
+                        <TableHead>Общий</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      <TableRow className="text-2xl font-bold">
+                        <TableCell>
+                          {data.avg_cheque_day
+                            .toFixed(2)
+                            .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                        </TableCell>
+                        <TableCell>
+                          {data.avg_cheque_night
+                            .toFixed(2)
+                            .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                        </TableCell>
+                        <TableCell>
+                          {data.avg_cheque_total
+                            .toFixed(2)
+                            .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                        </TableCell>
+                      </TableRow>
+                    </TableBody>
+                  </Table>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
+        </>
+      )}
     </>
   );
 };

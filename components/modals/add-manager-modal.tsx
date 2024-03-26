@@ -111,9 +111,8 @@ export const AddManagerModal = () => {
   return (
     <Dialog>
       <DialogTrigger>
-        <Button variant="outline">
-          <Plus className="w-4 h-4 mr-2 mt-0.5" />
-          Добавить менеджера
+        <Button variant="default">
+          <Plus className="w-4 h-4 " />
         </Button>
       </DialogTrigger>
       <DialogContent className="h-auto">

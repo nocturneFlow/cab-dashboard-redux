@@ -2,10 +2,7 @@
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Costs, costsColumns } from "../components/columns/costs";
-import GetAllApplications, {
-  Application,
-  columns,
-} from "../components/columns/applications";
+import GetAllApplications from "../components/columns/applications";
 import { Heading } from "@/components/ui/heading";
 import { Separator } from "@/components/ui/separator";
 import { AddManagerModal } from "@/components/modals/add-manager-modal";

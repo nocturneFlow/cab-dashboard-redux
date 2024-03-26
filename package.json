@@ -40,6 +40,7 @@
     "@radix-ui/react-toast": "^1.1.5",
     "@radix-ui/react-tooltip": "^1.0.7",
     "@remixicon/react": "^4.2.0",
+    "@tabler/core": "^1.0.0-beta20",
     "@tanstack/react-table": "^8.11.8",
     "@tremor/react": "^3.14.1",
     "axios": "^1.6.7",

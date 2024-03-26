@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Manrope, Open_Sans } from "next/font/google";
+import { Manrope } from "next/font/google";
 import { ClerkProvider } from "@clerk/nextjs";
 import { dark } from "@clerk/themes";
 import { ruRU } from "@clerk/localizations";
@@ -9,7 +9,7 @@ import { GeistSans } from "geist/font/sans";
 
 import "./globals.css";
 
-const font = Open_Sans({
+const font = Manrope({
   subsets: ["latin"],
 });
 
@@ -31,9 +31,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <ClerkProvider
-      localization={ruRU}
-    >
+    <ClerkProvider localization={ruRU}>
       <html lang="en">
         <body className={GeistSans.className}>
           <ThemeProvider

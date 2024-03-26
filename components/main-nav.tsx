@@ -15,7 +15,7 @@ import {
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
 
-import { CarTaxiFront, GanttChart } from "lucide-react";
+import { CarTaxiFront, GanttChart, LayoutDashboard } from "lucide-react";
 
 export function MainNav({
   className,
@@ -69,8 +69,8 @@ export function MainNav({
 
   const dashboard: { title: string; href: string; description: string }[] = [
     {
-      title: "Отчеты",
-      href: `/dashboard/reports`,
+      title: "Элемент 1",
+      href: `/dashboard/1`,
       description: "Текст для пояснения о таблице с отчетами",
     },
     {
@@ -105,11 +105,13 @@ export function MainNav({
                     className="flex h-full w-full select-none flex-col justify-end rounded-md bg-gradient-to-b from-muted/50 to-muted p-6 no-underline outline-none focus:shadow-md"
                     href={`/`}
                   >
-                    <CarTaxiFront className="h-6 w-6" />
-                    <div className="mb-2 mt-4 text-lg font-medium">Главная</div>
+                    <LayoutDashboard className="h-6 w-6" />
+                    <div className="mb-2 mt-4 text-lg font-medium">
+                      Заглушка
+                    </div>
                     <p className="text-sm leading-tight text-muted-foreground">
                       Интерактивный дэшборд, который позволяет вам быстро
-                      просматривать ключевые показатели
+                      просматривать ключевые показатели вашего бизнеса.
                     </p>
                   </a>
                 </NavigationMenuLink>

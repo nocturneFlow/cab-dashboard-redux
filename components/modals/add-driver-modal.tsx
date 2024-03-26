@@ -116,13 +116,16 @@ export const AddDriverModal = () => {
         car_id: carId,
       };
 
-      const response = await fetch("https://taxi-service-68bafebbc66d.herokuapp.com/drivers/addDriver", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(dataToSend), // Отправка только необходимых данных
-      });
+      const response = await fetch(
+        "https://taxi-service-68bafebbc66d.herokuapp.com/drivers/addDriver",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(dataToSend), // Отправка только необходимых данных
+        }
+      );
       if (!response.ok) {
         throw new Error("Failed to add driver");
       }
@@ -145,9 +148,8 @@ export const AddDriverModal = () => {
   return (
     <Dialog>
       <DialogTrigger>
-        <Button variant="outline">
-          <Plus className="w-4 h-4 mr-2 mt-0.5" />
-          Добавить водителя
+        <Button variant="default">
+          <Plus className="w-4 h-4" />
         </Button>
       </DialogTrigger>
       <DialogContent className="h-auto">
