@@ -13,6 +13,8 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 
+import { Siren } from "lucide-react";
+
 import {
   Table,
   TableBody,
@@ -24,7 +26,6 @@ import {
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Plus } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
 import {
   Dialog,
@@ -35,7 +36,6 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Label } from "@/components/ui/label";
 import { AddApplicationModal } from "@/components/modals/add-application-modal";
 import { DatePickerWithRange } from "@/components/modals/date-picker";
 
@@ -44,7 +44,7 @@ interface DataTableProps<TData, TValue> {
   data: TData[];
 }
 
-export function SalariesDataTable<TData, TValue>({
+export function ReportsDataTable<TData, TValue>({
   columns,
   data,
 }: DataTableProps<TData, TValue>) {
@@ -74,20 +74,20 @@ export function SalariesDataTable<TData, TValue>({
   return (
     <div>
       <div className="flex items-center justify-between py-4">
-        {/* <Input
-          placeholder="Поиск по виду оплаты.."
+        <Input
+          placeholder="Поиск по номеру машины.."
           value={
             (table
-              .getColumn("salariesTypeOfPayment")
+              .getColumn("car.plate_number")
               ?.getFilterValue() as string) ?? ""
           }
           onChange={(event) =>
             table
-              .getColumn("salariesTypeOfPayment")
+              .getColumn("car.plate_number")
               ?.setFilterValue(event.target.value)
           }
           className="max-w-sm"
-        /> */}
+        />
         <DatePickerWithRange />
       </div>
       <div className="rounded-md border">
@@ -131,9 +131,21 @@ export function SalariesDataTable<TData, TValue>({
               <TableRow>
                 <TableCell
                   colSpan={columns.length}
-                  className="h-24 text-center"
+                  className="h-24 items-center"
                 >
-                  No results.
+                  <div>
+                    <div className="flex items-center justify-center">
+                      {/* <Siren
+                        className="h-6 w-6 text-muted-foreground"
+                        strokeWidth="1.25"
+                      /> */}
+                    </div>
+                    <div className="text-center">
+                      <p className="text-sm font-semibold text-muted-foreground">
+                        Нет данных для отображения.
+                      </p>
+                    </div>
+                  </div>
                 </TableCell>
               </TableRow>
             )}

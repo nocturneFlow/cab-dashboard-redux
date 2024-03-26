@@ -1,3 +1,5 @@
+"use client";
+
 import * as React from "react";
 import {
   ColumnDef,
@@ -10,6 +12,7 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
+
 import {
   Table,
   TableBody,
@@ -18,33 +21,19 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+
 import { Button } from "@/components/ui/button";
 
-import { ArrowDown, ArrowUp } from "lucide-react";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { useParams, useRouter } from "next/navigation";
 
-import { ExpensesExpandingDataTable } from "./expenses-expanding-data-table";
-import {
-  ExpensesCash,
-  ExpensesCashColumns,
-} from "@/app/(taxipark)/(routes)/tables/components/columns/expensesCash";
-import {
-  ExpensesKaspi,
-  ExpensesKaspiColumns,
-} from "@/app/(taxipark)/(routes)/tables/components/columns/expensesKaspi";
+import { DatePickerWithRange } from "@/components/modals/date-picker";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
 }
 
-export function ExpensesDataTable<TData, TValue>({
+export function SalarySalariesDataTable<TData, TValue>({
   columns,
   data,
 }: DataTableProps<TData, TValue>) {
@@ -52,7 +41,6 @@ export function ExpensesDataTable<TData, TValue>({
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
   );
-
 
   const table = useReactTable({
     data,
@@ -69,25 +57,26 @@ export function ExpensesDataTable<TData, TValue>({
     },
   });
 
-  const [expandedRowIds, setExpandedRowIds] = React.useState<Set<string>>(
-    new Set()
-  );
-
-  const toggleRow = (rowId: string) => {
-    const newExpandedRowIds = new Set(expandedRowIds);
-    if (newExpandedRowIds.has(rowId)) {
-      newExpandedRowIds.delete(rowId);
-    } else {
-      newExpandedRowIds.add(rowId);
-    }
-    setExpandedRowIds(newExpandedRowIds);
-  };
+  const router = useRouter();
+  const params = useParams();
 
   return (
     <div>
+      <div className="flex items-center justify-between py-4">
+        <DatePickerWithRange />
+      </div>
       <div className="rounded-md border">
         <Table>
           <TableHeader>
+          <TableRow>
+              <TableCell align="center" colSpan={5}>
+                ФОТ
+              </TableCell>
+              {/* <TableCell align="center" colSpan={4}> */}
+              <TableCell align="center" colSpan={2}>
+                Оплата
+              </TableCell>
+            </TableRow>
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
@@ -108,31 +97,19 @@ export function ExpensesDataTable<TData, TValue>({
           <TableBody>
             {table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
-                <React.Fragment key={row.id}>
-                  <TableRow
-                    key={row.id}
-                    data-state={row.getIsSelected() && "selected"}
-                    onClick={() => toggleRow(row.id)}
-                  >
-                    {row.getVisibleCells().map((cell) => (
-                      <TableCell key={cell.id}>
-                        {flexRender(
-                          cell.column.columnDef.cell,
-                          cell.getContext()
-                        )}
-                      </TableCell>
-                    ))}
-                  </TableRow>
-                  {expandedRowIds.has(row.id) && (
-                    <TableRow>
-                      <TableCell colSpan={columns.length}>
-                        <div className="p-4">
-                          
-                        </div>
-                      </TableCell>
-                    </TableRow>
-                  )}
-                </React.Fragment>
+                <TableRow
+                  key={row.id}
+                  data-state={row.getIsSelected() && "selected"}
+                >
+                  {row.getVisibleCells().map((cell) => (
+                    <TableCell key={cell.id}>
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext()
+                      )}
+                    </TableCell>
+                  ))}
+                </TableRow>
               ))
             ) : (
               <TableRow>
@@ -147,7 +124,6 @@ export function ExpensesDataTable<TData, TValue>({
           </TableBody>
         </Table>
       </div>
-
       <div className="flex items-center justify-end space-x-2 py-4">
         <Button
           variant="outline"

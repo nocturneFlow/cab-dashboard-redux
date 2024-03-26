@@ -2,7 +2,7 @@
 
 import { ColumnDef } from "@tanstack/react-table";
 
-export type SalariesSalariesPayment = {
+export type SalariesSalariesPayment = {  
   id: string;
   SalariesSalariesPaymentDriver: string;
   SalariesSalariesPaymentUpfront: string;

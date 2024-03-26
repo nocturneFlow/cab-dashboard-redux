@@ -1,11 +1,32 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
-
 import React, { useState } from "react";
 import { CashReconciliationDataTable } from "@/components/tables/cashReconciliation/cashReconciliation-data-table-pagination";
 import { fetchCashReconciliationData } from "../../CashReconciliation/action/fetchCashReconciliationData";
 import { Button } from "@/components/ui/button";
+import {
+  Sheet,
+  SheetTrigger,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetDescription,
+} from "@/components/ui/sheet";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -15,26 +36,14 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import {
-  Sheet,
-  SheetClose,
-  SheetContent,
-  SheetDescription,
-  SheetFooter,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet";
-import {
-  Table,
-  TableBody,
-  TableCaption,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-
-import { ArrowUpDown, ExpandIcon, MoreHorizontal, Scaling } from "lucide-react";
+  ArrowUpDown,
+  Eraser,
+  MoreHorizontal,
+  PanelBottomOpen,
+  PenLine,
+} from "lucide-react";
+import { CellAction } from "../cell-action";
+import { EditApplicationModal } from "@/components/modals/edit-application-modal";
 
 export interface Car {
   id: number;
@@ -98,9 +107,10 @@ export interface ExpenseApl {
 }
 
 export interface CashReconciliation {
+  summ: any;
+  comment: any;
+  date: string | number | Date;
   id: number;
-  date: string;
-  time_on_line: number;
   car: Car;
   driver: Driver;
   manager: Manager;
@@ -147,86 +157,134 @@ export const CashReconciliationColumns: ColumnDef<CashReconciliation>[] = [
   {
     id: "expand",
     cell: ({ row }) => {
-      const CashReconciliation = row.originalSubRows;
-
       return (
         <>
           <div>
             <Sheet>
               <SheetTrigger>
-                <Scaling className="h-4 w-4" strokeWidth="2px" />
+                <Button variant="ghost" className="h-8 w-8 p-0">
+                  <PanelBottomOpen className="w-4 h-4" />
+                </Button>
               </SheetTrigger>
-              <SheetContent>
+              <SheetContent className="backdrop-blur">
                 <SheetHeader>
-                  <SheetTitle>Яндекс</SheetTitle>
-                  <SheetDescription>
-                    <Table>
-                      <TableCaption>
-                        A list of your recent invoices.
-                      </TableCaption>
-                      <TableHeader>
-                        <TableRow>
-                          <TableHead>Наличными</TableHead>
-                          <TableHead>Безнал</TableHead>
-                          <TableHead>Итого</TableHead>
-                        </TableRow>
-                      </TableHeader>
-                      <TableBody>
-                        <TableRow>
-                          <TableCell>INV001</TableCell>
-                          <TableCell>Paid</TableCell>
-                          <TableCell>Credit Card</TableCell>
-                        </TableRow>
-                      </TableBody>
-                    </Table>
-                  </SheetDescription>
-                  <SheetTitle>Касса</SheetTitle>
-                  <SheetDescription>
-                    <Table>
-                      <TableCaption>
-                        A list of your recent invoices.
-                      </TableCaption>
-                      <TableHeader>
-                        <TableRow>
-                          <TableHead className="w-[100px]">Invoice</TableHead>
-                          <TableHead>Status</TableHead>
-                          <TableHead>Method</TableHead>
-                          <TableHead className="text-right">Amount</TableHead>
-                        </TableRow>
-                      </TableHeader>
-                      <TableBody>
-                        <TableRow>
-                          <TableCell className="font-medium">INV001</TableCell>
-                          <TableCell>Paid</TableCell>
-                          <TableCell>Credit Card</TableCell>
-                          <TableCell className="text-right">$250.00</TableCell>
-                        </TableRow>
-                      </TableBody>
-                    </Table>
-                  </SheetDescription>
-                  <SheetTitle>Расходы</SheetTitle>
-                  <SheetDescription>
-                    <Table>
-                      <TableCaption>
-                        A list of your recent invoices.
-                      </TableCaption>
-                      <TableHeader>
-                        <TableRow>
-                          <TableHead className="w-[100px]">Invoice</TableHead>
-                          <TableHead>Status</TableHead>
-                          <TableHead>Method</TableHead>
-                          <TableHead className="text-right">Amount</TableHead>
-                        </TableRow>
-                      </TableHeader>
-                      <TableBody>
-                        <TableRow>
-                          <TableCell className="font-medium">INV001</TableCell>
-                          <TableCell>Paid</TableCell>
-                          <TableCell>Credit Card</TableCell>
-                          <TableCell className="text-right">$250.00</TableCell>
-                        </TableRow>
-                      </TableBody>
-                    </Table>
+                  <SheetDescription className="p-20 ">
+                    <Accordion type="multiple">
+                      <AccordionItem value="item-1">
+                        <AccordionTrigger>
+                          <SheetTitle>Яндекс</SheetTitle>
+                        </AccordionTrigger>
+                        <AccordionContent>
+                          <Table>
+                            <TableHeader>
+                              <TableRow>
+                                <TableHead>Наличными</TableHead>
+                                <TableHead>Безнал</TableHead>
+                                <TableHead className="text-right">
+                                  Итого
+                                </TableHead>
+                              </TableRow>
+                            </TableHeader>
+                            <TableBody>
+                              <TableRow>
+                                <TableCell>
+                                  {row.original.yandexData.cash_amount}
+                                </TableCell>
+                                <TableCell>
+                                  {row.original.yandexData.cashless_amount}
+                                </TableCell>
+                                <TableCell className="text-right">
+                                  {row.original.yandexData.cash_amount +
+                                    row.original.yandexData.cashless_amount}
+                                </TableCell>
+                              </TableRow>
+                            </TableBody>
+                          </Table>
+                        </AccordionContent>
+                      </AccordionItem>
+                      <AccordionItem value="item-2">
+                        <AccordionTrigger>
+                          <SheetTitle>Касса</SheetTitle>
+                        </AccordionTrigger>
+                        <AccordionContent>
+                          <Table>
+                            <TableHeader>
+                              <TableRow>
+                                <TableHead>Наличными</TableHead>
+                                <TableHead>Kaspi</TableHead>
+                                <TableHead>Итого</TableHead>
+                                <TableHead className="text-right">
+                                  Разница
+                                </TableHead>
+                              </TableRow>
+                            </TableHeader>
+                            <TableBody>
+                              <TableRow>
+                                <TableCell>
+                                  {row.original.payment.amount_cash}
+                                </TableCell> 
+                                <TableCell>
+                                  {row.original.payment.amount_cashless}
+                                </TableCell>
+                                <TableCell>
+                                  {row.original.payment.amount_cash +
+                                    row.original.payment.amount_cashless}
+                                </TableCell>
+                                <TableCell className="text-right">
+                                  {row.original.payment.amount_cash +
+                                    row.original.payment.amount_cashless -
+                                    row.original.payment.amount_cashless}
+                                </TableCell>
+                              </TableRow>
+                            </TableBody>
+                          </Table>
+                        </AccordionContent>
+                      </AccordionItem>
+                      <AccordionItem value="item-3">
+                        <AccordionTrigger>
+                          <SheetTitle>Расходы</SheetTitle>
+                        </AccordionTrigger>
+                        <AccordionContent>
+                          <Table>
+                            <TableHeader>
+                              <TableRow>
+                                <TableHead>Газ</TableHead>
+                                <TableHead>Прочие расходы</TableHead>
+                                <TableHead>Статья расходов</TableHead>
+                                <TableHead>Аванс</TableHead>
+                                <TableHead className="text-right">
+                                  Итого расходы с нал
+                                </TableHead>
+                              </TableRow>
+                            </TableHeader>
+                            <TableBody>
+                              <TableRow>
+                                <TableCell>
+                                  {row.original.expenseApl.gas}
+                                </TableCell>
+                                <TableCell>
+                                  {row.original.expenseApl.other}
+                                </TableCell>
+                                <TableCell>
+                                  {
+                                    row.original.expenseApl.expenseItemApl
+                                      .expense_item_name
+                                  }
+                                </TableCell>
+                                <TableCell>
+                                  {row.original.expenseApl.advance}
+                                </TableCell>
+                                <TableCell className="text-right">
+                                  {row.original.expenseApl.gas +
+                                    row.original.expenseApl.other +
+                                    row.original.expenseApl.advance}
+                                </TableCell>
+                              </TableRow>
+                            </TableBody>
+                          </Table>
+                        </AccordionContent>
+                      </AccordionItem>
+                    </Accordion>
                   </SheetDescription>
                 </SheetHeader>
               </SheetContent>
@@ -239,72 +297,68 @@ export const CashReconciliationColumns: ColumnDef<CashReconciliation>[] = [
   {
     id: "actions",
     cell: ({ row }) => {
-      const CashReconciliation = row.originalSubRows;
-
       return (
-        <>
-          <div>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant={"ghost"}>
-                  <MoreHorizontal className="w-4 h-4" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent>
-                <DropdownMenuLabel>Действие</DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem>Изменить</DropdownMenuItem>
-                <DropdownMenuItem
-                  onClick={() => row.original.onDelete(row.original.id)}
-                >
-                  Удалить
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </div>
-        </>
+        <DropdownMenu>
+          <DropdownMenuTrigger>
+            <Button variant="ghost">
+              <MoreHorizontal className="w-4 h-4" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent>
+            <DropdownMenuLabel>Действие</DropdownMenuLabel>
+            <DropdownMenuSeparator />
+            {/* <EditApplicationModal data={row.original} /> */}
+            <DropdownMenuItem
+              onClick={() => row.original.onDelete(row.original.id)}
+            >
+              <Eraser className="w-4 h-4" />
+              <span className="pl-2">Удалить</span>
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       );
     },
   },
+
 ];
 
-// export default function GetAllCashReconciliation() {
-//     const [dataCashReconciliation, setDataCashReconciliation] = React.useState<CashReconciliation[]>(
-//         []
-//     );
+export default function GetAllCashReconciliation() {
+  const [dataCashReconciliation, setDataCashReconciliation] = React.useState<CashReconciliation[]>(
+    []
+  );
 
-//   React.useEffect(() => {
-//     async function fetchCashReconciliationData() {
-//       try {
-//         const CashReconciliationData = await fetchCashReconciliationData();
+  React.useEffect(() => {
+    async function fetchDataCashReconciliation() {
+      try {
+        const cashReconciliationData = await fetchCashReconciliationData();
+        console.log(cashReconciliationData);
 
-//         // Преобразование даты в удобочитаемый формат
-//         const formattedCashReconciliationData = CashReconciliationData.map(
-//           (application) => ({
-//             ...application,
-//             date: new Date(application.date).toLocaleDateString("ru-RU"),
-//             car: {
-//               id: application.car.id,
-//               plate_number: application.car.plate_number,
-//               model: application.car.model,
-//             },
-//           })
-//         );
+        const formattedCashReconciliationData = cashReconciliationData.map(
+          (cashReconciliation) => ({
+            ...cashReconciliation,
+            car: {
+              id: cashReconciliation.car.id,
+              plate_number: cashReconciliation.car.plate_number,
+              model: cashReconciliation.car.model,
+            },
+          })
+        );
 
-//                 setDataCashReconciliation(formattedCashReconciliationData);
-//             } catch (error) {
-//                 console.error("Error fetching CashReconciliation data:", error);
-//             }
-//         }
-//         fetchCashReconciliationData();
-//     }, []);
+        setDataCashReconciliation(formattedCashReconciliationData);
+      } catch (error) {
+        console.error("Error fetching cashReconciliation data:", error);
+      }
+    }
+    fetchDataCashReconciliation();
+  }, []);
 
-//   return (
-//     <CashReconciliationDataTable
-//       columns={CashReconciliationColumns}
-//       data={dataCashReconciliation.map((cashReconciliation) => ({
-//         ...cashReconciliation,
-//       }))}
-//     />
-//   );
-// }
+
+  return (
+    <CashReconciliationDataTable
+      columns={CashReconciliationColumns}
+      data={dataCashReconciliation.map((cashReconciliation) => ({
+        ...cashReconciliation,
+      }))}
+    />
+  );
+}
