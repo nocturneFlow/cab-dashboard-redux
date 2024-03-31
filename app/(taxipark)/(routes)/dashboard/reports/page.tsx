@@ -86,7 +86,7 @@ const ReportsPage = () => {
         setData(data);
         setTimeout(() => {
           setLoading(false);
-        }, 3000);
+        });
       } catch (error) {
         console.error("Error fetching data:", error);
       }

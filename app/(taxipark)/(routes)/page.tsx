@@ -2,7 +2,6 @@
 
 import React from "react";
 import { TbCurrencyTenge } from "react-icons/tb";
-import Autoplay from "embla-carousel-autoplay";
 import {
   Card,
   CardContent,
@@ -11,7 +10,6 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Overview } from "./components/overview";
-
 import { useState, useEffect } from "react";
 import { DatePickerWithRange } from "@/components/ui/date-range-picker";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -20,7 +18,6 @@ import { Skeleton } from "@/components/ui/skeleton";
 import ReportsPage from "./dashboard/reports/page";
 import { TrendingDown, TrendingUp } from "lucide-react";
 import StaffPage from "./dashboard/staff/page";
-import axios, { AxiosResponse } from "axios";
 
 interface CarDetailModel {
   plate_number: string;
@@ -88,7 +85,7 @@ const DashboardPage = () => {
         setData(data);
         setTimeout(() => {
           setLoading(false);
-        }, 3000);
+        });
       } catch (error) {
         console.error("Error fetching data:", error);
       }
