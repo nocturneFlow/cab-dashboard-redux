@@ -21,7 +21,6 @@ import {
 } from "@/components/ui/table";
 
 import { Button } from "@/components/ui/button";
-import { DatePickerWithRange } from "@/components/modals/date-picker";
 
 import {
   ContextMenu,
@@ -31,6 +30,7 @@ import {
 } from "@/components/ui/context-menu";
 import { useParams, useRouter } from "next/navigation";
 import { Plus } from "lucide-react";
+import { DatePickerWithRange } from "@/components/ui/date-range-picker";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];

@@ -1,6 +1,6 @@
 "use client";
 
-import { Heading } from "@/components/ui/heading";
+import React from "react";
 import { TbCurrencyTenge } from "react-icons/tb";
 import Autoplay from "embla-carousel-autoplay";
 import {
@@ -10,17 +10,17 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-
 import { Overview } from "./components/overview";
-import React from "react";
 
 import { useState, useEffect } from "react";
 import { DatePickerWithRange } from "@/components/ui/date-range-picker";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
 import ReportsPage from "./dashboard/reports/page";
 import { TrendingDown, TrendingUp } from "lucide-react";
 import StaffPage from "./dashboard/staff/page";
+import axios, { AxiosResponse } from "axios";
 
 interface CarDetailModel {
   plate_number: string;
@@ -74,8 +74,8 @@ interface MyInterface {
 }
 
 const DashboardPage = () => {
-  const plugin = React.useRef(Autoplay({ delay: 2000 }));
   const [data, setData] = useState<MyInterface | null>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function fetchData(url: string): Promise<void> {
@@ -86,6 +86,9 @@ const DashboardPage = () => {
         }
         const data: MyInterface = await response.json();
         setData(data);
+        setTimeout(() => {
+          setLoading(false);
+        }, 3000);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -94,9 +97,115 @@ const DashboardPage = () => {
     const url = "https://taxi-service-68bafebbc66d.herokuapp.com/reports/all";
     fetchData(url);
   }, []);
+
   return (
     <>
-      {data && (
+      {loading && (
+        <div className="hidden flex-col md:flex">
+          <div className="flex-1 space-y-4 p-8 pt-6">
+            <div className="flex items-center justify-between space-y-2">
+              <h2 className="text-3xl font-bold tracking-tight">
+                <Skeleton className="w-[125px] h-8" />
+              </h2>
+              <div className="flex items-center space-x-2">
+                <Skeleton className="w-[300px] h-9" />
+                <Skeleton className="w-28 h-9" />
+              </div>
+            </div>
+            <Tabs defaultValue="overview" className="space-y-4">
+              <Skeleton className="w-[233px] h-10" />
+              <TabsContent value="overview" className="space-y-4">
+                <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+                  <Card>
+                    <CardHeader className="flex flex-row items-center justify-between pb-2">
+                      <CardTitle className="text-sm font-medium">
+                        <Skeleton className="w-[110px] h-3 mb-3" />
+                        <Skeleton className="w-[170px] h-7" />
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="text-2xl font-bold">
+                        <span
+                          style={{}}
+                          className="flex items-center gap-2"
+                        ></span>
+                      </div>
+                      <p className="text-xs text-muted-foreground"></p>
+                    </CardContent>
+                  </Card>
+                  <Card>
+                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                      <CardTitle className="text-sm font-medium">
+                        <Skeleton className="w-[110px] h-3 mb-3" />
+                        <Skeleton className="w-[170px] h-7" />
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="text-2xl font-bold"></div>
+                      <p className="text-xs text-muted-foreground"></p>
+                    </CardContent>
+                  </Card>
+                  <Card>
+                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                      <CardTitle className="text-sm font-medium">
+                        <Skeleton className="w-[110px] h-3 mb-3" />
+                        <Skeleton className="w-[170px] h-7" />
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="text-2xl font-bold"></div>
+                      <p className="text-xs text-muted-foreground"></p>
+                    </CardContent>
+                  </Card>
+                  <Card>
+                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                      <CardTitle className="text-sm font-medium">
+                        <Skeleton className="w-[110px] h-3 mb-3" />
+                        <Skeleton className="w-[170px] h-7" />
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="text-2xl font-bold"></div>
+                      <p className="text-xs text-muted-foreground"></p>
+                    </CardContent>
+                  </Card>
+                </div>
+                <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
+                  <Card className="col-span-4">
+                    <CardHeader>
+                      <CardTitle>
+                        <Skeleton className="w-[80px] h-7" />
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent className="">
+                      <Skeleton className="w-full h-[800px] " />
+                    </CardContent>
+                  </Card>
+                  <Card className="col-span-3">
+                    <CardHeader>
+                      <CardTitle>
+                        <Skeleton className="w-[150px] h-7" />
+                      </CardTitle>
+                      <Skeleton className="w-[210px] h-3" />
+                    </CardHeader>
+                    <CardContent>
+                      <Skeleton className="w-full h-[780px] " />
+                    </CardContent>
+                  </Card>
+                </div>
+              </TabsContent>
+              <TabsContent value="reports">
+                <ReportsPage />
+              </TabsContent>
+              <TabsContent value="staff">
+                <StaffPage />
+              </TabsContent>
+            </Tabs>
+          </div>
+        </div>
+      )}
+
+      {!loading && data && (
         <div className="hidden flex-col md:flex">
           <div className="flex-1 space-y-4 p-8 pt-6">
             <div className="flex items-center justify-between space-y-2">
@@ -111,9 +220,6 @@ const DashboardPage = () => {
                 <TabsTrigger value="overview">Обзор</TabsTrigger>
                 <TabsTrigger value="reports">Отчет</TabsTrigger>
                 <TabsTrigger value="staff">Персонал</TabsTrigger>
-                <TabsTrigger value="" disabled>
-                  Notifications
-                </TabsTrigger>
               </TabsList>
               <TabsContent value="overview" className="space-y-4">
                 <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
@@ -149,15 +255,13 @@ const DashboardPage = () => {
                           )}
                         </span>
                       </div>
-                      <p className="text-xs text-muted-foreground">
-                        +20.1% from last month
-                      </p>
+                      <p className="text-xs text-muted-foreground"></p>
                     </CardContent>
                   </Card>
                   <Card>
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                       <CardTitle className="text-sm font-medium">
-                        Subscriptions
+                        В прогрессе
                       </CardTitle>
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -176,15 +280,13 @@ const DashboardPage = () => {
                     </CardHeader>
                     <CardContent>
                       <div className="text-2xl font-bold">+2350</div>
-                      <p className="text-xs text-muted-foreground">
-                        +180.1% from last month
-                      </p>
+                      <p className="text-xs text-muted-foreground"></p>
                     </CardContent>
                   </Card>
                   <Card>
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                       <CardTitle className="text-sm font-medium">
-                        Sales
+                        В прогрессе
                       </CardTitle>
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -202,15 +304,13 @@ const DashboardPage = () => {
                     </CardHeader>
                     <CardContent>
                       <div className="text-2xl font-bold">+12,234</div>
-                      <p className="text-xs text-muted-foreground">
-                        +19% from last month
-                      </p>
+                      <p className="text-xs text-muted-foreground"></p>
                     </CardContent>
                   </Card>
                   <Card>
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                       <CardTitle className="text-sm font-medium">
-                        Active Now
+                        В прогрессе
                       </CardTitle>
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -227,9 +327,7 @@ const DashboardPage = () => {
                     </CardHeader>
                     <CardContent>
                       <div className="text-2xl font-bold">+573</div>
-                      <p className="text-xs text-muted-foreground">
-                        +201 since last hour
-                      </p>
+                      <p className="text-xs text-muted-foreground"></p>
                     </CardContent>
                   </Card>
                 </div>
@@ -244,10 +342,8 @@ const DashboardPage = () => {
                   </Card>
                   <Card className="col-span-3">
                     <CardHeader>
-                      <CardTitle>Recent Sales</CardTitle>
-                      <CardDescription>
-                        You made 265 sales this month.
-                      </CardDescription>
+                      <CardTitle>В прогрессе</CardTitle>
+                      <CardDescription>Будет когда-нибудь</CardDescription>
                     </CardHeader>
                     <CardContent>{/* <RecentSales /> */}</CardContent>
                   </Card>

@@ -1,10 +1,7 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Heading } from "@/components/ui/heading";
 import { Separator } from "@/components/ui/separator";
-import GetAllReports, {
-  additionalIncome,
-  additionalIncomeColumns,
-} from "../components/columns/reportT";
+import GetAllReports from "../components/columns/reportT";
 import { useEffect, useState } from "react";
 
 export default function ReportsPage() {
@@ -23,10 +20,10 @@ export default function ReportsPage() {
         </div>
         <Separator />
         <div className="flex items-center justify-center w-full pt-5">
-        <Tabs defaultValue="expenses" className="w-5/6">
+          <Tabs defaultValue="expenses" className="w-5/6">
             <TabsContent value="expenses">
               <div className="">
-                <GetAllReports/>
+                <GetAllReports />
               </div>
             </TabsContent>
           </Tabs>

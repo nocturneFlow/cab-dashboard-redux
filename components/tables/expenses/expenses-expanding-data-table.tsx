@@ -37,7 +37,6 @@ import {
 } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { AddApplicationModal } from "@/components/modals/add-application-modal";
-import { DatePickerWithRange } from "@/components/modals/date-picker";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];

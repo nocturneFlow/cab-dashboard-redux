@@ -2,8 +2,6 @@
 
 import * as React from "react";
 import Link from "next/link";
-import { useParams, usePathname } from "next/navigation";
-
 import { cn } from "@/lib/utils";
 import {
   NavigationMenu,
@@ -14,16 +12,9 @@ import {
   NavigationMenuTrigger,
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
+import { GanttChart, LayoutDashboard } from "lucide-react";
 
-import { CarTaxiFront, GanttChart, LayoutDashboard } from "lucide-react";
-
-export function MainNav({
-  className,
-  ...props
-}: React.HTMLAttributes<HTMLElement>) {
-  const pathname = usePathname();
-  const params = useParams();
-
+export function MainNav({ className }: React.HTMLAttributes<HTMLElement>) {
   const tables: { title: string; href: string; description: string }[] = [
     {
       title: "Заявки",
@@ -85,7 +76,7 @@ export function MainNav({
     },
   ];
 
-  const reports  : { title: string; href: string; description: string }[] = [
+  const reports: { title: string; href: string; description: string }[] = [
     {
       title: "Дополнительный Доход",
       href: `/tables/additionalIncome`,

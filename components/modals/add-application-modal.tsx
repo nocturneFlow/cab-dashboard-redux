@@ -35,6 +35,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { cn } from "@/lib/utils";
 import GetAllApplications from "@/app/(taxipark)/(routes)/tables/components/columns/applications";
+import { Skeleton } from "../ui/skeleton";
 
 interface Manager {
   id: string;
@@ -353,7 +354,11 @@ export const AddApplicationModal = () => {
   };
 
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <div>
+        <Skeleton className="w-[178px] h-10 mt-6" />
+      </div>
+    );
   }
 
   async function onSubmit(values: z.infer<typeof formSchema>) {

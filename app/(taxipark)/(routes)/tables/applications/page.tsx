@@ -21,7 +21,6 @@ export default function ApplicationsPage() {
             title="Таблицы | Заявки"
             description="Управляйте своими таблицами"
           />
-          {isClient && <AddManagerModal />}
         </div>
         <Separator />
         <div className="flex items-center justify-center w-full pt-5">

@@ -5,7 +5,6 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
   TableHead,
   TableHeader,
@@ -15,12 +14,11 @@ import { Separator } from "@/components/ui/separator";
 import {
   Coins,
   HandCoins,
-  Landmark,
   Percent,
   TrendingDown,
   TrendingUp,
 } from "lucide-react";
-import PieChartReportsIncome from "@/components/charts/pie-chart-reports-income";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export interface CarDetailModel {
   plate_number: string;
@@ -75,6 +73,7 @@ export interface MyInterface {
 
 const ReportsPage = () => {
   const [data, setData] = useState<MyInterface | null>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function fetchData(url: string): Promise<void> {
@@ -85,6 +84,9 @@ const ReportsPage = () => {
         }
         const data: MyInterface = await response.json();
         setData(data);
+        setTimeout(() => {
+          setLoading(false);
+        }, 3000);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -96,7 +98,321 @@ const ReportsPage = () => {
 
   return (
     <>
-      {data && (
+      {loading && (
+        <>
+          <div className="space-y-4">
+            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+              <Card>
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                  <CardTitle className="text-sm font-medium">
+                    <Skeleton className="w-[45px] h-3" />
+                  </CardTitle>
+                  <Skeleton className="w-[20px] h-5" />
+                </CardHeader>
+                <Separator className="mt-3 mb-3" />
+                <CardContent className="space-y-2">
+                  <div className="text-2xl font-bold">
+                    <Skeleton className="w-1/4 h-9" />
+                  </div>
+                  <p className="text-xs text-muted-foreground">
+                    <Skeleton className="w-10 h-2" />
+                  </p>
+                  <div className="text-2xl font-bold">
+                    <Skeleton className="w-1/3 h-9" />
+                  </div>
+                  <p className="text-xs text-muted-foreground">
+                    <Skeleton className="w-10 h-2" />
+                  </p>
+                  <div className="text-2xl font-bold">
+                    <Skeleton className="w-1/2 h-9" />
+                  </div>
+                  <p className="text-xs text-muted-foreground">
+                    <Skeleton className="w-10 h-2" />
+                  </p>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                  <CardTitle className="text-sm font-medium">
+                    <Skeleton className="w-[45px] h-3" />
+                  </CardTitle>
+                  <Skeleton className="w-[20px] h-5" />
+                </CardHeader>
+                <Separator className="mt-3 mb-3" />
+                <CardContent className="space-y-2">
+                  <div className="text-2xl font-bold">
+                    <Skeleton className="w-1/4 h-9" />
+                  </div>
+                  <p className="text-xs text-muted-foreground">
+                    <Skeleton className="w-10 h-2" />
+                  </p>
+                  <div className="text-2xl font-bold">
+                    <Skeleton className="w-1/3 h-9" />
+                  </div>
+                  <p className="text-xs text-muted-foreground">
+                    <Skeleton className="w-10 h-2" />
+                  </p>
+                  <div className="text-2xl font-bold">
+                    <Skeleton className="w-1/2 h-9" />
+                  </div>
+                  <p className="text-xs text-muted-foreground">
+                    <Skeleton className="w-10 h-2" />
+                  </p>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                  <CardTitle className="text-sm font-medium">
+                    <Skeleton className="w-[45px] h-3" />
+                  </CardTitle>
+                  <Skeleton className="w-[20px] h-5" />
+                </CardHeader>
+                <Separator className="mt-3 mb-3" />
+                <CardContent className="space-y-2">
+                  <div className="text-2xl font-bold">
+                    <Skeleton className="w-1/4 h-9" />
+                  </div>
+                  <p className="text-xs text-muted-foreground">
+                    <Skeleton className="w-10 h-2" />
+                  </p>
+                  <div className="text-2xl font-bold">
+                    <Skeleton className="w-1/3 h-9" />
+                  </div>
+                  <p className="text-xs text-muted-foreground">
+                    <Skeleton className="w-10 h-2" />
+                  </p>
+                  <div className="text-2xl font-bold">
+                    <Skeleton className="w-1/2 h-9" />
+                  </div>
+                  <p className="text-xs text-muted-foreground">
+                    <Skeleton className="w-10 h-2" />
+                  </p>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                  <CardTitle className="text-sm font-medium">
+                    <Skeleton className="w-[45px] h-3" />
+                  </CardTitle>
+                  <Skeleton className="w-[20px] h-5" />
+                </CardHeader>
+                <Separator className="mt-3 mb-3" />
+                <CardContent className="space-y-2">
+                  <div className="text-2xl font-bold">
+                    <Skeleton className="w-1/4 h-9" />
+                  </div>
+                  <p className="text-xs text-muted-foreground">
+                    <Skeleton className="w-10 h-2" />
+                  </p>
+                  <div className="text-2xl font-bold">
+                    <Skeleton className="w-1/3 h-9" />
+                  </div>
+                  <p className="text-xs text-muted-foreground">
+                    <Skeleton className="w-10 h-2" />
+                  </p>
+                  <div className="text-2xl font-bold">
+                    <Skeleton className="w-1/2 h-9" />
+                  </div>
+                  <p className="text-xs text-muted-foreground">
+                    <Skeleton className="w-10 h-2" />
+                  </p>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                  <CardTitle className="text-sm font-medium">
+                    <Skeleton className="w-[45px] h-3" />
+                  </CardTitle>
+                  <Skeleton className="w-[20px] h-5" />
+                </CardHeader>
+                <Separator className="mt-3 mb-3" />
+                <CardContent className="space-y-2">
+                  <div className="text-2xl font-bold">
+                    <Skeleton className="w-1/4 h-9" />
+                  </div>
+                  <p className="text-xs text-muted-foreground">
+                    <Skeleton className="w-10 h-2" />
+                  </p>
+                  <div className="text-2xl font-bold">
+                    <Skeleton className="w-1/3 h-9" />
+                  </div>
+                  <p className="text-xs text-muted-foreground">
+                    <Skeleton className="w-10 h-2" />
+                  </p>
+                  <div className="text-2xl font-bold">
+                    <Skeleton className="w-1/2 h-9" />
+                  </div>
+                  <p className="text-xs text-muted-foreground">
+                    <Skeleton className="w-10 h-2" />
+                  </p>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                  <CardTitle className="text-sm font-medium">
+                    <Skeleton className="w-[45px] h-3" />
+                  </CardTitle>
+                  <Skeleton className="w-[20px] h-5" />
+                </CardHeader>
+                <Separator className="mt-3 mb-3" />
+                <CardContent className="space-y-2">
+                  <div className="text-2xl font-bold">
+                    <Skeleton className="w-1/4 h-9" />
+                  </div>
+                  <p className="text-xs text-muted-foreground">
+                    <Skeleton className="w-10 h-2" />
+                  </p>
+                  <div className="text-2xl font-bold">
+                    <Skeleton className="w-1/3 h-9" />
+                  </div>
+                  <p className="text-xs text-muted-foreground">
+                    <Skeleton className="w-10 h-2" />
+                  </p>
+                  <div className="text-2xl font-bold">
+                    <Skeleton className="w-1/2 h-9" />
+                  </div>
+                  <p className="text-xs text-muted-foreground">
+                    <Skeleton className="w-10 h-2" />
+                  </p>
+                </CardContent>
+              </Card>
+            </div>
+            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-">
+              <Card className="col-span-7">
+                <CardHeader>
+                  <CardTitle>
+                    <Skeleton className="w-[120px] h-7" />
+                  </CardTitle>
+                </CardHeader>
+                <Separator className="mb-4" />
+                <CardContent className="space-y-2">
+                  <Table>
+                    <TableHeader>
+                      <TableRow className="text-sm font-medium">
+                        <TableHead>
+                          <Skeleton className="w-[75px] h-3" />
+                        </TableHead>
+                        <TableHead>
+                          <Skeleton className="w-[75px] h-3" />
+                        </TableHead>
+                        <TableHead>
+                          <Skeleton className="w-[75px] h-3" />
+                        </TableHead>
+                        <TableHead>
+                          <Skeleton className="w-[75px] h-3" />
+                        </TableHead>
+                        <TableHead>
+                          <Skeleton className="w-[75px] h-3" />
+                        </TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      <TableRow className="text-2xl font-bold">
+                        <TableCell>
+                          <Skeleton className="w-[125px] h-5" />
+                        </TableCell>
+                        <TableCell>
+                          <Skeleton className="w-[125px] h-5" />
+                        </TableCell>
+                        <TableCell>
+                          <Skeleton className="w-[125px] h-5" />
+                        </TableCell>
+                        <TableCell>
+                          <Skeleton className="w-[125px] h-5" />
+                        </TableCell>
+                        <TableCell>
+                          <Skeleton className="w-[125px] h-5" />
+                        </TableCell>
+                      </TableRow>
+                    </TableBody>
+                  </Table>
+                </CardContent>
+              </Card>
+            </div>
+            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
+              <Card className="col-span-3">
+                <CardHeader>
+                  <CardTitle>
+                    <Skeleton className="w-[120px] h-7" />
+                  </CardTitle>
+                </CardHeader>
+                <Separator className="mb-4" />
+                <CardContent className="space-y-2">
+                  <Table>
+                    <TableHeader>
+                      <TableRow className="text-sm font-medium">
+                        <TableHead>
+                          <Skeleton className="w-[75px] h-3" />
+                        </TableHead>
+                        <TableHead>
+                          <Skeleton className="w-[75px] h-3" />
+                        </TableHead>
+                        <TableHead>
+                          <Skeleton className="w-[75px] h-3" />
+                        </TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      <TableRow className="text-2xl font-bold">
+                        <TableCell>
+                          <Skeleton className="w-[125px] h-5" />
+                        </TableCell>
+                        <TableCell>
+                          <Skeleton className="w-[125px] h-5" />
+                        </TableCell>
+                        <TableCell>
+                          <Skeleton className="w-[125px] h-5" />
+                        </TableCell>
+                      </TableRow>
+                    </TableBody>
+                  </Table>
+                </CardContent>
+              </Card>
+              <Card className="col-span-4">
+                <CardHeader>
+                  <CardTitle>
+                    {" "}
+                    <Skeleton className="w-[120px] h-7" />
+                  </CardTitle>
+                </CardHeader>
+                <Separator className="mb-4" />
+                <CardContent className="space-y-2">
+                  <Table>
+                    <TableHeader>
+                      <TableRow className="text-sm font-medium">
+                        <TableHead>
+                          <Skeleton className="w-[75px] h-3" />
+                        </TableHead>
+                        <TableHead>
+                          <Skeleton className="w-[75px] h-3" />
+                        </TableHead>
+                        <TableHead>
+                          <Skeleton className="w-[75px] h-3" />
+                        </TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      <TableRow className="text-2xl font-bold">
+                        <TableCell>
+                          <Skeleton className="w-[125px] h-5" />
+                        </TableCell>
+                        <TableCell>
+                          <Skeleton className="w-[125px] h-5" />
+                        </TableCell>
+                        <TableCell>
+                          <Skeleton className="w-[125px] h-5" />
+                        </TableCell>
+                      </TableRow>
+                    </TableBody>
+                  </Table>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
+        </>
+      )}
+
+      {!loading && data && (
         <>
           <div className="space-y-4">
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">

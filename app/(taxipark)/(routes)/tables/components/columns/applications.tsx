@@ -23,6 +23,14 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
   Accordion,
   AccordionContent,
   AccordionItem,
@@ -41,10 +49,10 @@ import {
   Eraser,
   MoreHorizontal,
   PanelBottomOpen,
-  PenLine,
 } from "lucide-react";
-import { CellAction } from "../cell-action";
 import { EditApplicationModal } from "@/components/modals/edit-application-modal";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Separator } from "@/components/ui/separator";
 
 export interface Car {
   id: number;
@@ -362,21 +370,18 @@ export const columns: ColumnDef<Application>[] = [
       );
     },
   },
-  // {
-  //   id: "actionsTwo",
-  //   cell: ({ row }) => <CellAction data={row.original} />,
-  // },
 ];
 
 export default function GetAllApplications() {
   const [dataApplications, setDataApplications] = React.useState<Application[]>(
     []
   );
+  const [loading, setLoading] = useState(true);
 
   React.useEffect(() => {
     async function fetchDataApplications() {
       try {
-        const applicationsData = await fetchApplicationsData(); // Получение данных из вашего API
+        const applicationsData = await fetchApplicationsData();
         console.log(applicationsData);
 
         // Преобразование даты в удобочитаемый формат
@@ -393,6 +398,9 @@ export default function GetAllApplications() {
         );
 
         setDataApplications(formattedApplicationsData);
+        setTimeout(() => {
+          setLoading(false);
+        }, 3000);
       } catch (error) {
         console.error("Error fetching applications data:", error);
       }
@@ -402,7 +410,7 @@ export default function GetAllApplications() {
 
   const handleDelete = async (id: number) => {
     try {
-      await deleteApplication(id); // Call API to delete application
+      await deleteApplication(id);
       setDataApplications((prevData) =>
         prevData.filter((app) => app.id !== id)
       );
@@ -412,12 +420,73 @@ export default function GetAllApplications() {
   };
 
   return (
-    <ApplicationsDataTable
-      columns={columns}
-      data={dataApplications.map((application) => ({
-        ...application,
-        onDelete: handleDelete,
-      }))}
-    />
+    <>
+      {loading && (
+        <>
+          <div className="flex items-center justify-between">
+            <Skeleton className="w-[384px] h-10 mt-6" />
+            <Skeleton className="w-[300px] h-10 mt-6" />
+            <Skeleton className="w-[178px] h-10 mt-6" />
+          </div>
+          <div className="mt-5">
+            <Card className="h-full mt-8">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    {[...Array(6)].map((_, index) => (
+                      <TableHead key={index}>
+                        <Skeleton className="w-24 h-5" />
+                      </TableHead>
+                    ))}
+                    <TableHead> </TableHead>
+                    <TableHead> </TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {[...Array(10)].map((_, rowIndex) => (
+                    <TableRow key={rowIndex}>
+                      {[...Array(6)].map((_, cellIndex) => (
+                        <TableCell key={cellIndex}>
+                          <Skeleton className="w-27 h-3" />
+                        </TableCell>
+                      ))}
+                      <TableCell>
+                        <Skeleton className="w-5 h-5" />
+                      </TableCell>
+                      <TableCell>
+                        <Skeleton className="w-5 h-5" />
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </Card>
+            <div className="flex items-center justify-end gap-2">
+              <Skeleton className="w-[131px] h-8 mt-4" />
+              <Skeleton className="w-[70px] h-8 mt-4" />
+              <div className="flex mx-8">
+                <Skeleton className="w-[150px] h-8 mt-4" />
+              </div>
+              <div className="flex space-x-1">
+                <Skeleton className="w-8 h-8 mt-4" />
+                <Skeleton className="w-8 h-8 mt-4" />
+                <Skeleton className="w-8 h-8 mt-4" />
+                <Skeleton className="w-8 h-8 mt-4" />
+              </div>
+            </div>
+          </div>
+        </>
+      )}
+
+      {!loading && (
+        <ApplicationsDataTable
+          columns={columns}
+          data={dataApplications.map((application) => ({
+            ...application,
+            onDelete: handleDelete,
+          }))}
+        />
+      )}
+    </>
   );
 }
