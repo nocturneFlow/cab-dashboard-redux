@@ -22,14 +22,14 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
-import {DataTableToolbar} from "./data-table-toolbar"
+import { DataTableToolbar } from "./data-table-toolbar";
 
 import { Button } from "@/components/ui/button";
 import { useParams, useRouter } from "next/navigation";
-import { priorities } from "./priorities"
-import { DataTableFacetedFilter } from "./data-table-faceted-filter"
+import { priorities } from "./priorities";
+import { DataTableFacetedFilter } from "./data-table-faceted-filter";
 
-import { DatePickerWithRange } from "@/components/modals/date-picker";
+import { DatePickerWithRange } from "@/components/ui/date-range-picker";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -66,8 +66,7 @@ export function SalariesDataTable<TData, TValue>({
   return (
     <div>
       <div className="flex items-center justify-between py-4">
-      {table.getColumn("priority") && (
-        
+        {table.getColumn("priority") && (
           <DataTableFacetedFilter
             column={table.getColumn("priority")}
             title="Priority"

@@ -37,7 +37,8 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { AddApplicationModal } from "@/components/modals/add-application-modal";
-import { DatePickerWithRange } from "@/components/modals/date-picker";
+import { DatePickerWithRange } from "@/components/ui/date-range-picker";
+
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];

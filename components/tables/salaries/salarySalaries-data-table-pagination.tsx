@@ -26,7 +26,7 @@ import { Button } from "@/components/ui/button";
 
 import { useParams, useRouter } from "next/navigation";
 
-import { DatePickerWithRange } from "@/components/modals/date-picker";
+import { DatePickerWithRange } from "@/components/ui/date-range-picker";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -68,7 +68,7 @@ export function SalarySalariesDataTable<TData, TValue>({
       <div className="rounded-md border">
         <Table>
           <TableHeader>
-          <TableRow>
+            <TableRow>
               <TableCell align="center" colSpan={5}>
                 ФОТ
               </TableCell>
