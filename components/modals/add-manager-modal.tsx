@@ -80,7 +80,7 @@ export const AddManagerModal = () => {
       };
 
       const response = await fetch(
-        "https://taxi-service-68bafebbc66d.herokuapp.com/managers/addManager",
+        "https://taxi-service-34d2f59aac8f.herokuapp.com//managers/addManager",
         {
           method: "POST",
           headers: {

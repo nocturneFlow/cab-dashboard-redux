@@ -1,11 +1,14 @@
 export async function deleteApplication(id: number): Promise<void> {
   try {
-    const response = await fetch(`https://taxi-service-68bafebbc66d.herokuapp.com/applications/${id}`, {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    const response = await fetch(
+      `https://taxi-service-34d2f59aac8f.herokuapp.com//applications/${id}`,
+      {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
 
     if (!response.ok) {
       throw new Error(`Failed to delete application with ID ${id}`);

@@ -1,9 +1,14 @@
 import { CashReconciliation } from "../../components/columns/cashReconciliation";
 
-export async function fetchCashReconciliationData(): Promise<CashReconciliation[]> {
-  const response = await fetch("http://localhost:8080/applications/all", {
-    next: { revalidate: 30 },
-  });
+export async function fetchCashReconciliationData(): Promise<
+  CashReconciliation[]
+> {
+  const response = await fetch(
+    "https://taxi-service-34d2f59aac8f.herokuapp.com/applications/all",
+    {
+      next: { revalidate: 30 },
+    }
+  );
   if (!response.ok) {
     throw new Error("Failed to fetch CashReconciliation data");
   }

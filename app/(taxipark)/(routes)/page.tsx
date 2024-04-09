@@ -91,7 +91,7 @@ const DashboardPage = () => {
       }
     }
 
-    const url = "https://taxi-service-68bafebbc66d.herokuapp.com/reports/all";
+    const url = "https://taxi-service-34d2f59aac8f.herokuapp.com//reports/all";
     fetchData(url);
   }, []);
 

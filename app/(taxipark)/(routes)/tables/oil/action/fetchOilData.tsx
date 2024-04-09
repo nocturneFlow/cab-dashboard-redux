@@ -1,7 +1,7 @@
 // import { Oil } from "../../components/columns/oil";
 
 // export async function fetchOilData(): Promise<Oil[]> {
-//   const response = await fetch("http://localhost:8080/oilMaintenances", {
+//   const response = await fetch("https://taxi-service-34d2f59aac8f.herokuapp.com/oilMaintenances", {
 //     next: { revalidate: 30 },
 //   });
 //   if (!response.ok) {

@@ -3,10 +3,12 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { CarTaxiFront, User } from "lucide-react";
+import { CarTaxiFront, Trash2, User } from "lucide-react";
 import { AddManagerModal } from "@/components/modals/add-manager-modal";
 import { AddDriverModal } from "@/components/modals/add-driver-modal";
 import { Skeleton } from "@/components/ui/skeleton";
+import { deleteManager } from "@/components/modals/delete-manager";
+import { Button } from "@/components/ui/button";
 
 interface Driver {
   id: number;
@@ -34,7 +36,7 @@ const StaffPage = () => {
     const fetchDataDriver = async () => {
       try {
         const response = await axios.get(
-          "https://taxi-service-68bafebbc66d.herokuapp.com/drivers/all"
+          "https://taxi-service-34d2f59aac8f.herokuapp.com//drivers/all"
         );
         setDrivers(response.data);
         setTimeout(() => {
@@ -48,7 +50,7 @@ const StaffPage = () => {
     const fetchDataManager = async () => {
       try {
         const response = await axios.get(
-          "https://taxi-service-68bafebbc66d.herokuapp.com/managers/all"
+          "https://taxi-service-34d2f59aac8f.herokuapp.com//managers/all"
         );
         setManagers(response.data);
       } catch (error) {
@@ -59,6 +61,16 @@ const StaffPage = () => {
     fetchDataManager();
     fetchDataDriver();
   }, []);
+
+  const handleDeleteManager = async (id: number) => {
+    try {
+      await deleteManager(id);
+
+      setManagers(managers.filter((manager) => manager.id !== id));
+    } catch (error) {
+      console.error("Error deleting manager:", error);
+    }
+  };
 
   return (
     <>
@@ -136,9 +148,16 @@ const StaffPage = () => {
                   <Card key={manager.id}>
                     <CardContent className="mt-5">
                       <ul>
-                        <div className="flex items-center mr-0.5">
+                        <div className="flex items-center mr-0.5 justify-between">
                           <User className="mr-5" />
                           {manager.firstName} {manager.lastName}
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => handleDeleteManager(manager.id)}
+                          >
+                            <Trash2 className="w-4 h-4" color="red" />
+                          </Button>
                         </div>
                       </ul>
                     </CardContent>
