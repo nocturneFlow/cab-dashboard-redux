@@ -1,7 +1,7 @@
 export async function deleteManager(id: number): Promise<void> {
   try {
     const response = await fetch(
-      `https://taxi-service-34d2f59aac8f.herokuapp.com//managers/${id}`,
+      `https://taxi-service-34d2f59aac8f.herokuapp.com/managers/${id}`,
       {
         method: "DELETE",
         headers: {

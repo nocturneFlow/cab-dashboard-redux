@@ -1,6 +1,6 @@
 async function updateApplication(id: number, updatedData: string) {
   const response = await fetch(
-    `https://taxi-service-34d2f59aac8f.herokuapp.com//applications/${id}/editApplication`,
+    `https://taxi-service-34d2f59aac8f.herokuapp.com/applications/${id}/editApplication`,
     {
       method: "PUT",
       headers: {

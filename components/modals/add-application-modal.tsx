@@ -335,7 +335,7 @@ export const AddApplicationModal = () => {
   const fetchData = async () => {
     try {
       const response = await fetch(
-        "https://taxi-service-34d2f59aac8f.herokuapp.com//applications/addApplication"
+        "https://taxi-service-34d2f59aac8f.herokuapp.com/applications/addApplication"
       );
       if (!response.ok) {
         throw new Error("Failed to fetch data");
@@ -403,7 +403,7 @@ export const AddApplicationModal = () => {
       }; // Создание объекта с необходимыми данными
 
       const response = await fetch(
-        "https://taxi-service-34d2f59aac8f.herokuapp.com//applications/addApplication",
+        "https://taxi-service-34d2f59aac8f.herokuapp.com/applications/addApplication",
         {
           method: "POST",
           headers: {

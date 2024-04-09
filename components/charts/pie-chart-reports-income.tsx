@@ -96,7 +96,7 @@ export default function PieChartReportsIncome() {
       }
     }
 
-    const url = "https://taxi-service-34d2f59aac8f.herokuapp.com//reports/all";
+    const url = "https://taxi-service-34d2f59aac8f.herokuapp.com/reports/all";
     fetchData(url);
   }, []);
 

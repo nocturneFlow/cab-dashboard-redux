@@ -36,7 +36,7 @@ const StaffPage = () => {
     const fetchDataDriver = async () => {
       try {
         const response = await axios.get(
-          "https://taxi-service-34d2f59aac8f.herokuapp.com//drivers/all"
+          "https://taxi-service-34d2f59aac8f.herokuapp.com/drivers/all"
         );
         setDrivers(response.data);
         setTimeout(() => {
@@ -50,7 +50,7 @@ const StaffPage = () => {
     const fetchDataManager = async () => {
       try {
         const response = await axios.get(
-          "https://taxi-service-34d2f59aac8f.herokuapp.com//managers/all"
+          "https://taxi-service-34d2f59aac8f.herokuapp.com/managers/all"
         );
         setManagers(response.data);
       } catch (error) {

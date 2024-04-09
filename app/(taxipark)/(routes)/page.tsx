@@ -91,7 +91,7 @@ const DashboardPage = () => {
       }
     }
 
-    const url = "https://taxi-service-34d2f59aac8f.herokuapp.com//reports/all";
+    const url = "https://taxi-service-34d2f59aac8f.herokuapp.com/reports/all";
     fetchData(url);
   }, []);
 
@@ -238,18 +238,31 @@ const DashboardPage = () => {
                       <div className="text-2xl font-bold">
                         <span
                           style={{
-                            color: data.net_profit < 0 ? "#FF6B6B" : "#66DE93",
+                            color:
+                              data.net_profit !== undefined &&
+                              data.net_profit < 0
+                                ? "#FF6B6B"
+                                : "#66DE93",
                           }}
                           className="flex items-center gap-2"
                         >
-                          {data.net_profit
-                            .toFixed(2)
-                            .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
-                          {data.net_profit < 0 ? (
-                            <TrendingDown size={20} strokeWidth="3" />
-                          ) : (
-                            <TrendingUp size={20} strokeWidth="3" />
-                          )}
+                          {
+                            data.net_profit !== undefined &&
+                            typeof data.net_profit === "number" ? (
+                              <>
+                                {data.net_profit
+                                  .toFixed(2)
+                                  .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                                {data.net_profit < 0 ? (
+                                  <TrendingDown size={20} strokeWidth="3" />
+                                ) : (
+                                  <TrendingUp size={20} strokeWidth="3" />
+                                )}
+                              </>
+                            ) : (
+                              "N/A"
+                            ) // Display 'N/A' if net_profit is undefined or not a number
+                          }
                         </span>
                       </div>
                       <p className="text-xs text-muted-foreground"></p>
