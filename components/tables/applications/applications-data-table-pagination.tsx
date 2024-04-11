@@ -11,7 +11,6 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-
 import {
   Table,
   TableBody,
@@ -20,14 +19,9 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-
 import { Input } from "@/components/ui/input";
 import { AddApplicationModal } from "@/components/modals/add-application-modal";
-
-import { Application } from "@/app/(taxipark)/(routes)/tables/components/columns/applications";
 import { DataTablePagination } from "./data-table-pagination";
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
 import { DatePickerWithRange } from "@/components/ui/date-range-picker";
 
 interface DataTableProps<TData, TValue> {
@@ -61,7 +55,7 @@ export function ApplicationsDataTable<TData, TValue>({
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center justify-between py-4">
+      <div className="flex items-start justify-between py-4">
         <Input
           placeholder="Поиск по номеру машины..."
           value={
@@ -75,8 +69,10 @@ export function ApplicationsDataTable<TData, TValue>({
           }
           className="max-w-sm"
         />
-        <DatePickerWithRange />
-        <AddApplicationModal />
+        <div className="flex space-x-4">
+          <DatePickerWithRange className="mt-1.5" />
+          <AddApplicationModal />
+        </div>
       </div>
       <div className="rounded-md border">
         <Table>

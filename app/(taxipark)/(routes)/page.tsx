@@ -18,6 +18,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import ReportsPage from "./dashboard/reports/page";
 import { TrendingDown, TrendingUp } from "lucide-react";
 import StaffPage from "./dashboard/staff/page";
+import ExpenditureItemPage from "./dashboard/expenditure_item/page";
 
 interface CarDetailModel {
   plate_number: string;
@@ -217,6 +218,9 @@ const DashboardPage = () => {
                 <TabsTrigger value="overview">Обзор</TabsTrigger>
                 <TabsTrigger value="reports">Отчет</TabsTrigger>
                 <TabsTrigger value="staff">Персонал</TabsTrigger>
+                <TabsTrigger value="expenditureItem">
+                  Статья Расходов
+                </TabsTrigger>
               </TabsList>
               <TabsContent value="overview" className="space-y-4">
                 <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
@@ -364,6 +368,9 @@ const DashboardPage = () => {
               </TabsContent>
               <TabsContent value="staff">
                 <StaffPage />
+              </TabsContent>
+              <TabsContent value="expenditureItem">
+                <ExpenditureItemPage />
               </TabsContent>
             </Tabs>
           </div>
