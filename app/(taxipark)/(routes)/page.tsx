@@ -43,35 +43,32 @@ interface CarDetailModel {
 }
 
 interface MyInterface {
-  start_date: Date;
-  end_date: Date;
-  day_amount_profit: number;
-  night_amount_profit: number;
-  amount_total: number;
-  taxopark_commission: number;
-  yandex_commission: number;
-  gas_expense: number;
-  other_expense: number;
-  salary: number;
-  fixed_cost: number;
-  car_parts: number;
-  car_maintenance: number;
-  car_service: number;
-  variable_cost: number;
-  cash_adm_expense: number;
-  cashless_adm_expense: number;
-  total_adm_expense: number;
-  gross_profit: number;
-  operating_profit: number;
-  tax: number;
-  financial_expense: number;
-  net_profit: number;
-  car_day_amount: number;
-  car_night_amount: number;
-  car_total_amount: number;
-  avg_cheque_day: number;
-  avg_cheque_night: number;
-  avg_cheque_total: number;
+  day_amount_profit?: number;
+  night_amount_profit?: number;
+  amount_total?: number;
+  variable_cost?: number;
+  taxopark_commission?: number;
+  yandex_commission?: number;
+  gas_expense?: number;
+  other_expense?: number;
+  salary?: number;
+  car_parts?: number;
+  car_service?: number;
+  car_maintenance?: number;
+  cash_adm_expense?: number;
+  cashless_adm_expense?: number;
+  total_adm_expense?: number;
+  gross_profit?: number;
+  operating_profit?: number;
+  tax?: number;
+  financial_expense?: number;
+  net_profit?: number;
+  car_day_amount?: number;
+  car_night_amount?: number;
+  car_total_amount?: number;
+  avg_cheque_day?: number;
+  avg_cheque_night?: number;
+  avg_cheque_total?: number;
   getCarDetailModel: CarDetailModel[];
 }
 
@@ -84,15 +81,19 @@ const DashboardPage = () => {
       try {
         const response = await fetch(url);
         if (!response.ok) {
-          throw new Error("Network response was not ok");
+          throw new Error("Сетевой ответ был неудовлетворительным");
         }
-        const data: MyInterface = await response.json();
-        setData(data);
+        const jsonData = await response.json();
+        if (jsonData && Array.isArray(jsonData) && jsonData.length > 0) {
+          setData(jsonData[0]); // Предполагаем, что нам нужен только первый элемент
+        } else {
+          throw new Error("Данные пусты или не в ожидаемом формате");
+        }
         setTimeout(() => {
           setLoading(false);
-        });
+        }, 500);
       } catch (error) {
-        console.error("Error fetching data:", error);
+        console.error("Ошибка при получении данных:", error);
       }
     }
 

@@ -1,67 +1,105 @@
 "use client";
+import { useState, useEffect } from "react";
 import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis } from "recharts";
+import axios from "axios";
 
-interface NetProfitByMonth {
-  
+// Определение интерфейса для финансовых данных
+interface FinancialData {
+  month: string; // Строковое поле, указывающее месяц
+  net_profit_amount: number; // Числовое поле, указывающее чистую прибыль
 }
 
-const data = [
-  {
-    name: "Январь",
-    total: Math.floor(Math.random() * 5000) + 1000,
-  },
-  {
-    name: "Февраль",
-    total: Math.floor(Math.random() * 5000) + 1000,
-  },
-  {
-    name: "Март",
-    total: Math.floor(Math.random() * 5000) + 1000,
-  },
-  {
-    name: "Апрель",
-    total: Math.floor(Math.random() * 5000) + 1000,
-  },
-  {
-    name: "Май",
-    total: Math.floor(Math.random() * 5000) + 1000,
-  },
-  {
-    name: "Июнь",
-    total: Math.floor(Math.random() * 5000) + 1000,
-  },
-  {
-    name: "Июль",
-    total: Math.floor(Math.random() * 5000) + 1000,
-  },
-  {
-    name: "Август",
-    total: Math.floor(Math.random() * 5000) + 1000,
-  },
-  {
-    name: "Сентябрь",
-    total: Math.floor(Math.random() * 5000) + 1000,
-  },
-  {
-    name: "Октябрь",
-    total: Math.floor(Math.random() * 5000) + 1000,
-  },
-  {
-    name: "Ноябрь",
-    total: Math.floor(Math.random() * 5000) + 1000,
-  },
-  {
-    name: "Декабрь",
-    total: Math.floor(Math.random() * 5000) + 1000,
-  },
-];
-
+// Основной компонент Overview
 export function Overview() {
+  // Состояние для хранения данных из API
+  const [data, setData] = useState<FinancialData[]>([]);
+
+  // Список всех месяцев в году на русском языке
+  const monthsList = [
+    "Январь",
+    "Февраль",
+    "Март",
+    "Апрель",
+    "Май",
+    "Июнь",
+    "Июль",
+    "Август",
+    "Сентябрь",
+    "Октябрь",
+    "Ноябрь",
+    "Декабрь",
+  ];
+
+  // Словарь для сопоставления названий месяцев
+  const monthMapping: Record<string, string> = {
+    JANUARY: "Январь",
+    FEBRUARY: "Февраль",
+    MARCH: "Март",
+    APRIL: "Апрель",
+    MAY: "Май",
+    JUNE: "Июнь",
+    JULY: "Июль",
+    AUGUST: "Август",
+    SEPTEMBER: "Сентябрь",
+    OCTOBER: "Октябрь",
+    NOVEMBER: "Ноябрь",
+    DECEMBER: "Декабрь",
+  };
+
+  // Функция для объединения данных из API с полным списком месяцев
+  function combineDataWithMonths(apiData: FinancialData[]): FinancialData[] {
+    // Преобразование названий месяцев из API в русский формат
+    const apiDataMapped = apiData.map((item) => ({
+      ...item,
+      month: monthMapping[item.month.toUpperCase()] || item.month,
+    }));
+
+    // Объединение данных из API с полным списком месяцев
+    const combinedData = monthsList.map((month) => {
+      // Поиск данных для текущего месяца в данных из API
+      const monthData = apiDataMapped.find((item) => item.month === month);
+
+      // Если данные для текущего месяца найдены, используем их, иначе устанавливаем нулевое значение чистой прибыли
+      return monthData
+        ? monthData
+        : {
+            month: month,
+            net_profit_amount: 0,
+          };
+    });
+
+    return combinedData;
+  }
+
+  // Функция для загрузки данных из API
+  async function fetchData(): Promise<void> {
+    try {
+      const response = await axios.get(
+        "https://taxi-service-34d2f59aac8f.herokuapp.com/reports/allByMonth"
+      );
+      const apiData: FinancialData[] = response.data;
+
+      // Объединение данных из API с полным списком месяцев
+      const combinedData = combineDataWithMonths(apiData);
+
+      // Установка объединенных данных в состоянии компонента
+      setData(combinedData);
+    } catch (error) {
+      console.error("Ошибка при загрузке данных:", error);
+    }
+  }
+
+  // Загрузка данных из API при загрузке компонента
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  // Отображение графика
   return (
     <ResponsiveContainer width="100%" height={600}>
-      <BarChart width={150} height={40} data={data}>
+      <BarChart data={data}>
         <XAxis
-          dataKey="name"
+          dataKey="month"
           stroke="#888888"
           fontSize={12}
           tickLine={false}
@@ -75,7 +113,7 @@ export function Overview() {
           tickFormatter={(value) => `${value}`}
         />
         <Bar
-          dataKey="total"
+          dataKey="net_profit_amount"
           fill="currentColor"
           radius={[4, 4, 0, 0]}
           className="fill-ring"
