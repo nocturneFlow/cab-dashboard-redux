@@ -41,33 +41,32 @@ export interface CarDetailModel {
 }
 
 export interface MyInterface {
-  day_amount_profit: number;
-  night_amount_profit: number;
-  amount_total: number;
-  taxopark_commission: number;
-  yandex_commission: number;
-  gas_expense: number;
-  other_expense: number;
-  salary: number;
-  fixed_cost: number;
-  car_parts: number;
-  car_maintenance: number;
-  car_service: number;
-  variable_cost: number;
-  cash_adm_expense: number;
-  cashless_adm_expense: number;
-  total_adm_expense: number;
-  gross_profit: number;
-  operating_profit: number;
-  tax: number;
-  financial_expense: number;
-  net_profit: number;
-  car_day_amount: number;
-  car_night_amount: number;
-  car_total_amount: number;
-  avg_cheque_day: number;
-  avg_cheque_night: number;
-  avg_cheque_total: number;
+  day_amount_profit?: number;
+  night_amount_profit?: number;
+  amount_total?: number;
+  variable_cost?: number;
+  taxopark_commission?: number;
+  yandex_commission?: number;
+  gas_expense?: number;
+  other_expense?: number;
+  salary?: number;
+  car_parts?: number;
+  car_service?: number;
+  car_maintenance?: number;
+  cash_adm_expense?: number;
+  cashless_adm_expense?: number;
+  total_adm_expense?: number;
+  gross_profit?: number;
+  operating_profit?: number;
+  tax?: number;
+  financial_expense?: number;
+  net_profit?: number;
+  car_day_amount?: number;
+  car_night_amount?: number;
+  car_total_amount?: number;
+  avg_cheque_day?: number;
+  avg_cheque_night?: number;
+  avg_cheque_total?: number;
   getCarDetailModel: CarDetailModel[];
 }
 
@@ -80,15 +79,19 @@ const ReportsPage = () => {
       try {
         const response = await fetch(url);
         if (!response.ok) {
-          throw new Error("Network response was not ok");
+          throw new Error("Сетевой ответ был неудовлетворительным");
         }
-        const data: MyInterface = await response.json();
-        setData(data);
+        const jsonData = await response.json();
+        if (jsonData && Array.isArray(jsonData) && jsonData.length > 0) {
+          setData(jsonData[0]); // Предполагаем, что нам нужен только первый элемент
+        } else {
+          throw new Error("Данные пусты или не в ожидаемом формате");
+        }
         setTimeout(() => {
           setLoading(false);
-        });
+        }, 500);
       } catch (error) {
-        console.error("Error fetching data:", error);
+        console.error("Ошибка при получении данных:", error);
       }
     }
 
@@ -423,22 +426,13 @@ const ReportsPage = () => {
                 </CardHeader>
                 <Separator className="mt-3 mb-3" />
                 <CardContent className="space-y-2">
+                  <div className="text-2xl font-bold">{}</div>
+                  <p className="text-xs text-muted-foreground">Итого</p>
                   <div className="text-2xl font-bold">
                     {
                       data.amount_total !== undefined &&
                       typeof data.amount_total === "number"
                         ? data.amount_total
-                            .toFixed(2)
-                            .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-                        : "N/A" // Display 'N/A' if amount_total is undefined or not a number
-                    }
-                  </div>
-                  <p className="text-xs text-muted-foreground">Итого</p>
-                  <div className="text-2xl font-bold">
-                    {
-                      data.day_amount_profit !== undefined &&
-                      typeof data.day_amount_profit === "number"
-                        ? data.day_amount_profit
                             .toFixed(2)
                             .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
                         : "N/A" // Display 'N/A' if day_amount_profit is undefined or not a number
@@ -447,15 +441,27 @@ const ReportsPage = () => {
                   <p className="text-xs text-muted-foreground">День</p>
                   <div className="text-2xl font-bold">
                     {
-                      data.night_amount_profit !== undefined &&
-                      typeof data.night_amount_profit === "number"
-                        ? data.night_amount_profit
+                      data.day_amount_profit !== undefined &&
+                      typeof data.day_amount_profit === "number"
+                        ? data.day_amount_profit
                             .toFixed(2)
                             .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
                         : "N/A" // Display 'N/A' if night_amount_profit is undefined or not a number
                     }
                   </div>
                   <p className="text-xs text-muted-foreground">Ночь</p>
+                  <div className="text-2xl font-bold">
+                    <div className="text-2xl font-bold">
+                      {
+                        data.night_amount_profit !== undefined &&
+                        typeof data.night_amount_profit === "number"
+                          ? data.night_amount_profit
+                              .toFixed(2)
+                              .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                          : "N/A" // Display 'N/A' if amount_total is undefined or not a number
+                      }
+                    </div>
+                  </div>
                 </CardContent>
               </Card>
               <Card>
@@ -607,7 +613,6 @@ const ReportsPage = () => {
                       }
                     </div>
                   </div>
-
                   <p className="text-xs text-muted-foreground">Мойка</p>
                 </CardContent>
               </Card>
@@ -683,7 +688,9 @@ const ReportsPage = () => {
                           <span
                             style={{
                               color:
-                                data.gross_profit < 0 ? "#FF6B6B" : "#66DE93",
+                                data.gross_profit ?? 0 < 0
+                                  ? "#FF6B6B"
+                                  : "#66DE93",
                             }}
                           >
                             {
@@ -699,7 +706,7 @@ const ReportsPage = () => {
                           <span
                             style={{
                               color:
-                                data.operating_profit < 0
+                                (data.operating_profit ?? 0) < 0
                                   ? "#FF6B6B"
                                   : "#66DE93",
                             }}
@@ -735,19 +742,17 @@ const ReportsPage = () => {
                           <span
                             style={{
                               color:
-                                data.net_profit && data.net_profit < 0
+                                data.net_profit !== undefined &&
+                                data.net_profit < 0
                                   ? "#FF6B6B"
                                   : "#66DE93",
                             }}
                           >
-                            {
-                              data.net_profit !== undefined &&
-                              typeof data.net_profit === "number"
-                                ? data.net_profit
-                                    .toFixed(2)
-                                    .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-                                : "N/A" // Display 'N/A' if net_profit is undefined or not a number
-                            }
+                            {typeof data.net_profit === "number"
+                              ? data.net_profit
+                                  .toFixed(2)
+                                  .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                              : "N/A"}
                           </span>
                         </TableCell>
                       </TableRow>

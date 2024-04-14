@@ -1,60 +1,64 @@
 "use client";
 import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis } from "recharts";
 
+interface NetProfitByMonth {
+  
+}
+
 const data = [
   {
-    name: "Jan",
+    name: "Январь",
     total: Math.floor(Math.random() * 5000) + 1000,
   },
   {
-    name: "Feb",
+    name: "Февраль",
     total: Math.floor(Math.random() * 5000) + 1000,
   },
   {
-    name: "Mar",
+    name: "Март",
     total: Math.floor(Math.random() * 5000) + 1000,
   },
   {
-    name: "Apr",
+    name: "Апрель",
     total: Math.floor(Math.random() * 5000) + 1000,
   },
   {
-    name: "May",
+    name: "Май",
     total: Math.floor(Math.random() * 5000) + 1000,
   },
   {
-    name: "Jun",
+    name: "Июнь",
     total: Math.floor(Math.random() * 5000) + 1000,
   },
   {
-    name: "Jul",
+    name: "Июль",
     total: Math.floor(Math.random() * 5000) + 1000,
   },
   {
-    name: "Aug",
+    name: "Август",
     total: Math.floor(Math.random() * 5000) + 1000,
   },
   {
-    name: "Sep",
+    name: "Сентябрь",
     total: Math.floor(Math.random() * 5000) + 1000,
   },
   {
-    name: "Oct",
+    name: "Октябрь",
     total: Math.floor(Math.random() * 5000) + 1000,
   },
   {
-    name: "Nov",
+    name: "Ноябрь",
     total: Math.floor(Math.random() * 5000) + 1000,
   },
   {
-    name: "Dec",
+    name: "Декабрь",
     total: Math.floor(Math.random() * 5000) + 1000,
   },
 ];
 
 export function Overview() {
   return (
-    <ResponsiveContainer width="100%" height={800}>
+    <ResponsiveContainer width="100%" height={600}>
       <BarChart width={150} height={40} data={data}>
         <XAxis
           dataKey="name"

@@ -92,7 +92,7 @@ export interface Payroll {
 
 export interface ExpenseItemApl {
   id: number;
-  expense_item_name: string;
+  name: string;
 }
 
 export interface ExpenseApl {
@@ -106,62 +106,61 @@ export interface ExpenseApl {
 }
 
 export interface Report {
-    id: number;
-    car: Car;
-    payment: Payment;
-    yandexData: YandexData;
-    payroll: Payroll;
-    applicationsAmount: number;
-    time_on_line: number;
-    yandexCommission: number;
-    fixedCosts: number;
-    variableCosts: number;
-    expenseApl: ExpenseApl;
-};
-  
-export const ReportColumns: ColumnDef<Report>[] = [
-    {
-      accessorKey: "car.plate_number",
-      header: "Номер Машины",
-    },
-    {
-      accessorKey: "applicationsAmount",
-      header: "Кол-во заявок",
-    },
-    {
-      accessorKey: "time_on_line",
-      header: "Кол-во часов на линии",
-    },
-    {
-      accessorKey: "yandexCommission",
-      header: "Комиссия Яндекс",
-    },
-    {
-      accessorKey: "fixedCosts",
-      header: "GP (постоянные расходы)",
-    },
-    {
-      accessorKey: "variableCosts",
-      header: "GP (переменные расходы)",
-    },
-    {
-      id: "expand",
-      cell: ({ row }) => {
-        return (
-          <>
-            <div>
-              <Sheet>
-                <SheetTrigger>
-                  <Button variant="ghost" className="h-8 w-8 p-0">
-                    <PanelBottomOpen className="w-4 h-4" />
-                  </Button>
-                </SheetTrigger>
-                <SheetContent className="backdrop-blur">
-                  <SheetHeader>
-                    <SheetDescription className="p-20 ">
-                      <Accordion type="multiple">
+  id: number;
+  car: Car;
+  payment: Payment;
+  yandexData: YandexData;
+  payroll: Payroll;
+  applicationsAmount: number;
+  time_on_line: number;
+  yandexCommission: number;
+  fixedCosts: number;
+  variableCosts: number;
+  expenseApl: ExpenseApl;
+}
 
-                        {/* <AccordionItem value="item-1">
+export const ReportColumns: ColumnDef<Report>[] = [
+  {
+    accessorKey: "car.plate_number",
+    header: "Номер Машины",
+  },
+  {
+    accessorKey: "applicationsAmount",
+    header: "Кол-во заявок",
+  },
+  {
+    accessorKey: "time_on_line",
+    header: "Кол-во часов на линии",
+  },
+  {
+    accessorKey: "yandexCommission",
+    header: "Комиссия Яндекс",
+  },
+  {
+    accessorKey: "fixedCosts",
+    header: "GP (постоянные расходы)",
+  },
+  {
+    accessorKey: "variableCosts",
+    header: "GP (переменные расходы)",
+  },
+  {
+    id: "expand",
+    cell: ({ row }) => {
+      return (
+        <>
+          <div>
+            <Sheet>
+              <SheetTrigger>
+                <Button variant="ghost" className="h-8 w-8 p-0">
+                  <PanelBottomOpen className="w-4 h-4" />
+                </Button>
+              </SheetTrigger>
+              <SheetContent className="backdrop-blur">
+                <SheetHeader>
+                  <SheetDescription className="p-20 ">
+                    <Accordion type="multiple">
+                      {/* <AccordionItem value="item-1">
                           <AccordionTrigger>
                             <SheetTitle>В программе яндекс Такси</SheetTitle>
                           </AccordionTrigger>
@@ -194,7 +193,7 @@ export const ReportColumns: ColumnDef<Report>[] = [
                           </AccordionContent>
                         </AccordionItem> */}
 
-                        {/* <AccordionItem value="item-2">
+                      {/* <AccordionItem value="item-2">
                           <AccordionTrigger>
                             <SheetTitle>Касса</SheetTitle>
                           </AccordionTrigger>
@@ -225,7 +224,7 @@ export const ReportColumns: ColumnDef<Report>[] = [
                           </AccordionContent>
                         </AccordionItem> */}
 
-                        {/* <AccordionItem value="item-3">
+                      {/* <AccordionItem value="item-3">
                           <AccordionTrigger>
                             <SheetTitle>Фонд оплаты труда</SheetTitle>
                           </AccordionTrigger>
@@ -255,8 +254,7 @@ export const ReportColumns: ColumnDef<Report>[] = [
                           </AccordionContent>
                         </AccordionItem> */}
 
-
-                        {/* <AccordionItem value="item-4">
+                      {/* <AccordionItem value="item-4">
                           <AccordionTrigger>
                             <SheetTitle>Расходы постоянные</SheetTitle>
                           </AccordionTrigger>
@@ -290,7 +288,7 @@ export const ReportColumns: ColumnDef<Report>[] = [
                           </AccordionContent>
                         </AccordionItem> */}
 
-                        {/* <AccordionItem value="item-5">
+                      {/* <AccordionItem value="item-5">
                           <AccordionTrigger>
                             <SheetTitle>Расходы переменные</SheetTitle>
                           </AccordionTrigger>
@@ -323,87 +321,76 @@ export const ReportColumns: ColumnDef<Report>[] = [
                             </Table>
                           </AccordionContent>
                         </AccordionItem> */}
-
-                      </Accordion>
-                    </SheetDescription>
-                  </SheetHeader>
-                </SheetContent>
-              </Sheet>
-            </div>
-          </>
-        );
-      },
+                    </Accordion>
+                  </SheetDescription>
+                </SheetHeader>
+              </SheetContent>
+            </Sheet>
+          </div>
+        </>
+      );
     },
+  },
 ];
 
 export default function GetAllReport() {
-    const [dataReport, setDataReport] = React.useState<Report[]>(
-      []
-    );
-    // const [isModalOpen, setIsModalOpen] = useState(false);
-    // const [currentReport, setCurrentReport] =
-    //   useState<Report | null>(null);
-    // const [updatedData, setUpdatedData] = useState<Report | null>(null);
-  
-    // // ...
-  
-    // const handleOpenModal = (car: Report) => {
-    //   setCurrentReport(car);
-    //   setIsModalOpen(true);
-    // };
-  
-    // const handleCloseModal = () => {
-    //   setIsModalOpen(false);
-    // };
-  
-  
-    React.useEffect(() => {
-      async function fetchDataReport() {
-        try {
-          const ReportData = await fetchReportData(); // Получение данных из вашего API
-  
-          // Преобразование даты в удобочитаемый формат
-          const formattedReportData = ReportData.map(
-            (report) => ({
-              ...report,
-              car: {
-                id: report.car.id,
-                plate_number: report.car.plate_number,
-                model: report.car.model,
-              },
-            })
-          );
-  
-          setDataReport(formattedReportData);
-        } catch (error) {
-          console.error("Error fetching Report data:", error);
-        }
-      }
-      fetchDataReport();
-    }, []);
-  
+  const [dataReport, setDataReport] = React.useState<Report[]>([]);
+  // const [isModalOpen, setIsModalOpen] = useState(false);
+  // const [currentReport, setCurrentReport] =
+  //   useState<Report | null>(null);
+  // const [updatedData, setUpdatedData] = useState<Report | null>(null);
 
-  
-    const handleDelete = async (id: number) => {
+  // // ...
+
+  // const handleOpenModal = (car: Report) => {
+  //   setCurrentReport(car);
+  //   setIsModalOpen(true);
+  // };
+
+  // const handleCloseModal = () => {
+  //   setIsModalOpen(false);
+  // };
+
+  React.useEffect(() => {
+    async function fetchDataReport() {
       try {
-        // await deleteCars(id); // Call API to delete application
-        setDataReport((prevData) =>
-          prevData.filter((car) => car.id !== id)
-        );
+        const ReportData = await fetchReportData(); // Получение данных из вашего API
+
+        // Преобразование даты в удобочитаемый формат
+        const formattedReportData = ReportData.map((report) => ({
+          ...report,
+          car: {
+            id: report.car.id,
+            plate_number: report.car.plate_number,
+            model: report.car.model,
+          },
+        }));
+
+        setDataReport(formattedReportData);
       } catch (error) {
-        console.error("Error deleting application:", error);
+        console.error("Error fetching Report data:", error);
       }
-    };
-  
-    return (
-      <ReportsDataTable
-        columns={ReportColumns}
-        data={dataReport.map((car) => ({
-          ...car,
-          onDelete: handleDelete,
-        }))}
-        // onEdit={handleOpenModal}
-      />
-    );
-  }
-  
+    }
+    fetchDataReport();
+  }, []);
+
+  const handleDelete = async (id: number) => {
+    try {
+      // await deleteCars(id); // Call API to delete application
+      setDataReport((prevData) => prevData.filter((car) => car.id !== id));
+    } catch (error) {
+      console.error("Error deleting application:", error);
+    }
+  };
+
+  return (
+    <ReportsDataTable
+      columns={ReportColumns}
+      data={dataReport.map((car) => ({
+        ...car,
+        onDelete: handleDelete,
+      }))}
+      // onEdit={handleOpenModal}
+    />
+  );
+}

@@ -18,7 +18,9 @@ import { Skeleton } from "@/components/ui/skeleton";
 import ReportsPage from "./dashboard/reports/page";
 import { TrendingDown, TrendingUp } from "lucide-react";
 import StaffPage from "./dashboard/staff/page";
-import ExpenditureItemPage from "./dashboard/expenditure_item/page";
+import ExpenditureItemPage from "./dashboard/expense-item/page";
+import ExpenseItemPage from "./dashboard/expense-item/page";
+import { AddExpenseItemModal } from "@/components/modals/add-expense-item";
 
 interface CarDetailModel {
   plate_number: string;
@@ -41,6 +43,8 @@ interface CarDetailModel {
 }
 
 interface MyInterface {
+  start_date: Date;
+  end_date: Date;
   day_amount_profit: number;
   night_amount_profit: number;
   amount_total: number;
@@ -204,7 +208,7 @@ const DashboardPage = () => {
       )}
 
       {!loading && data && (
-        <div className="hidden flex-col md:flex">
+        <div className="flex-col md:flex">
           <div className="flex-1 space-y-4 p-8 pt-6">
             <div className="flex items-center justify-between space-y-2">
               <h2 className="text-3xl font-bold tracking-tight">Главная</h2>
@@ -218,9 +222,6 @@ const DashboardPage = () => {
                 <TabsTrigger value="overview">Обзор</TabsTrigger>
                 <TabsTrigger value="reports">Отчет</TabsTrigger>
                 <TabsTrigger value="staff">Персонал</TabsTrigger>
-                <TabsTrigger value="expenditureItem">
-                  Статья Расходов
-                </TabsTrigger>
               </TabsList>
               <TabsContent value="overview" className="space-y-4">
                 <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
@@ -248,25 +249,12 @@ const DashboardPage = () => {
                                 ? "#FF6B6B"
                                 : "#66DE93",
                           }}
-                          className="flex items-center gap-2"
                         >
-                          {
-                            data.net_profit !== undefined &&
-                            typeof data.net_profit === "number" ? (
-                              <>
-                                {data.net_profit
-                                  .toFixed(2)
-                                  .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
-                                {data.net_profit < 0 ? (
-                                  <TrendingDown size={20} strokeWidth="3" />
-                                ) : (
-                                  <TrendingUp size={20} strokeWidth="3" />
-                                )}
-                              </>
-                            ) : (
-                              "N/A"
-                            ) // Display 'N/A' if net_profit is undefined or not a number
-                          }
+                          {typeof data.net_profit === "number"
+                            ? data.net_profit
+                                .toFixed(2)
+                                .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                            : "N/A"}
                         </span>
                       </div>
                       <p className="text-xs text-muted-foreground"></p>
@@ -356,10 +344,14 @@ const DashboardPage = () => {
                   </Card>
                   <Card className="col-span-3">
                     <CardHeader>
-                      <CardTitle>В прогрессе</CardTitle>
-                      <CardDescription>Будет когда-нибудь</CardDescription>
+                      <div className="flex items-center justify-between">
+                        <CardTitle>Статья Расходов</CardTitle>
+                        <AddExpenseItemModal />
+                      </div>
                     </CardHeader>
-                    <CardContent>{/* <RecentSales /> */}</CardContent>
+                    <CardContent>
+                      <ExpenseItemPage />
+                    </CardContent>
                   </Card>
                 </div>
               </TabsContent>
@@ -368,9 +360,6 @@ const DashboardPage = () => {
               </TabsContent>
               <TabsContent value="staff">
                 <StaffPage />
-              </TabsContent>
-              <TabsContent value="expenditureItem">
-                <ExpenditureItemPage />
               </TabsContent>
             </Tabs>
           </div>

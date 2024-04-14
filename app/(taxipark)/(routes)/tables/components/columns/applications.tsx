@@ -1,10 +1,10 @@
 "use client";
-
-import { ColumnDef } from "@tanstack/react-table";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useDateRange } from "@/contexts/DateRangeContext"; // Импортируем хук для использования дат из контекста
 import { ApplicationsDataTable } from "@/components/tables/applications/applications-data-table-pagination";
 import { fetchApplicationsData } from "../../applications/action/fetchApplicationData";
 import { deleteApplication } from "@/components/modals/delete-application";
+import { ColumnDef } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
@@ -102,7 +102,7 @@ export interface Payroll {
 
 export interface ExpenseItemApl {
   id: number;
-  expense_item_name: string;
+  name: string;
 }
 
 export interface ExpenseApl {
@@ -288,10 +288,7 @@ export const columns: ColumnDef<Application>[] = [
                                   {row.original.expenseApl.other}
                                 </TableCell>
                                 <TableCell>
-                                  {
-                                    row.original.expenseApl.expenseItemApl
-                                      .expense_item_name
-                                  }
+                                  {row.original.expenseApl.expenseItemApl.name}
                                 </TableCell>
                                 <TableCell>
                                   {row.original.expenseApl.advance}
@@ -373,44 +370,39 @@ export const columns: ColumnDef<Application>[] = [
 ];
 
 export default function GetAllApplications() {
-  const [dataApplications, setDataApplications] = React.useState<Application[]>(
-    []
-  );
+  // Указываем, что dataApplications - массив объектов типа Application
+  const [dataApplications, setDataApplications] = useState<Application[]>([]);
   const [loading, setLoading] = useState(true);
+  const { dateRange } = useDateRange(); // Получаем диапазон дат из контекста
 
-  React.useEffect(() => {
+  useEffect(() => {
     async function fetchDataApplications() {
-      try {
-        const applicationsData = await fetchApplicationsData();
-        console.log(applicationsData);
-
-        // Преобразование даты в удобочитаемый формат
-        const formattedApplicationsData = applicationsData.map(
-          (application) => ({
-            ...application,
-            date: new Date(application.date).toLocaleDateString("ru-RU"),
-            car: {
-              id: application.car.id,
-              plate_number: application.car.plate_number,
-              model: application.car.model,
-            },
-          })
-        );
-
-        setDataApplications(formattedApplicationsData);
-        setTimeout(() => {
+      if (dateRange && dateRange.from && dateRange.to) {
+        try {
+          const startDate = dateRange.from.toISOString().split("T")[0];
+          const endDate = dateRange.to.toISOString().split("T")[0];
+          const applicationsData = await fetchApplicationsData(
+            startDate,
+            endDate
+          ); // Передаем даты в функцию запроса
+          setDataApplications(applicationsData);
+        } catch (error) {
+          console.error("Error fetching applications data:", error);
+        } finally {
           setLoading(false);
-        });
-      } catch (error) {
-        console.error("Error fetching applications data:", error);
+        }
+      } else {
+        console.log("Date range is not fully specified.");
+        setLoading(false); // Обновляем состояние загрузки, если даты не указаны
       }
     }
     fetchDataApplications();
-  }, []);
+  }, [dateRange]);
 
   const handleDelete = async (id: number) => {
     try {
       await deleteApplication(id);
+      // Обновляем список данных, исключая удаленный элемент
       setDataApplications((prevData) =>
         prevData.filter((app) => app.id !== id)
       );

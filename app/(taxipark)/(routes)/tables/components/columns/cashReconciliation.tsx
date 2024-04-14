@@ -93,7 +93,7 @@ export interface Payroll {
 
 export interface ExpenseItemApl {
   id: number;
-  expense_item_name: string;
+  name: string;
 }
 
 export interface ExpenseApl {
@@ -222,7 +222,7 @@ export const CashReconciliationColumns: ColumnDef<CashReconciliation>[] = [
                               <TableRow>
                                 <TableCell>
                                   {row.original.payment.amount_cash}
-                                </TableCell> 
+                                </TableCell>
                                 <TableCell>
                                   {row.original.payment.amount_cashless}
                                 </TableCell>
@@ -266,10 +266,7 @@ export const CashReconciliationColumns: ColumnDef<CashReconciliation>[] = [
                                   {row.original.expenseApl.other}
                                 </TableCell>
                                 <TableCell>
-                                  {
-                                    row.original.expenseApl.expenseItemApl
-                                      .expense_item_name
-                                  }
+                                  {row.original.expenseApl.expenseItemApl.name}
                                 </TableCell>
                                 <TableCell>
                                   {row.original.expenseApl.advance}
@@ -319,13 +316,12 @@ export const CashReconciliationColumns: ColumnDef<CashReconciliation>[] = [
       );
     },
   },
-
 ];
 
 export default function GetAllCashReconciliation() {
-  const [dataCashReconciliation, setDataCashReconciliation] = React.useState<CashReconciliation[]>(
-    []
-  );
+  const [dataCashReconciliation, setDataCashReconciliation] = React.useState<
+    CashReconciliation[]
+  >([]);
 
   React.useEffect(() => {
     async function fetchDataCashReconciliation() {
@@ -351,7 +347,6 @@ export default function GetAllCashReconciliation() {
     }
     fetchDataCashReconciliation();
   }, []);
-
 
   return (
     <CashReconciliationDataTable

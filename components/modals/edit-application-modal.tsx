@@ -61,7 +61,7 @@ interface Schedule {
 
 interface ExpenseItemApl {
   id: string;
-  expense_item_name: string;
+  name: string;
 }
 
 const formSchema = z.object({
@@ -805,9 +805,9 @@ export const EditApplicationModal: React.FC<Props> = ({
                           {expenseItemApls.map((expenseItemApl) => (
                             <SelectItem
                               key={expenseItemApl.id}
-                              value={`${expenseItemApl.id} ${expenseItemApl.expense_item_name}`}
+                              value={`${expenseItemApl.id} ${expenseItemApl.name}`}
                             >
-                              {`${expenseItemApl.expense_item_name}`}
+                              {`${expenseItemApl.name}`}
                             </SelectItem>
                           ))}
                         </SelectContent>

@@ -56,7 +56,7 @@ export interface Driver {
 
 export interface ExpenseItemApl {
   id: number;
-  expense_item_name: string;
+  name: string;
 }
 
 export interface ExpenseApl {
@@ -81,7 +81,7 @@ export interface Expenses {
   expensesKaspiFuel: number;
   expensesKaspiOther: number;
   expensesObjectOfExpenditure: string;
-};
+}
 
 export const ExpensesColumns: ColumnDef<Expenses>[] = [
   {
@@ -132,7 +132,6 @@ export const ExpensesColumns: ColumnDef<Expenses>[] = [
                 <SheetHeader>
                   <SheetDescription className="p-20 ">
                     <Accordion type="multiple">
-
                       <AccordionItem value="item-2">
                         <AccordionTrigger>
                           <SheetTitle>Наличными</SheetTitle>
@@ -186,7 +185,6 @@ export const ExpensesColumns: ColumnDef<Expenses>[] = [
                           </Table>
                         </AccordionContent>
                       </AccordionItem>
-
                     </Accordion>
                   </SheetDescription>
                 </SheetHeader>
@@ -199,11 +197,8 @@ export const ExpensesColumns: ColumnDef<Expenses>[] = [
   },
 ];
 
-
 export default function GetAllExpenses() {
-  const [dataExpenses, setDataExpenses] = React.useState<Expenses[]>(
-    []
-  );
+  const [dataExpenses, setDataExpenses] = React.useState<Expenses[]>([]);
 
   React.useEffect(() => {
     async function fetchDataExpenses() {
@@ -211,22 +206,22 @@ export default function GetAllExpenses() {
         let expensesData = await fetchExpensesData(); // Получение данных из вашего API
         console.log(expensesData);
 
-            // Normalize expensesData to an array if it's not already an array
+        // Normalize expensesData to an array if it's not already an array
         if (!Array.isArray(expensesData)) {
           expensesData = []; // Wrap the single object in an array
         }
         // Преобразование даты в удобочитаемый формат
-        const formattedExpensesData = expensesData.map(
-          (expenses) => ({
-            ...expenses,
-            date: new Date(expenses.expensesDateOfIssue).toLocaleDateString("ru-RU"),
-            car: {
-              id: expenses.expensesCar.id,
-              plate_number: expenses.expensesCar.plate_number,
-              model: expenses.expensesCar.model,
-            },
-          })
-        );
+        const formattedExpensesData = expensesData.map((expenses) => ({
+          ...expenses,
+          date: new Date(expenses.expensesDateOfIssue).toLocaleDateString(
+            "ru-RU"
+          ),
+          car: {
+            id: expenses.expensesCar.id,
+            plate_number: expenses.expensesCar.plate_number,
+            model: expenses.expensesCar.model,
+          },
+        }));
 
         setDataExpenses(formattedExpensesData);
       } catch (error) {
@@ -235,8 +230,6 @@ export default function GetAllExpenses() {
     }
     fetchDataExpenses();
   }, []);
-
-
 
   return (
     <ExpensesDataTable
