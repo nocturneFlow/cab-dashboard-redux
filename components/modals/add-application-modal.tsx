@@ -436,8 +436,12 @@ export const AddApplicationModal = () => {
 
   return (
     <Dialog>
-      <DialogTrigger>
-        <Button variant="outline">
+      <DialogTrigger asChild>
+        <Button
+          variant="outline"
+          size="sm"
+          className="ml-auto hidden h-8 lg:flex"
+        >
           <Plus className="w-4 h-4 mr-2 mt-0.5" />
           Добавить заявку
         </Button>
@@ -446,8 +450,7 @@ export const AddApplicationModal = () => {
         <DialogHeader>
           <DialogTitle>Добавить заявку</DialogTitle>
           <DialogDescription>
-            Внесите изменения в заявку здесь. Нажмите кнопку добавить, когда
-            закончите.
+            Заполните все поля для добавления новой заявки.
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>

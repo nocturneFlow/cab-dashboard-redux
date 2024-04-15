@@ -455,9 +455,8 @@ export const EditApplicationModal: React.FC<Props> = ({
 
   return (
     <>
-      {/* {isOpen && ( */}
       <Dialog>
-        <DialogTrigger>
+        <DialogTrigger asChild>
           <DropdownMenu>
             <DropdownMenuItem>
               <Edit className="mr-2 w-4 h-4" />
@@ -904,7 +903,6 @@ export const EditApplicationModal: React.FC<Props> = ({
           </Form>
         </DialogContent>
       </Dialog>
-      {/* )} */}
     </>
   );
 };

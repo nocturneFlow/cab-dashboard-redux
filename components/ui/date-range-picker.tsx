@@ -1,8 +1,7 @@
-// src/components/DatePickerWithRange.tsx
 import * as React from "react";
 import { CalendarIcon } from "@radix-ui/react-icons";
-import { addDays, format } from "date-fns";
-import { DateRange } from "react-day-picker";
+import { format } from "date-fns";
+import { ru } from "date-fns/locale";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
@@ -25,8 +24,9 @@ export function DatePickerWithRange({
           <Button
             id="date"
             variant="outline"
+            size="sm"
             className={cn(
-              "w-[300px] justify-start text-left font-normal",
+              "ml-auto hidden h-8 lg:flex justify-start text-left font-normal",
               !dateRange && "text-muted-foreground"
             )}
           >
@@ -34,14 +34,14 @@ export function DatePickerWithRange({
             {dateRange?.from ? (
               dateRange.to ? (
                 <>
-                  {format(dateRange.from, "LLL dd, y")} -{" "}
-                  {format(dateRange.to, "LLL dd, y")}
+                  {format(dateRange.from, "LLL dd, y", { locale: ru })} -{" "}
+                  {format(dateRange.to, "LLL dd, y", { locale: ru })}
                 </>
               ) : (
-                format(dateRange.from, "LLL dd, y")
+                format(dateRange.from, "LLL dd, y", { locale: ru })
               )
             ) : (
-              <span>Pick a date</span>
+              <span>Выберите дату</span>
             )}
           </Button>
         </PopoverTrigger>
@@ -53,6 +53,8 @@ export function DatePickerWithRange({
             selected={dateRange}
             onSelect={setDateRange}
             numberOfMonths={2}
+            locale={ru}
+            className="capitalize"
           />
         </PopoverContent>
       </Popover>

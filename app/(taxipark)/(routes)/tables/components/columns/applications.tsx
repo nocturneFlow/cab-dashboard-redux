@@ -53,6 +53,7 @@ import {
 import { EditApplicationModal } from "@/components/modals/edit-application-modal";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Separator } from "@/components/ui/separator";
+import { DataTableColumnHeader } from "@/components/ui/data-table-column-header";
 
 export interface Car {
   id: number;
@@ -136,22 +137,19 @@ export interface Application {
 export const columns: ColumnDef<Application>[] = [
   {
     accessorKey: "manager",
-    header: "Менеджер",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Менеджер" />
+    ),
     cell: ({ row }) => {
       const { firstName, lastName } = row.original.manager;
-      return `${firstName} ${lastName}`;
+      const managerName = `${firstName} ${lastName}`;
+      return <div className="text-left font-medium">{managerName}</div>;
     },
   },
   {
     accessorKey: "date",
     header: ({ column }) => (
-      <Button
-        variant="ghost"
-        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-      >
-        Дата
-        <ArrowUpDown className="ml-2 h-4 w-4" />
-      </Button>
+      <DataTableColumnHeader column={column} title="Дата" />
     ),
     cell: ({ row }) => {
       const dateFormatter = new Intl.DateTimeFormat("ru-RU", {
@@ -166,23 +164,41 @@ export const columns: ColumnDef<Application>[] = [
   },
   {
     accessorKey: "driver",
-    header: "ФИО Водителя",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Водитель" />
+    ),
     cell: ({ row }) => {
       const { firstName, lastName } = row.original.driver;
-      return `${firstName} ${lastName}`;
+      const driverName = `${firstName} ${lastName}`;
+      return <div className="text-left font-medium">{driverName}</div>;
     },
   },
   {
     accessorKey: "car.plate_number",
-    header: "Номер Машины",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Номер Машины" />
+    ),
+    cell: ({ row }) => (
+      <div className="lowercase">{row.getValue("car.plate_number")}</div>
+    ),
   },
   {
     accessorKey: "schedule.schedule",
-    header: "График",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="График" />
+    ),
+    cell: ({ row }) => (
+      <div className="lowercase">{row.getValue("schedule.schedule")}</div>
+    ),
   },
   {
     accessorKey: "time_on_line",
-    header: "Время на линии",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Время на линии" />
+    ),
+    cell: ({ row }) => (
+      <div className="lowercase">{row.getValue("time_on_line")}</div>
+    ),
   },
   {
     id: "expand",
@@ -355,14 +371,14 @@ export const columns: ColumnDef<Application>[] = [
     cell: ({ row }) => {
       return (
         <DropdownMenu>
-          <DropdownMenuTrigger>
-            <Button variant="ghost">
-              <MoreHorizontal className="w-4 h-4" />
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" className="h-8 w-8 p-0">
+              <span className="sr-only">Open menu</span>
+              <MoreHorizontal className="h-4 w-4" />
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent>
+          <DropdownMenuContent align="end">
             <DropdownMenuLabel>Действие</DropdownMenuLabel>
-            <DropdownMenuSeparator />
             <EditApplicationModal data={row.original} />
             <DropdownMenuItem
               onClick={() => row.original.onDelete(row.original.id)}
@@ -378,10 +394,9 @@ export const columns: ColumnDef<Application>[] = [
 ];
 
 export default function GetAllApplications() {
-  // Указываем, что dataApplications - массив объектов типа Application
   const [dataApplications, setDataApplications] = useState<Application[]>([]);
   const [loading, setLoading] = useState(true);
-  const { dateRange } = useDateRange(); // Получаем диапазон дат из контекста
+  const { dateRange } = useDateRange();
 
   useEffect(() => {
     async function fetchDataApplications() {
@@ -392,7 +407,7 @@ export default function GetAllApplications() {
           const applicationsData = await fetchApplicationsData(
             startDate,
             endDate
-          ); // Передаем даты в функцию запроса
+          );
           setDataApplications(applicationsData);
         } catch (error) {
           console.error("Error fetching applications data:", error);
@@ -401,7 +416,7 @@ export default function GetAllApplications() {
         }
       } else {
         console.log("Date range is not fully specified.");
-        setLoading(false); // Обновляем состояние загрузки, если даты не указаны
+        setLoading(false);
       }
     }
     fetchDataApplications();
@@ -424,9 +439,12 @@ export default function GetAllApplications() {
       {loading && (
         <>
           <div className="flex items-center justify-between">
-            <Skeleton className="w-[384px] h-10 mt-6" />
-            <Skeleton className="w-[300px] h-10 mt-6" />
-            <Skeleton className="w-[178px] h-10 mt-6" />
+            <Skeleton className="w-[250px] h-8" />
+            <div className="flex space-x-2">
+              <Skeleton className="w-[150.39px] h-8 mt-6" />
+              <Skeleton className="w-[217.73px] h-8 mt-6" />
+              <Skeleton className="w-[110.08px] h-8 mt-6" />
+            </div>
           </div>
           <div className="mt-5">
             <Card className="h-full mt-8">
