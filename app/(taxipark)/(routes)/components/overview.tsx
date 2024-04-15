@@ -1,7 +1,24 @@
 "use client";
 import { useState, useEffect } from "react";
-import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis } from "recharts";
+import {
+  Bar,
+  BarChart,
+  Legend,
+  Rectangle,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
+} from "recharts";
 import axios from "axios";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 
 // Определение интерфейса для финансовых данных
 interface FinancialData {
@@ -94,29 +111,59 @@ export function Overview() {
     fetchData();
   }, []);
 
+  const CustomTooltip = ({
+    active,
+    payload,
+    label,
+  }: {
+    active: boolean;
+    payload: any[];
+    label: string;
+  }) => {
+    if (active && payload && payload.length) {
+      return (
+        <div className="custom-tooltip">
+          <Card className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 shadow-md">
+            <CardHeader className="pb-2 label">
+              <CardTitle className="">{`${label}`}</CardTitle>
+              <CardDescription>
+                Чистая прибыль - {`${payload[0].value}`}
+              </CardDescription>
+            </CardHeader>
+            <CardContent></CardContent>
+          </Card>
+        </div>
+      );
+    }
+
+    return null;
+  };
+
   // Отображение графика
   return (
     <ResponsiveContainer width="100%" height={600}>
-      <BarChart data={data}>
-        <XAxis
-          dataKey="month"
-          stroke="#888888"
-          fontSize={12}
-          tickLine={false}
-          axisLine={false}
-        />
-        <YAxis
-          stroke="#888888"
-          fontSize={12}
-          tickLine={false}
-          axisLine={false}
-          tickFormatter={(value) => `${value}`}
+      <BarChart
+        width={500}
+        height={300}
+        data={data}
+        margin={{
+          top: 5,
+          right: 30,
+          left: 20,
+          bottom: 5,
+        }}
+      >
+        <XAxis dataKey="month" tickLine={false} fontSize={12} />
+        <YAxis tickLine={false} fontSize={12} />
+        <Tooltip
+          content={<CustomTooltip active={false} payload={[]} label={""} />}
         />
         <Bar
           dataKey="net_profit_amount"
-          fill="currentColor"
+          name={"Чистая прибыль"}
+          fill="#8884d8"
           radius={[4, 4, 0, 0]}
-          className="fill-ring"
+          activeBar={<Rectangle fill="gold" stroke="purple" />}
         />
       </BarChart>
     </ResponsiveContainer>
