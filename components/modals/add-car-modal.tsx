@@ -20,7 +20,7 @@ import {
 import { useToast } from "@/components/ui/use-toast";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Plus } from "lucide-react";
+import Plus from "@geist-ui/icons/plus";
 import * as React from "react";
 import { useState, useEffect } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -110,10 +110,14 @@ export const AddCarModal = () => {
 
   return (
     <Dialog>
-      <DialogTrigger>
-        <Button variant="outline">
-          <Plus className="w-4 h-4 mr-2 mt-0.5" />
-          Добавить машину
+      <DialogTrigger asChild>
+        <Button
+          variant="outline"
+          size="sm"
+          className="ml-auto hidden h-8 lg:flex"
+        >
+          <Plus className="w-4 h-4 mr-2" />
+          Новая машина
         </Button>
       </DialogTrigger>
       <DialogContent className="h-auto">

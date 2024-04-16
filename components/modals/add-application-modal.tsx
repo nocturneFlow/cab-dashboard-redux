@@ -27,7 +27,8 @@ import {
 import { useToast } from "@/components/ui/use-toast";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, ArrowRight, Plus } from "lucide-react";
+import { ArrowLeft, ArrowRight } from "lucide-react";
+import { Plus } from "@geist-ui/icons";
 import * as React from "react";
 import { useState, useEffect } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -442,21 +443,21 @@ export const AddApplicationModal = () => {
           size="sm"
           className="ml-auto hidden h-8 lg:flex"
         >
-          <Plus className="w-4 h-4 mr-2 mt-0.5" />
-          Добавить заявку
+          <Plus className="w-4 h-4 mr-2" />
+          Новая заявка
         </Button>
       </DialogTrigger>
       <DialogContent className="h-auto">
         <DialogHeader>
-          <DialogTitle>Добавить заявку</DialogTitle>
+          <DialogTitle>Добавление заявки</DialogTitle>
           <DialogDescription>
             Заполните все поля для добавления новой заявки.
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3">
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
             <div
-              className={cn("space-y-3", {
+              className={cn("space-y-4", {
                 hidden: formStep != 0,
               })}
             >
@@ -825,7 +826,7 @@ export const AddApplicationModal = () => {
                   }}
                   className={cn({ hidden: formStep == 0 })}
                 >
-                  <ArrowLeft className="w-4 h-4 mr-2 mt-1" />
+                  <ArrowLeft className="w-4 h-4 mr-2" />
                   Назад
                 </Button>
                 <Button
@@ -866,7 +867,7 @@ export const AddApplicationModal = () => {
                   }}
                 >
                   Далее
-                  <ArrowRight className="w-4 h-4 ml-2 mt-1" />
+                  <ArrowRight className="w-4 h-4 ml-2" />
                 </Button>
               </div>
               <DialogClose>

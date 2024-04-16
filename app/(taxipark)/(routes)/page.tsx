@@ -16,7 +16,9 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import ReportsPage from "./dashboard/reports/page";
-import { TrendingDown, TrendingUp } from "lucide-react";
+import Users from "@geist-ui/icons/users";
+import Grid from "@geist-ui/icons/grid";
+import BarChart2 from "@geist-ui/icons/barChart2";
 import StaffPage from "./dashboard/staff/page";
 import ExpenditureItemPage from "./dashboard/expense-item/page";
 import ExpenseItemPage from "./dashboard/expense-item/page";
@@ -110,10 +112,6 @@ const DashboardPage = () => {
               <h2 className="text-3xl font-bold tracking-tight">
                 <Skeleton className="w-[125px] h-8" />
               </h2>
-              <div className="flex items-center space-x-2">
-                <Skeleton className="w-[300px] h-9" />
-                <Skeleton className="w-28 h-9" />
-              </div>
             </div>
             <Tabs defaultValue="overview" className="space-y-4">
               <Skeleton className="w-[233px] h-10" />
@@ -213,16 +211,21 @@ const DashboardPage = () => {
           <div className="flex-1 space-y-4 p-8 pt-6">
             <div className="flex items-center justify-between space-y-2">
               <h2 className="text-3xl font-bold tracking-tight">Главная</h2>
-              <div className="flex items-center space-x-2">
-                <DatePickerWithRange />
-                <Button>Применить</Button>
-              </div>
             </div>
             <Tabs defaultValue="overview" className="space-y-4">
               <TabsList>
-                <TabsTrigger value="overview">Обзор</TabsTrigger>
-                <TabsTrigger value="reports">Отчет</TabsTrigger>
-                <TabsTrigger value="staff">Персонал</TabsTrigger>
+                <TabsTrigger value="overview">
+                  <BarChart2 className="w-4 h-4 mr-2" />
+                  Обзор
+                </TabsTrigger>
+                <TabsTrigger value="reports">
+                  <Grid className="w-4 h-4 mr-2" />
+                  Отчет
+                </TabsTrigger>
+                <TabsTrigger value="staff">
+                  <Users className="w-4 h-4 mr-2" />
+                  Персонал
+                </TabsTrigger>
               </TabsList>
               <TabsContent value="overview" className="space-y-4">
                 <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
@@ -243,13 +246,12 @@ const DashboardPage = () => {
                     <CardContent>
                       <div className="text-2xl font-bold">
                         <span
-                          style={{
-                            color:
-                              data.net_profit !== undefined &&
-                              data.net_profit < 0
-                                ? "#FF6B6B"
-                                : "#66DE93",
-                          }}
+                          className={`${
+                            typeof data.net_profit === "number" &&
+                            data.net_profit < 0
+                              ? "text-red-500"
+                              : "text-green-500"
+                          }`}
                         >
                           {typeof data.net_profit === "number"
                             ? data.net_profit

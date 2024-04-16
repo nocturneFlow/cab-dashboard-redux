@@ -3,7 +3,6 @@ import { useState, useEffect } from "react";
 import {
   Bar,
   BarChart,
-  Legend,
   Rectangle,
   ResponsiveContainer,
   Tooltip,
@@ -15,72 +14,76 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
 
-// Определение интерфейса для финансовых данных
 interface FinancialData {
-  month: string; // Строковое поле, указывающее месяц
-  net_profit_amount: number; // Числовое поле, указывающее чистую прибыль
+  month: string;
+  net_profit_amount: number;
 }
 
-// Основной компонент Overview
 export function Overview() {
-  // Состояние для хранения данных из API
   const [data, setData] = useState<FinancialData[]>([]);
 
-  // Список всех месяцев в году на русском языке
   const monthsList = [
-    "Январь",
-    "Февраль",
-    "Март",
-    "Апрель",
+    "Янв",
+    "Фев",
+    "Мар",
+    "Апр",
     "Май",
-    "Июнь",
-    "Июль",
-    "Август",
-    "Сентябрь",
-    "Октябрь",
-    "Ноябрь",
-    "Декабрь",
+    "Июн",
+    "Июл",
+    "Авг",
+    "Сен",
+    "Окт",
+    "Ноя",
+    "Дек",
   ];
 
-  // Словарь для сопоставления названий месяцев
   const monthMapping: Record<string, string> = {
-    JANUARY: "Январь",
-    FEBRUARY: "Февраль",
-    MARCH: "Март",
-    APRIL: "Апрель",
+    JANUARY: "Янв",
+    FEBRUARY: "Фев",
+    MARCH: "Мар",
+    APRIL: "Апр",
     MAY: "Май",
-    JUNE: "Июнь",
-    JULY: "Июль",
-    AUGUST: "Август",
-    SEPTEMBER: "Сентябрь",
-    OCTOBER: "Октябрь",
-    NOVEMBER: "Ноябрь",
-    DECEMBER: "Декабрь",
+    JUNE: "Июн",
+    JULY: "Июл",
+    AUGUST: "Авг",
+    SEPTEMBER: "Сен",
+    OCTOBER: "Окт",
+    NOVEMBER: "Ноя",
+    DECEMBER: "Дек",
   };
 
-  // Функция для объединения данных из API с полным списком месяцев
+  const fullMonthNames: Record<string, string> = {
+    Янв: "Январь",
+    Фев: "Февраль",
+    Мар: "Март",
+    Апр: "Апрель",
+    Май: "Май",
+    Июн: "Июнь",
+    Июл: "Июль",
+    Авг: "Август",
+    Сен: "Сентябрь",
+    Окт: "Октябрь",
+    Ноя: "Ноябрь",
+    Дек: "Декабрь",
+  };
+
   function combineDataWithMonths(apiData: FinancialData[]): FinancialData[] {
-    // Преобразование названий месяцев из API в русский формат
     const apiDataMapped = apiData.map((item) => ({
       ...item,
       month: monthMapping[item.month.toUpperCase()] || item.month,
     }));
 
-    // Объединение данных из API с полным списком месяцев
     const combinedData = monthsList.map((month) => {
-      // Поиск данных для текущего месяца в данных из API
       const monthData = apiDataMapped.find((item) => item.month === month);
 
-      // Если данные для текущего месяца найдены, используем их, иначе устанавливаем нулевое значение чистой прибыли
       return monthData
         ? monthData
         : {
-            month: month,
+            month,
             net_profit_amount: 0,
           };
     });
@@ -88,7 +91,6 @@ export function Overview() {
     return combinedData;
   }
 
-  // Функция для загрузки данных из API
   async function fetchData(): Promise<void> {
     try {
       const response = await axios.get(
@@ -96,17 +98,14 @@ export function Overview() {
       );
       const apiData: FinancialData[] = response.data;
 
-      // Объединение данных из API с полным списком месяцев
       const combinedData = combineDataWithMonths(apiData);
 
-      // Установка объединенных данных в состоянии компонента
       setData(combinedData);
     } catch (error) {
       console.error("Ошибка при загрузке данных:", error);
     }
   }
 
-  // Загрузка данных из API при загрузке компонента
   useEffect(() => {
     fetchData();
   }, []);
@@ -121,13 +120,19 @@ export function Overview() {
     label: string;
   }) => {
     if (active && payload && payload.length) {
+      const fullMonthName = fullMonthNames[label] || label;
+
       return (
         <div className="custom-tooltip">
-          <Card className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 shadow-md">
-            <CardHeader className="pb-2 label">
-              <CardTitle className="">{`${label}`}</CardTitle>
+          <Card className="z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+            <CardHeader className="label pb-2">
+              <CardTitle className="text-lg">{`${fullMonthName}`}</CardTitle>
               <CardDescription>
-                Чистая прибыль - {`${payload[0].value}`}
+                Чистая прибыль -{" "}
+                {new Intl.NumberFormat("ru-KZ", {
+                  style: "currency",
+                  currency: "KZT",
+                }).format(payload[0].value)}
               </CardDescription>
             </CardHeader>
             <CardContent></CardContent>
@@ -139,31 +144,34 @@ export function Overview() {
     return null;
   };
 
-  // Отображение графика
   return (
     <ResponsiveContainer width="100%" height={600}>
-      <BarChart
-        width={500}
-        height={300}
-        data={data}
-        margin={{
-          top: 5,
-          right: 30,
-          left: 20,
-          bottom: 5,
-        }}
-      >
-        <XAxis dataKey="month" tickLine={false} fontSize={12} />
-        <YAxis tickLine={false} fontSize={12} />
+      <BarChart data={data}>
+        <XAxis
+          dataKey="month"
+          stroke="#888888"
+          fontSize={12}
+          tickLine={false}
+          axisLine={false}
+        />
+        <YAxis
+          stroke="#888888"
+          fontSize={12}
+          tickLine={false}
+          axisLine={false}
+          tickFormatter={(value) =>
+            new Intl.NumberFormat("ru-KZ").format(value)
+          }
+        />
         <Tooltip
           content={<CustomTooltip active={false} payload={[]} label={""} />}
         />
         <Bar
           dataKey="net_profit_amount"
-          name={"Чистая прибыль"}
-          fill="#8884d8"
+          fill="currentColor"
           radius={[4, 4, 0, 0]}
-          activeBar={<Rectangle fill="gold" stroke="purple" />}
+          className="fill-primary"
+          activeBar={<Rectangle stroke="#8884d8" strokeWidth={2} />}
         />
       </BarChart>
     </ResponsiveContainer>

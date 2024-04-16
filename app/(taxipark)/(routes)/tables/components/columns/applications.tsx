@@ -1,8 +1,8 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { useDateRange } from "@/contexts/DateRangeContext"; // Импортируем хук для использования дат из контекста
-import { ApplicationsDataTable } from "@/components/tables/applications/applications-data-table-pagination";
-import { fetchApplicationsData } from "../../applications/action/fetchApplicationData";
+import { ApplicationsDataTable } from "@/components/tables/applications/data-table";
+import { fetchApplicationsData } from "../../(applications)/action/fetchApplicationData";
 import { deleteApplication } from "@/components/modals/delete-application";
 import { ColumnDef } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
@@ -22,14 +22,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card } from "@/components/ui/card";
 import {
   Accordion,
   AccordionContent,
@@ -40,20 +33,23 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import {
-  ArrowUpDown,
-  Eraser,
-  MoreHorizontal,
-  PanelBottomOpen,
-} from "lucide-react";
+import { MoreHorizontal, PanelBottomOpen } from "lucide-react";
 import { EditApplicationModal } from "@/components/modals/edit-application-modal";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Separator } from "@/components/ui/separator";
-import { DataTableColumnHeader } from "@/components/ui/data-table-column-header";
+import { DataTableColumnHeader } from "@/components/tables/applications/data-table-column-header";
+import { Edit, Trash2, Delete } from "@geist-ui/icons";
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 
 export interface Car {
   id: number;
@@ -188,7 +184,7 @@ export const columns: ColumnDef<Application>[] = [
       <DataTableColumnHeader column={column} title="График" />
     ),
     cell: ({ row }) => (
-      <div className="lowercase">{row.getValue("schedule.schedule")}</div>
+      <div className="lowercase ">{row.getValue("schedule.schedule")}</div>
     ),
   },
   {
@@ -197,7 +193,7 @@ export const columns: ColumnDef<Application>[] = [
       <DataTableColumnHeader column={column} title="Время на линии" />
     ),
     cell: ({ row }) => (
-      <div className="lowercase">{row.getValue("time_on_line")}</div>
+      <div className="lowercase ">{row.getValue("time_on_line")}</div>
     ),
   },
   {
@@ -214,7 +210,7 @@ export const columns: ColumnDef<Application>[] = [
               </SheetTrigger>
               <SheetContent className="backdrop-blur">
                 <SheetHeader>
-                  <SheetDescription className="p-20 ">
+                  <SheetDescription className="p-20">
                     <Accordion type="multiple">
                       <AccordionItem value="item-1">
                         <AccordionTrigger>
@@ -224,10 +220,14 @@ export const columns: ColumnDef<Application>[] = [
                           <Table>
                             <TableHeader>
                               <TableRow>
-                                <TableHead>Наличными</TableHead>
-                                <TableHead>Безнал</TableHead>
+                                <TableHead>
+                                  <strong>Наличными</strong>
+                                </TableHead>
+                                <TableHead>
+                                  <strong>Безнал</strong>
+                                </TableHead>
                                 <TableHead className="text-right">
-                                  Итого
+                                  <strong>Итого</strong>
                                 </TableHead>
                               </TableRow>
                             </TableHeader>
@@ -256,11 +256,17 @@ export const columns: ColumnDef<Application>[] = [
                           <Table>
                             <TableHeader>
                               <TableRow>
-                                <TableHead>Наличными</TableHead>
-                                <TableHead>Kaspi</TableHead>
-                                <TableHead>Итого</TableHead>
+                                <TableHead>
+                                  <strong>Наличными</strong>
+                                </TableHead>
+                                <TableHead>
+                                  <strong>Kaspi</strong>
+                                </TableHead>
+                                <TableHead>
+                                  <strong>Итого</strong>
+                                </TableHead>
                                 <TableHead className="text-right">
-                                  Разница
+                                  <strong>Разница</strong>
                                 </TableHead>
                               </TableRow>
                             </TableHeader>
@@ -294,12 +300,20 @@ export const columns: ColumnDef<Application>[] = [
                           <Table>
                             <TableHeader>
                               <TableRow>
-                                <TableHead>Газ</TableHead>
-                                <TableHead>Прочие расходы</TableHead>
-                                <TableHead>Статья расходов</TableHead>
-                                <TableHead>Аванс</TableHead>
+                                <TableHead>
+                                  <strong>Газ</strong>
+                                </TableHead>
+                                <TableHead>
+                                  <strong>Прочие расходы</strong>
+                                </TableHead>
+                                <TableHead>
+                                  <strong>Статья расходов</strong>
+                                </TableHead>
+                                <TableHead>
+                                  <strong>Аванс</strong>
+                                </TableHead>
                                 <TableHead className="text-right">
-                                  Итого расходы с нал
+                                  <strong>Итого расходы с нал</strong>
                                 </TableHead>
                               </TableRow>
                             </TableHeader>
@@ -335,18 +349,26 @@ export const columns: ColumnDef<Application>[] = [
                           <Table>
                             <TableHeader>
                               <TableRow>
-                                <TableHead>Итого оклад+бонус</TableHead>
-                                <TableHead>Оклад</TableHead>
-                                <TableHead>Бонус</TableHead>
+                                <TableHead>
+                                  <strong>Итого оклад+бонус</strong>
+                                </TableHead>
+                                <TableHead>
+                                  <strong>Оклад</strong>
+                                </TableHead>
+                                <TableHead>
+                                  <strong>Бонус</strong>
+                                </TableHead>
                                 <TableHead className="text-right">
-                                  Бонус от компании
+                                  <strong>Бонус от компании</strong>
                                 </TableHead>
                               </TableRow>
                             </TableHeader>
                             <TableBody>
                               <TableRow>
                                 <TableCell></TableCell>
-                                <TableCell></TableCell>
+                                <TableCell>
+                                  {row.original.payroll.salary}
+                                </TableCell>
                                 <TableCell></TableCell>
                                 <TableCell className="text-right">
                                   {row.original.payroll.bonus_from_company}
@@ -370,24 +392,40 @@ export const columns: ColumnDef<Application>[] = [
     id: "actions",
     cell: ({ row }) => {
       return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0">
-              <span className="sr-only">Open menu</span>
-              <MoreHorizontal className="h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Действие</DropdownMenuLabel>
+        <Dialog>
+          <DropdownMenu>
+            <DropdownMenuTrigger>
+              <Button variant="ghost" size="sm" className="hidden h-8 lg:flex">
+                <span className="sr-only">Open menu</span>
+                <MoreHorizontal className="h-4 w-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="text-center">
+              <DialogTrigger asChild>
+                <DropdownMenuItem>
+                  <Edit className="w-4 h-4 mr-2" />
+                  <span>Изменить</span>
+                </DropdownMenuItem>
+              </DialogTrigger>
+              <DropdownMenuItem
+                onClick={() => row.original.onDelete(row.original.id)}
+                className="flex"
+              >
+                <Trash2 className="w-4 h-4 mr-2" />
+                <span>Удалить</span>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Изменить заявку</DialogTitle>
+              <DialogDescription>
+                Внесите изменения в заявку и нажмите &quot;Подтвердить&quot;
+              </DialogDescription>
+            </DialogHeader>
             <EditApplicationModal data={row.original} />
-            <DropdownMenuItem
-              onClick={() => row.original.onDelete(row.original.id)}
-            >
-              <Eraser className="w-4 h-4" />
-              <span className="pl-2">Удалить</span>
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+          </DialogContent>
+        </Dialog>
       );
     },
   },

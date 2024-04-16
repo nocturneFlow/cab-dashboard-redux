@@ -20,7 +20,6 @@ import {
 import { useToast } from "@/components/ui/use-toast";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Plus } from "lucide-react";
 import * as React from "react";
 import { useState, useEffect } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -33,6 +32,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
+import Plus from "@geist-ui/icons/plus";
 
 interface Driver {
   id: string;
@@ -147,23 +147,14 @@ export const AddDriverModal = () => {
 
   return (
     <Dialog>
-      <DialogTrigger>
-        <Button variant="outline">
-          <svg
-            data-testid="geist-icon"
-            height="16"
-            stroke-linejoin="round"
-            viewBox="0 0 16 16"
-            width="16"
-            style={{ color: "currentcolor" }}
-          >
-            <path
-              fill-rule="evenodd"
-              clip-rule="evenodd"
-              d="M8.75 1.75V1H7.25V1.75V6.75H2.25H1.5V8.25H2.25H7.25V13.25V14H8.75V13.25V8.25H13.75H14.5V6.75H13.75H8.75V1.75Z"
-              fill="currentColor"
-            ></path>
-          </svg>
+      <DialogTrigger asChild>
+        <Button
+          variant="outline"
+          size="sm"
+          className="ml-auto hidden h-8 lg:flex"
+        >
+          <Plus className="mr-2 h-4 w-4" />
+          Новый водитель
         </Button>
       </DialogTrigger>
       <DialogContent className="h-auto">

@@ -686,38 +686,34 @@ const ReportsPage = () => {
                       <TableRow className="text-2xl font-bold">
                         <TableCell>
                           <span
-                            style={{
-                              color:
-                                data.gross_profit ?? 0 < 0
-                                  ? "#FF6B6B"
-                                  : "#66DE93",
-                            }}
+                            className={`${
+                              typeof data.gross_profit === "number" &&
+                              data.gross_profit < 0
+                                ? "text-red-500"
+                                : "text-green-500"
+                            }`}
                           >
-                            {
-                              typeof data.gross_profit === "number"
-                                ? data.gross_profit
-                                    .toFixed(2)
-                                    .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-                                : "N/A" // Display 'N/A' if gross_profit is not a number
-                            }
+                            {typeof data.gross_profit === "number"
+                              ? data.gross_profit
+                                  .toFixed(2)
+                                  .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                              : "N/A"}
                           </span>
                         </TableCell>
                         <TableCell>
                           <span
-                            style={{
-                              color:
-                                (data.operating_profit ?? 0) < 0
-                                  ? "#FF6B6B"
-                                  : "#66DE93",
-                            }}
+                            className={`${
+                              typeof data.operating_profit === "number" &&
+                              data.operating_profit < 0
+                                ? "text-red-500"
+                                : "text-green-500"
+                            }`}
                           >
-                            {
-                              typeof data.operating_profit === "number"
-                                ? data.operating_profit
-                                    .toFixed(2)
-                                    .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-                                : "N/A" // Display 'N/A' if operating_profit is not a number
-                            }
+                            {typeof data.operating_profit === "number"
+                              ? data.operating_profit
+                                  .toFixed(2)
+                                  .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                              : "N/A"}
                           </span>
                         </TableCell>
                         <TableCell>
@@ -740,13 +736,12 @@ const ReportsPage = () => {
                         </TableCell>
                         <TableCell>
                           <span
-                            style={{
-                              color:
-                                data.net_profit !== undefined &&
-                                data.net_profit < 0
-                                  ? "#FF6B6B"
-                                  : "#66DE93",
-                            }}
+                            className={`${
+                              typeof data.net_profit === "number" &&
+                              data.net_profit < 0
+                                ? "text-red-500"
+                                : "text-green-500"
+                            }`}
                           >
                             {typeof data.net_profit === "number"
                               ? data.net_profit

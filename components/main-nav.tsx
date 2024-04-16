@@ -60,18 +60,18 @@ export function MainNav({ className }: React.HTMLAttributes<HTMLElement>) {
 
   const dashboard: { title: string; href: string; description: string }[] = [
     {
-      title: "Элемент 1",
-      href: `/dashboard/1`,
+      title: "Обзор",
+      href: `/`,
       description: "Текст для пояснения о таблице с отчетами",
     },
     {
-      title: "Элемент 2",
-      href: `/dashboard/2`,
+      title: "Отчет",
+      href: `/dashboard/reports`,
       description: "Текст для пояснения о таблице с водителями",
     },
     {
-      title: "Элемент 3",
-      href: `/dashboard/3`,
+      title: "Персонал",
+      href: `/dashboard/staff`,
       description: "Текст для пояснения о таблице с машинами",
     },
   ];
@@ -114,7 +114,6 @@ export function MainNav({ className }: React.HTMLAttributes<HTMLElement>) {
             </a>
           </NavigationMenuLink>
         </NavigationMenuItem>
-
         <NavigationMenuItem>
           <NavigationMenuTrigger>Сводка</NavigationMenuTrigger>
           <NavigationMenuContent>
@@ -148,24 +147,13 @@ export function MainNav({ className }: React.HTMLAttributes<HTMLElement>) {
             </ul>
           </NavigationMenuContent>
         </NavigationMenuItem>
-
         <NavigationMenuItem>
-          <NavigationMenuTrigger>Таблицы</NavigationMenuTrigger>
-          <NavigationMenuContent>
-            <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] ">
-              {tables.map((tables) => (
-                <ListItem
-                  key={tables.title}
-                  title={tables.title}
-                  href={tables.href}
-                >
-                  {tables.description}
-                </ListItem>
-              ))}
-            </ul>
-          </NavigationMenuContent>
+          <Link href={`/tables`} legacyBehavior passHref>
+            <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+              Таблицы
+            </NavigationMenuLink>
+          </Link>
         </NavigationMenuItem>
-
         <NavigationMenuItem>
           <NavigationMenuTrigger>Таблицы Отчетов</NavigationMenuTrigger>
           <NavigationMenuContent>
@@ -181,14 +169,6 @@ export function MainNav({ className }: React.HTMLAttributes<HTMLElement>) {
               ))}
             </ul>
           </NavigationMenuContent>
-        </NavigationMenuItem>
-
-        <NavigationMenuItem>
-          <Link href={`/settings`} legacyBehavior passHref>
-            <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-              Настройки
-            </NavigationMenuLink>
-          </Link>
         </NavigationMenuItem>
       </NavigationMenuList>
     </NavigationMenu>

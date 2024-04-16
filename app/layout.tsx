@@ -4,6 +4,7 @@ import type { Metadata, Viewport } from "next";
 import { DateRangeProvider } from "@/contexts/DateRangeContext";
 import { ClerkProvider } from "@clerk/nextjs";
 import { ThemeProvider } from "@/components/theme-provider";
+import { Providers } from "@/app/providers";
 
 import { Toaster } from "@/components/ui/toaster";
 import { ruRU } from "@clerk/localizations";
@@ -47,20 +48,11 @@ export const metadata: Metadata = {
     title: siteConfig.name,
     description: siteConfig.description,
     siteName: siteConfig.name,
-    images: [
-      {
-        url: siteConfig.ogImage,
-        width: 1200,
-        height: 630,
-        alt: siteConfig.name,
-      },
-    ],
   },
   twitter: {
     card: "summary_large_image",
     title: siteConfig.name,
     description: siteConfig.description,
-    images: [siteConfig.ogImage],
     creator: "@nocturneFlow",
   },
   icons: {
@@ -83,7 +75,7 @@ export default function RootLayout({ children }: React.PropsWithChildren) {
   return (
     <ClerkProvider localization={ruRU}>
       <DateRangeProvider>
-        <html lang="ru" suppressHydrationWarning>
+        <html lang="ru" suppressHydrationWarning className="dark">
           <body
             className={cn(
               "min-h-screen bg-background font-sans antialiased",
@@ -92,15 +84,17 @@ export default function RootLayout({ children }: React.PropsWithChildren) {
               GeistMono.variable
             )}
           >
-            <ThemeProvider
-              attribute="class"
-              defaultTheme="system"
-              enableSystem
-              disableTransitionOnChange
-            >
-              <Toaster />
-              {children}
-            </ThemeProvider>
+            <Providers>
+              <ThemeProvider
+                attribute="class"
+                defaultTheme="system"
+                enableSystem
+                disableTransitionOnChange
+              >
+                <Toaster />
+                {children}
+              </ThemeProvider>
+            </Providers>
           </body>
         </html>
       </DateRangeProvider>
