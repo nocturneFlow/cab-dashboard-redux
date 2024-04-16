@@ -4,7 +4,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import React, { useState } from "react";
-import { fetchSalariesCountPenaltiesData } from "../../salaries/action/fetchSalariesCountPenaltiesData";
+import { fetchSalariesCountPenaltiesData } from "../../(salaries)/action/fetchSalariesCountPenaltiesData";
 import { SalariesDataTable } from "@/components/tables/salaries/salaries-data-table-pagination";
 
 export interface Car {
@@ -12,7 +12,6 @@ export interface Car {
   plate_number: string;
   model: string;
 }
-
 
 export type SalariesCountPenalties = {
   id: number;
@@ -80,51 +79,52 @@ export const SalariesCountPenaltiesColumns: ColumnDef<SalariesCountPenalties>[] 
     },
   ];
 
+export default function GetAllSalariesCountPenalties() {
+  const [dataSalariesCountPenalties, setDataSalariesCountPenalties] =
+    React.useState<SalariesCountPenalties[]>([]);
 
-  export default function GetAllSalariesCountPenalties() {
-    const [dataSalariesCountPenalties, setDataSalariesCountPenalties] = React.useState<SalariesCountPenalties[]>(
-      []
-    );
-  
-    React.useEffect(() => {
-      async function fetchDataSalariesCountPenalties() {
-        try {
-          const salariesCountPenaltiesData = await fetchSalariesCountPenaltiesData(); // Получение данных из вашего API
-          console.log(salariesCountPenaltiesData);
-  
-          // Преобразование даты в удобочитаемый формат
-          const formattedSalariesCountPenaltiesData = salariesCountPenaltiesData.map(
-            (salariesCountPenalties) => ({
-              ...salariesCountPenalties,
-              recDate: new Date(salariesCountPenalties.SalariesCountPenaltiesRecDate).toLocaleDateString("ru-RU"),
-              documentDate: new Date(salariesCountPenalties.SalariesCountPenaltiesDocumentDate).toLocaleDateString("ru-RU"),
+  React.useEffect(() => {
+    async function fetchDataSalariesCountPenalties() {
+      try {
+        const salariesCountPenaltiesData =
+          await fetchSalariesCountPenaltiesData(); // Получение данных из вашего API
+        console.log(salariesCountPenaltiesData);
 
-              car: {
-                id: salariesCountPenalties.SalariesCountPenaltiesCarNumber.id,
-                plate_number: salariesCountPenalties.SalariesCountPenaltiesCarNumber.plate_number,
-                model: salariesCountPenalties.SalariesCountPenaltiesCarNumber.model,
-              },
+        // Преобразование даты в удобочитаемый формат
+        const formattedSalariesCountPenaltiesData =
+          salariesCountPenaltiesData.map((salariesCountPenalties) => ({
+            ...salariesCountPenalties,
+            recDate: new Date(
+              salariesCountPenalties.SalariesCountPenaltiesRecDate
+            ).toLocaleDateString("ru-RU"),
+            documentDate: new Date(
+              salariesCountPenalties.SalariesCountPenaltiesDocumentDate
+            ).toLocaleDateString("ru-RU"),
 
-            })
-          );
-  
-          setDataSalariesCountPenalties(formattedSalariesCountPenaltiesData);
-        } catch (error) {
-          console.error("Error fetching SalariesCountPenalties data:", error);
-        }
+            car: {
+              id: salariesCountPenalties.SalariesCountPenaltiesCarNumber.id,
+              plate_number:
+                salariesCountPenalties.SalariesCountPenaltiesCarNumber
+                  .plate_number,
+              model:
+                salariesCountPenalties.SalariesCountPenaltiesCarNumber.model,
+            },
+          }));
+
+        setDataSalariesCountPenalties(formattedSalariesCountPenaltiesData);
+      } catch (error) {
+        console.error("Error fetching SalariesCountPenalties data:", error);
       }
-      fetchDataSalariesCountPenalties();
-    }, []);
-  
-    
-  
-    return (
-      <SalariesDataTable
-        columns={SalariesCountPenaltiesColumns}
-        data={dataSalariesCountPenalties.map((salariesCountPenalties) => ({
-          ...salariesCountPenalties,
-        }))}
-      />
-    );
-  }
-  
+    }
+    fetchDataSalariesCountPenalties();
+  }, []);
+
+  return (
+    <SalariesDataTable
+      columns={SalariesCountPenaltiesColumns}
+      data={dataSalariesCountPenalties.map((salariesCountPenalties) => ({
+        ...salariesCountPenalties,
+      }))}
+    />
+  );
+}

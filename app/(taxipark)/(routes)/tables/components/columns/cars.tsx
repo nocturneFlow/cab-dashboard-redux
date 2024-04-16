@@ -3,7 +3,7 @@
 import { ColumnDef } from "@tanstack/react-table";
 import React, { useState } from "react";
 import { CarsDataTable } from "@/components/tables/cars/cars-data-table-pagination";
-import { fetchCarsData } from "../../cars/action/fetchCarsData";
+import { fetchCarsData } from "../../(cars)/action/fetchCarsData";
 
 export interface Car {
   id: number;

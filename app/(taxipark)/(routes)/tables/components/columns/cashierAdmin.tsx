@@ -3,7 +3,7 @@
 import { ColumnDef } from "@tanstack/react-table";
 import React, { useState } from "react";
 import { ReportsDataTable } from "@/components/tables/reports/reports-data-table-pagination";
-import { fetchCashierAdminData } from "../../cashierAdmin/action/fetchCashierAdminData";
+import { fetchCashierAdminData } from "../../(cashierAdmin)/action/fetchCashierAdminData";
 import { Button } from "@/components/ui/button";
 import { ArrowUpDown } from "lucide-react";
 

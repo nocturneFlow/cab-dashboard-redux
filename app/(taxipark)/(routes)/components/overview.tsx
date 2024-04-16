@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import {
   Bar,
   BarChart,
@@ -91,12 +91,12 @@ export function Overview() {
     return combinedData;
   }
 
-  async function fetchData(): Promise<void> {
+  const fetchData = useCallback(async () => {
     try {
       const response = await axios.get(
         "https://taxi-service-34d2f59aac8f.herokuapp.com/reports/allByMonth"
       );
-      const apiData: FinancialData[] = response.data;
+      const apiData = response.data;
 
       const combinedData = combineDataWithMonths(apiData);
 
@@ -104,11 +104,12 @@ export function Overview() {
     } catch (error) {
       console.error("Ошибка при загрузке данных:", error);
     }
-  }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [fetchData]);
 
   const CustomTooltip = ({
     active,

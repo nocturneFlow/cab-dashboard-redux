@@ -43,7 +43,7 @@ interface Manager {
   lastName: string;
 }
 
-export const StaffPage = () => {
+const StaffPage = () => {
   const [managers, setManagers] = useState<Manager[]>([]);
   const [drivers, setDrivers] = useState<Driver[]>([]);
   const [loading, setLoading] = useState(true);

@@ -3,7 +3,7 @@
 import { ColumnDef } from "@tanstack/react-table";
 import React, { useState } from "react";
 import { ReportsDataTable } from "@/components/tables/reports/reports-data-table-pagination";
-import { fetchReportData } from "../../reportT/action/fetchReportData";
+import { fetchReportData } from "../../(reportT)/action/fetchReportData";
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
@@ -42,7 +42,6 @@ import {
   PanelBottomOpen,
   PenLine,
 } from "lucide-react";
-import { CellAction } from "../cell-action";
 
 export interface Car {
   id: number;

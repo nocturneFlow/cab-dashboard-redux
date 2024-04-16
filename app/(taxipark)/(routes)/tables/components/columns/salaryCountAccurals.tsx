@@ -4,7 +4,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import React, { useState } from "react";
-import { fetchSalariesCountAccuralsData } from "../../salaries/action/fetchSalariesCountAccuralsData";
+import { fetchSalariesCountAccuralsData } from "../../(salaries)/action/fetchSalariesCountAccuralsData";
 import { SalariesDataTable } from "@/components/tables/salaries/salaries-data-table-pagination";
 
 export interface Car {
@@ -43,7 +43,7 @@ export interface SalariesCountAccurals {
   SalariesCountAccuralsBonusFromCompany: number;
   SalariesCountAccuralsUpFront: number;
   SalariesCountAccuralsManager: Manager;
-};
+}
 
 export const SalariesCountAccuralsColumns: ColumnDef<SalariesCountAccurals>[] =
   [
@@ -105,53 +105,54 @@ export const SalariesCountAccuralsColumns: ColumnDef<SalariesCountAccurals>[] =
       accessorKey: "SalariesCountAccuralsManager",
       header: "Менеджер",
       cell: ({ row }) => {
-        const { firstName, lastName } = row.original.SalariesCountAccuralsManager;
+        const { firstName, lastName } =
+          row.original.SalariesCountAccuralsManager;
         return `${firstName} ${lastName}`;
       },
     },
   ];
 
-  export default function GetAllSalariesCountAccurals() {
-    const [dataSalariesCountAccurals, setDataSalariesCountAccurals] = React.useState<SalariesCountAccurals[]>(
-      []
-    );
-  
-    React.useEffect(() => {
-      async function fetchDataSalariesCountAccurals() {
-        try {
-          const salariesCountAccuralsData = await fetchSalariesCountAccuralsData(); // Получение данных из вашего API
-          console.log(salariesCountAccuralsData);
-  
-          // Преобразование даты в удобочитаемый формат
-          const formattedSalariesCountAccuralsData = salariesCountAccuralsData.map(
-            (salariesCountAccurals) => ({
-              ...salariesCountAccurals,
-              date: new Date(salariesCountAccurals.SalariesCountAccuralsTravelDate).toLocaleDateString("ru-RU"),
-              car: {
-                id: salariesCountAccurals.SalariesCountAccuralsCarNumber.id,
-                plate_number: salariesCountAccurals.SalariesCountAccuralsCarNumber.plate_number,
-                model: salariesCountAccurals.SalariesCountAccuralsCarNumber.model,
-              },
-            })
-          );
-  
-          setDataSalariesCountAccurals(formattedSalariesCountAccuralsData);
-        } catch (error) {
-          console.error("Error fetching SalariesCountAccurals data:", error);
-        }
+export default function GetAllSalariesCountAccurals() {
+  const [dataSalariesCountAccurals, setDataSalariesCountAccurals] =
+    React.useState<SalariesCountAccurals[]>([]);
+
+  React.useEffect(() => {
+    async function fetchDataSalariesCountAccurals() {
+      try {
+        const salariesCountAccuralsData =
+          await fetchSalariesCountAccuralsData(); // Получение данных из вашего API
+        console.log(salariesCountAccuralsData);
+
+        // Преобразование даты в удобочитаемый формат
+        const formattedSalariesCountAccuralsData =
+          salariesCountAccuralsData.map((salariesCountAccurals) => ({
+            ...salariesCountAccurals,
+            date: new Date(
+              salariesCountAccurals.SalariesCountAccuralsTravelDate
+            ).toLocaleDateString("ru-RU"),
+            car: {
+              id: salariesCountAccurals.SalariesCountAccuralsCarNumber.id,
+              plate_number:
+                salariesCountAccurals.SalariesCountAccuralsCarNumber
+                  .plate_number,
+              model: salariesCountAccurals.SalariesCountAccuralsCarNumber.model,
+            },
+          }));
+
+        setDataSalariesCountAccurals(formattedSalariesCountAccuralsData);
+      } catch (error) {
+        console.error("Error fetching SalariesCountAccurals data:", error);
       }
-      fetchDataSalariesCountAccurals();
-    }, []);
-  
-    
-  
-    return (
-      <SalariesDataTable
-        columns={SalariesCountAccuralsColumns}
-        data={dataSalariesCountAccurals.map((salariesCountAccurals) => ({
-          ...salariesCountAccurals,
-        }))}
-      />
-    );
-  }
-  
+    }
+    fetchDataSalariesCountAccurals();
+  }, []);
+
+  return (
+    <SalariesDataTable
+      columns={SalariesCountAccuralsColumns}
+      data={dataSalariesCountAccurals.map((salariesCountAccurals) => ({
+        ...salariesCountAccurals,
+      }))}
+    />
+  );
+}

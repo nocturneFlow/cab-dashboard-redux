@@ -4,7 +4,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import React, { useState } from "react";
-import { fetchSalariesCountPaidOffData } from "../../salaries/action/fetchSalariesCountPaidOffData";
+import { fetchSalariesCountPaidOffData } from "../../(salaries)/action/fetchSalariesCountPaidOffData";
 import { SalariesDataTable } from "@/components/tables/salaries/salaries-data-table-pagination";
 
 export interface Manager {
@@ -20,7 +20,7 @@ export interface SalariesCountPaidOff {
   SalariesCountPaidOffPaymentType: string;
   SalariesCountPaidOffManager: Manager;
   SalariesCountPaidOffTypeOfCashier: string;
-};
+}
 
 export const SalariesCountPaidOffColumns: ColumnDef<SalariesCountPaidOff>[] = [
   {
@@ -60,9 +60,8 @@ export const SalariesCountPaidOffColumns: ColumnDef<SalariesCountPaidOff>[] = [
 ];
 
 export default function GetAllSalariesCountPaidOff() {
-  const [dataSalariesCountPaidOff, setDataSalariesCountPaidOff] = React.useState<SalariesCountPaidOff[]>(
-    []
-  );
+  const [dataSalariesCountPaidOff, setDataSalariesCountPaidOff] =
+    React.useState<SalariesCountPaidOff[]>([]);
 
   React.useEffect(() => {
     async function fetchDataSalariesCountPaidOff() {
@@ -74,12 +73,18 @@ export default function GetAllSalariesCountPaidOff() {
         const formattedSalariesCountPaidOffData = salariesCountPaidOffData.map(
           (salariesCountPaidOff) => ({
             ...salariesCountPaidOff,
-            date: new Date(salariesCountPaidOff.SalariesCountPaidOffRecDate).toLocaleDateString("ru-RU"),
+            date: new Date(
+              salariesCountPaidOff.SalariesCountPaidOffRecDate
+            ).toLocaleDateString("ru-RU"),
             salariesCountPaidOff: {
-              SalariesCountPaidOffRecDate: salariesCountPaidOff.SalariesCountPaidOffRecDate,
-              SalariesCountPaidOffAmount: salariesCountPaidOff.SalariesCountPaidOffAmount,
-              SalariesCountPaidOffPaymentType: salariesCountPaidOff.SalariesCountPaidOffPaymentType,
-              SalariesCountPaidOffTypeOfCashier: salariesCountPaidOff.SalariesCountPaidOffTypeOfCashier,
+              SalariesCountPaidOffRecDate:
+                salariesCountPaidOff.SalariesCountPaidOffRecDate,
+              SalariesCountPaidOffAmount:
+                salariesCountPaidOff.SalariesCountPaidOffAmount,
+              SalariesCountPaidOffPaymentType:
+                salariesCountPaidOff.SalariesCountPaidOffPaymentType,
+              SalariesCountPaidOffTypeOfCashier:
+                salariesCountPaidOff.SalariesCountPaidOffTypeOfCashier,
             },
           })
         );
@@ -91,8 +96,6 @@ export default function GetAllSalariesCountPaidOff() {
     }
     fetchDataSalariesCountPaidOff();
   }, []);
-
-  
 
   return (
     <SalariesDataTable

@@ -3,7 +3,7 @@
 import { ColumnDef } from "@tanstack/react-table";
 import React, { useState } from "react";
 import { ExpensesDataTable } from "@/components/tables/expenses/expenses-data-table-pagination";
-import { fetchExpensesData } from "../../expenses/action/fetchExpensesData";
+import { fetchExpensesData } from "../../(expenses)/action/fetchExpensesData";
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
@@ -34,7 +34,6 @@ import {
   PanelBottomOpen,
   PenLine,
 } from "lucide-react";
-import { CellAction } from "../cell-action";
 
 export interface Manager {
   id: number;
