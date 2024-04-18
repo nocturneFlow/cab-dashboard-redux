@@ -147,7 +147,15 @@ export function Overview() {
 
   return (
     <ResponsiveContainer width="100%" height={600}>
-      <BarChart data={data}>
+      <BarChart
+        data={data}
+        margin={{
+          top: 5,
+          right: 30,
+          left: 30,
+          bottom: 5,
+        }}
+      >
         <XAxis
           dataKey="month"
           stroke="#888888"

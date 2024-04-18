@@ -4,7 +4,9 @@ import React from "react";
 
 import ApplicationsTablePage from "./(applications)/applicationsTablePage";
 import ManagersCashierTablePage from "./(kassa)/cashierTablePage";
-
+import SalariesTablePage from "./(salaries)/salariesTablePage";
+import CarsTablePage from "./(cars)/carsTablePage";
+import OilTablePage from "./(oil)/oilTablePage";
 import { Tabs, Tab } from "@nextui-org/react";
 import { TestModal } from "@/components/modals/test-add-application-modal";
 import {
@@ -42,6 +44,7 @@ export default function TablesPage() {
             >
               <ApplicationsTablePage />
             </Tab>
+
             <Tab
               key="kassa"
               title={
@@ -53,8 +56,9 @@ export default function TablesPage() {
             >
               <ManagersCashierTablePage />
             </Tab>
+
             <Tab
-              key="cars"
+              key="expenses"
               title={
                 <div className="flex items-center space-x-2">
                   {/* <GalleryIcon /> */}
@@ -62,7 +66,7 @@ export default function TablesPage() {
                 </div>
               }
             >
-              <Dialog>
+              {/* <Dialog>
                 <DialogTrigger>Open</DialogTrigger>
                 <DialogContent>
                   <DialogHeader>
@@ -73,37 +77,35 @@ export default function TablesPage() {
                   </DialogHeader>
                   <TestModal />
                 </DialogContent>
-              </Dialog>
+              </Dialog> */}
             </Tab>
+
             <Tab
               key="salaries"
-              title={
-                <div className="flex items-center space-x-2">
-                  {/* <GalleryIcon /> */}
-                  <span>Сверка Кассы</span>
-                </div>
-              }
-            />
-            <Tab
-              key="penalties"
               title={
                 <div className="flex items-center space-x-2">
                   {/* <GalleryIcon /> */}
                   <span>Зарплата</span>
                 </div>
               }
-            />
+            >
+              <SalariesTablePage />
+            </Tab>
+
             <Tab
-              key="oil"
+              key="cars"
               title={
                 <div className="flex items-center space-x-2">
                   {/* <GalleryIcon /> */}
                   <span>Машины</span>
                 </div>
               }
-            />
+            >
+              <CarsTablePage />
+            </Tab>
+
             <Tab
-              key="expenses"
+              key="penalties"
               title={
                 <div className="flex items-center space-x-2">
                   {/* <GalleryIcon /> */}
@@ -112,14 +114,16 @@ export default function TablesPage() {
               }
             />
             <Tab
-              key="CashReconciliation"
+              key="oil"
               title={
                 <div className="flex items-center space-x-2">
                   {/* <GalleryIcon /> */}
                   <span>Масло</span>
                 </div>
               }
-            />
+            >
+              <OilTablePage />
+            </Tab>
           </Tabs>
         </div>
       </div>
