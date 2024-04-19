@@ -6,14 +6,14 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-
+import GetAllCash from "../components/columns/managersCashier";
 import { Table } from "lucide-react";
 
 export default function CashierTablePage() {
   return (
     <>
       <div>
-        <Card className="h-[50rem] ">
+        <Card className="h-auto ">
           <CardHeader>
             <CardTitle className="flex gap-2">
               <Table />
@@ -25,14 +25,14 @@ export default function CashierTablePage() {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <Tabs defaultValue="cash">
-              <TabsList className="grid w-full grid-cols-3">
-                <TabsTrigger value="cash">Наличка</TabsTrigger>
-                <TabsTrigger value="kaspi">Kaspi</TabsTrigger>
+            <Tabs defaultValue="kassa">
+              <TabsList className="grid w-full grid-cols-2">
+                <TabsTrigger value="kassa">Касса</TabsTrigger>
                 <TabsTrigger value="check">Проверка</TabsTrigger>
               </TabsList>
-              <TabsContent value="cash"></TabsContent>
-              <TabsContent value="kaspi"></TabsContent>
+              <TabsContent value="kassa">
+                <GetAllCash />
+              </TabsContent>
               <TabsContent value="check"></TabsContent>
             </Tabs>
           </CardContent>

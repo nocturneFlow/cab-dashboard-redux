@@ -1,142 +1,93 @@
-// "use client";
-// import React, { useState } from "react";
-// import { fetchOilData } from "../../oil/action/fetchOilData";
-// import { OilDataTable } from "@/components/tables/oil/oil-data-table-pagination";
-// import { ColumnDef } from "@tanstack/react-table";
+"use client";
+import React, { useState } from "react";
+import { fetchOilData } from "../../(oil)/action/fetchOilData";
+import { OilDataTable } from "@/components/tables/oil/data-table";
+import { ColumnDef } from "@tanstack/react-table";
 
-// // export interface Car {
-// //   id: number;
-// //   plate_number: string;
-// //   model: string;
-// // }
+export interface Car {
+  id: number;
+  plate_number: string;
+  model: string;
+}
 
-// // export interface Driver {
-// //   id: number;
-// //   firstName: string;
-// //   lastName: string;
-// // }
+export interface Oil {
+  id: number;
+  plate_number: Car;
+  date_after_rep: string;
+  mileage: number;
+  date_fact: string;
+  mileage_fact: number;
+  kilometers: number;
+  comment: string;
+}
 
-// // export interface Manager {
-// //   id: number;
-// //   firstName: string;
-// //   lastName: string;
-// // }
+export const OilColumns: ColumnDef<Oil>[] = [
+  {
+    accessorKey: "car.plate_number",
+    header: "Номер Машины",
+  },
+  {
+    accessorKey: "date_after_rep",
+    header: "Дата После Замены",
+  },
+  {
+    accessorKey: "mileage",
+    header: "Пробег",
+  },
+  {
+    accessorKey: "date_fact",
+    header: "Дата Фактическая",
+  },
+  {
+    accessorKey: "mileage_fact",
+    header: "Пробег Фактический",
+  },
+  {
+    accessorKey: "kilometers",
+    header: "Километраж",
+  },
+  {
+    accessorKey: "comment",
+    header: "Комментарий",
+  },
+];
 
-// export interface Root {
-//   last_date_change: string
-//   mileage: number
-//   date_fact: string
-//   mileage_fact: number
-//   distance: number
-//   comment: any
-//   _links: Links
-// }
+export default function GetAllOil() {
+  const [dataOil, setDataOil] = React.useState<Oil[]>([]);
 
-// export interface Links {
-//   self: Self
-//   oilMaintenance: OilMaintenance
-//   car: Car
-// }
+  React.useEffect(() => {
+    async function fetchDataOil() {
+      try {
+        const OilData = await fetchOilData(); // Получение данных из вашего API
 
-// export interface Self {
-//   href: string
-// }
+        // Преобразование даты в удобочитаемый формат
+        const formattedOilData = OilData.map((oil) => ({
+          ...oil,
+          date_after_rep: new Date(oil.date_after_rep).toLocaleDateString(
+            "ru-RU"
+          ),
+          date_fact: new Date(oil.date_fact).toLocaleDateString("ru-RU"),
+          car: {
+            id: oil.id,
+            plate_number: oil.plate_number,
+            // model: oil.model,
+          },
+        }));
 
-// export interface OilMaintenance {
-//   href: string
-// }
+        setDataOil(formattedOilData);
+      } catch (error) {
+        console.error("Error fetching Oil data:", error);
+      }
+    }
+    fetchDataOil();
+  }, []);
 
-// export interface Car {
-//   href: string
-// }
-
-// export interface Oil {
-//   id: number;
-//   oilCarNumber: Car;
-//   oilDateAfterReplacing: string;
-//   oilMileage: number;
-//   oilDateFact: string;
-//   oilMileageFact: number;
-//   oilkilometers: number;
-//   oilComment: string;
-// };
-
-// export const OilColumns: ColumnDef<Oil>[] = [
-//   {
-//     accessorKey: "oilCarNumber",
-//     header: "Номер Машины",
-//   },
-//   {
-//     accessorKey: "oilDateAfterReplacing",
-//     header: "Дата После Замены",
-//   },
-//   {
-//     accessorKey: "oilMileage",
-//     header: "Пробег",
-//   },
-//   {
-//     accessorKey: "oilDateFact",
-//     header: "Дата Фактическая",
-//   },
-//   {
-//     accessorKey: "oilMileageFact",
-//     header: "Пробег Фактический",
-//   },
-//   {
-//     accessorKey: "oilkilometers",
-//     header: "Километраж",
-//   },
-//   {
-//     accessorKey: "oilComment",
-//     header: "Комментарий",
-//   },
-// ];
-
-// export default function GetAllOil() {
-//   const [dataOil, setDataOil] = React.useState<Oil[]>([]);
-
-//   React.useEffect(() => {
-//     async function fetchDataOil() {
-//       try {
-//         const OilData = await fetchOilData(); // Получение данных из вашего API
-
-//         // Преобразование даты в удобочитаемый формат
-//         const formattedOilData = OilData.map((oil) => ({
-//           ...oil,
-//           oilDateAfterReplacing: new Date(oil.oilDateAfterReplacing).toLocaleDateString("ru-RU"),
-//           car: {
-//             id: oil.car.id,
-//             plate_number: oil.car.plate_number,
-//             model: oil.car.model,
-//           },
-//         }));
-
-//         setDataOil(formattedOilData);
-//       } catch (error) {
-//         console.error("Error fetching Oil data:", error);
-//       }
-//     }
-//     fetchDataOil();
-//   }, []);
-
-//   // const handleDelete = async (id: number) => {
-//   //   try {
-//   //     await deleteoil(id); // Call API to delete oil
-//   //     setDataOil((prevData) =>
-//   //       prevData.filter((app) => app.id !== id)
-//   //     );
-//   //   } catch (error) {
-//   //     console.error("Error deleting oil:", error);
-//   //   }
-//   // };
-
-//   return (
-//     <OilDataTable
-//       columns={OilColumns}
-//       data={dataOil.map((oil) => ({
-//         ...oil,
-//         // onDelete: handleDelete,
-//       }))}
-//     />
-//   );
-// }
+  return (
+    <OilDataTable
+      columns={OilColumns}
+      data={dataOil.map((oil) => ({
+        ...oil,
+      }))}
+    />
+  );
+}

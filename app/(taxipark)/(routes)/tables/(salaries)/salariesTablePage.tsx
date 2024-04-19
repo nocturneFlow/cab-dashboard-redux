@@ -1,27 +1,10 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import GetAllSalariesCountAccurals, {
-  SalariesCountAccurals,
-  SalariesCountAccuralsColumns,
-} from "../components/columns/salaryCountAccurals";
-import GetAllSalariesCountPaidOff, {
-  SalariesCountPaidOff,
-  SalariesCountPaidOffColumns,
-} from "../components/columns/salaryCountPaidOff";
-import GetAllSalariesCountPenalties, {
-  SalariesCountPenalties,
-  SalariesCountPenaltiesColumns,
-} from "../components/columns/salaryCountPenalties";
+import GetAllSalariesCountAccurals from "../components/columns/salaryCountAccurals";
+import GetAllSalariesCountPaidOff from "../components/columns/salaryCountPaidOff";
+import GetAllSalariesCountPenalties from "../components/columns/salaryCountPenalties";
 
-import GetAllSalariesCashier, {
-  SalariesCashier,
-  SalariesCashierColumns,
-} from "../components/columns/salariesCashier";
-import GetAllSalariesSalaries, {
-  SalariesSalaries,
-  SalariesSalariesColumns,
-} from "../components/columns/salariesSalaries";
-import { SalariesDataTable } from "@/components/tables/salaries/salaries-data-table-pagination";
-import { SalarySalariesDataTable } from "@/components/tables/salaries/salarySalaries-data-table-pagination";
+import GetAllSalariesCashier from "../components/columns/salariesCashier";
+import GetAllSalariesSalaries from "../components/columns/salariesSalaries";
 
 import { Heading } from "@/components/ui/heading";
 import { Separator } from "@/components/ui/separator";

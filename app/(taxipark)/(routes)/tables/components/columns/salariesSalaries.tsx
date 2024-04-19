@@ -1,71 +1,93 @@
 "use client";
 
+import React, { useState, useEffect } from "react";
 import { ColumnDef } from "@tanstack/react-table";
-import React, { useState } from "react";
 import { SalarySalariesDataTable } from "@/components/tables/salaries/salarySalaries-data-table-pagination";
 import { fetchSalariesSalariesData } from "../../(salaries)/action/fetchSalariesSalariesData";
+import { useDateRange } from "@/contexts/DateRangeContext"; // Импортируем хук для использования дат из контекста
+import { Skeleton } from "@/components/ui/skeleton";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 
-export interface Driver {
-  id: number;
-  firstName: string;
-  lastName: string;
-}
+// interface Driver {
+
+// }
 
 export interface SalariesSalaries {
   id: string;
-  SalariesSalariesDriver: Driver;
+  first_name: string;
+  last_name: string;
 
-  SalariesSalariesLaborRemunerationFundTotal: string;
-  SalariesSalariesLaborRemunerationFundWages: string;
-  SalariesSalariesLaborRemunerationFundBonus: string;
+  total_salary: string;
+  salary: string;
+  bonus_from_company: string;
 
-  SalariesSalariesPaymentUpfront: string;
-  SalariesSalariesPaymentSalary: string;
-  SalariesSalariesPaymentDeposit: string;
-  SalariesSalariesPaymentPenalty: string;
+  advance: string;
+  payout: string;
+  insurance: string;
+  deposit: string;
+  fine: string;
 
-  SalariesSalariesToThePayment: string;
+  total_payout: string;
 }
 
-export const SalariesSalariesColumns: ColumnDef<SalariesSalaries>[] = [
+export const columns: ColumnDef<SalariesSalaries>[] = [
   {
-    accessorKey: "SalariesSalariesDriver",
+    accessorKey: "driver",
     header: "Водители",
     cell: ({ row }) => {
-      const { firstName, lastName } = row.original.SalariesSalariesDriver;
-      return `${firstName} ${lastName}`;
+      const { first_name, last_name } = row.original;
+      return `${first_name} ${last_name}`;
     },
   },
   {
-    accessorKey: "SalariesSalariesLaborRemunerationFundTotal",
+    accessorKey: "total_salary",
     header: "Итого",
   },
   {
-    accessorKey: "SalariesSalariesLaborRemunerationFundWages",
+    accessorKey: "salary",
     header: "Оклад",
   },
   {
-    accessorKey: "SalariesSalariesLaborRemunerationFundBonus",
+    accessorKey: "bonus_from_company",
     header: "Бонус",
   },
   {
-    accessorKey: "SalariesSalariesPaymentUpfront",
+    accessorKey: "advance",
     header: "Аванс",
   },
   {
-    accessorKey: "SalariesSalariesPaymentSalary",
+    accessorKey: "payout",
     header: "ЗП",
   },
   {
-    accessorKey: "SalariesSalariesPaymentDeposit",
+    accessorKey: "insurance",
+    header: "Страховка",
+  },
+  {
+    accessorKey: "deposit",
     header: "Депозит ",
   },
   {
-    accessorKey: "SalariesSalariesPaymentPenalty",
+    accessorKey: "fine",
     header: "Штраф ",
   },
   {
-    accessorKey: "SalariesSalariesToThePayment",
+    accessorKey: "total_payout",
     header: "К выплате",
   },
 ];
@@ -79,34 +101,8 @@ export default function GetAllSalariesSalaries() {
     async function fetchDataSalariesSalaries() {
       try {
         const salarySalariesData = await fetchSalariesSalariesData(); // Получение данных из вашего API
-        console.log(salarySalariesData);
 
-        const formattedSalariesSalariesData = salarySalariesData.map(
-          (salarySalaries) => ({
-            ...salarySalaries,
-            salarySalaries: {
-              SalariesSalariesLaborRemunerationFundTotal:
-                salarySalaries.SalariesSalariesLaborRemunerationFundTotal,
-              SalariesSalariesLaborRemunerationFundWages:
-                salarySalaries.SalariesSalariesLaborRemunerationFundWages,
-              SalariesSalariesLaborRemunerationFundBonus:
-                salarySalaries.SalariesSalariesLaborRemunerationFundBonus,
-
-              SalariesSalariesPaymentUpfront:
-                salarySalaries.SalariesSalariesPaymentUpfront,
-              SalariesSalariesPaymentSalary:
-                salarySalaries.SalariesSalariesPaymentSalary,
-              SalariesSalariesPaymentDeposit:
-                salarySalaries.SalariesSalariesPaymentDeposit,
-              SalariesSalariesPaymentPenalty:
-                salarySalaries.SalariesSalariesPaymentPenalty,
-              SalariesSalariesToThePayment:
-                salarySalaries.SalariesSalariesToThePayment,
-            },
-          })
-        );
-
-        setDataSalariesSalaries(formattedSalariesSalariesData);
+        setDataSalariesSalaries(salarySalariesData);
       } catch (error) {
         console.error("Error fetching SalariesSalaries data:", error);
       }
@@ -116,7 +112,7 @@ export default function GetAllSalariesSalaries() {
 
   return (
     <SalarySalariesDataTable
-      columns={SalariesSalariesColumns}
+      columns={columns}
       data={dataSalariesSalaries.map((salarySalaries) => ({
         ...salarySalaries,
       }))}

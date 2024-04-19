@@ -1,36 +1,59 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
-import React, { useState } from "react";
-import { CarsDataTable } from "@/components/tables/cars/cars-data-table-pagination";
+import React, { useState, useEffect } from "react";
+import { CarsDataTable } from "@/components/tables/cars/data-table";
 import { fetchCarsData } from "../../(cars)/action/fetchCarsData";
 
-export interface Car {
-  id: number;
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { Card } from "@/components/ui/card";
+
+import { Skeleton } from "@/components/ui/skeleton";
+import { DataTableColumnHeader } from "@/components/tables/cars/data-table-column-header";
+// export interface Car {
+//   id: number;
+//   plate_number: string;
+//   model: string;
+// }
+
+export interface Cars {
+  id: number; // ID записи
   plate_number: string;
   model: string;
 }
 
-export interface Cars {
-  plate_number: any;
-  model: any;
-  id: number; // ID записи
-  car: Car; // Объект Car
-  taxipark: string; // Название таксопарка
-}
-
-export const CarsColumns: ColumnDef<Cars>[] = [
+export const columns: ColumnDef<Cars>[] = [
   {
-    accessorKey: "car.id",
-    header: "ID",
+    accessorKey: "id",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="ID" />
+    ),
+    cell: ({ row }) => <div className="lowercase">{row.getValue("id")}</div>,
   },
   {
-    accessorKey: "car.plate_number",
-    header: "Номер машины",
+    accessorKey: "plate_number",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Номер Машины" />
+    ),
+    cell: ({ row }) => (
+      <div className="lowercase">{row.getValue("plate_number")}</div>
+    ),
   },
   {
-    accessorKey: "car.model",
-    header: "Модель машины",
+    accessorKey: "model",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Модель Машины" />
+    ),
+    cell: ({ row }) => (
+      <div className="font-medium">{row.getValue("model")}</div>
+    ),
   },
 ];
 
@@ -39,6 +62,7 @@ export default function GetAllCars() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentCars, setCurrentCars] = useState<Cars | null>(null);
   const [updatedData, setUpdatedData] = useState<Cars | null>(null);
+  const [loading, setLoading] = useState(true);
 
   // ...
 
@@ -74,23 +98,76 @@ export default function GetAllCars() {
     fetchDataCars();
   }, []);
 
-  const handleDelete = async (id: number) => {
-    try {
-      // await deleteCars(id); // Call API to delete application
-      setDataCars((prevData) => prevData.filter((car) => car.id !== id));
-    } catch (error) {
-      console.error("Error deleting application:", error);
-    }
-  };
-
   return (
-    <CarsDataTable
-      columns={CarsColumns}
-      data={dataCars.map((car) => ({
-        ...car,
-        onDelete: handleDelete,
-      }))}
-      // onEdit={handleOpenModal}
-    />
+    <>
+      {/* {loading && (
+        <>
+          <div className="flex items-center justify-between">
+            <Skeleton className="w-[250px] h-8" />
+            <div className="flex space-x-2">
+              <Skeleton className="w-[150.39px] h-8 mt-6" />
+              <Skeleton className="w-[217.73px] h-8 mt-6" />
+              <Skeleton className="w-[110.08px] h-8 mt-6" />
+            </div>
+          </div>
+          <div className="mt-5">
+            <Card className="h-full mt-8">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    {[...Array(6)].map((_, index) => (
+                      <TableHead key={index}>
+                        <Skeleton className="w-24 h-5" />
+                      </TableHead>
+                    ))}
+                    <TableHead> </TableHead>
+                    <TableHead> </TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {[...Array(10)].map((_, rowIndex) => (
+                    <TableRow key={rowIndex}>
+                      {[...Array(6)].map((_, cellIndex) => (
+                        <TableCell key={cellIndex}>
+                          <Skeleton className="w-27 h-3" />
+                        </TableCell>
+                      ))}
+                      <TableCell>
+                        <Skeleton className="w-5 h-5" />
+                      </TableCell>
+                      <TableCell>
+                        <Skeleton className="w-5 h-5" />
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </Card>
+            <div className="flex items-center justify-end gap-2">
+              <Skeleton className="w-[131px] h-8 mt-4" />
+              <Skeleton className="w-[70px] h-8 mt-4" />
+              <div className="flex mx-8">
+                <Skeleton className="w-[150px] h-8 mt-4" />
+              </div>
+              <div className="flex space-x-1">
+                <Skeleton className="w-8 h-8 mt-4" />
+                <Skeleton className="w-8 h-8 mt-4" />
+                <Skeleton className="w-8 h-8 mt-4" />
+                <Skeleton className="w-8 h-8 mt-4" />
+              </div>
+            </div>
+          </div>
+        </>
+      )} */}
+
+      {/* {!loading && ( */}
+      <CarsDataTable
+        columns={columns}
+        data={dataCars.map((car) => ({
+          ...car,
+        }))}
+      />
+      {/* )} */}
+    </>
   );
 }
