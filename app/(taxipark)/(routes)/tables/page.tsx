@@ -8,15 +8,6 @@ import SalariesTablePage from "./(salaries)/salariesTablePage";
 import CarsTablePage from "./(cars)/carsTablePage";
 import OilTablePage from "./(oil)/oilTablePage";
 import { Tabs, Tab } from "@nextui-org/react";
-import { TestModal } from "@/components/modals/test-add-application-modal";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
 
 export default function TablesPage() {
   return (

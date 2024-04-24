@@ -1,8 +1,8 @@
-import {  auth } from '@clerk/nextjs/server';
+import { auth } from "@clerk/nextjs/server";
 import { MainNav } from "@/components/main-nav";
 import { redirect } from "next/navigation";
 import { ModeToggle } from "./ui/theme-toggle";
-import { UserButton } from '@clerk/nextjs';
+import { UserButton, UserProfile } from "@clerk/nextjs";
 
 const Navbar = async () => {
   const { userId } = auth();
@@ -18,7 +18,7 @@ const Navbar = async () => {
           <MainNav className="mx-6" />
           <div className="ml-auto flex items-center space-x-4">
             <ModeToggle />
-            <UserButton />
+            <UserButton showName={true} />
           </div>
         </div>
       </div>

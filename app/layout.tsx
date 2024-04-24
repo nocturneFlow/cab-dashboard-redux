@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { siteConfig } from "@/components/site";
+import { dark } from "@clerk/themes";
 
 import { DateRangeProvider } from "@/contexts/DateRangeContext";
 import { ThemeProvider } from "@/components/theme-provider";
@@ -69,17 +70,22 @@ export const viewport: Viewport = {
   ],
 };
 
-export default function RootLayout({ children }: React.PropsWithChildren) {
+export default async function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
-    <ClerkProvider localization={ruRU}>
-      <DateRangeProvider>
-        <html lang="ru" suppressHydrationWarning className="dark">
-          <body
-            className={cn(
-              "min-h-screen bg-background font-sans antialiased",
-              fontSans.variable
-            )}
-          >
+    <html lang="en" suppressHydrationWarning>
+      <head />
+      <body
+        className={cn(
+          "min-h-screen bg-background font-sans antialiased",
+          fontSans.variable
+        )}
+      >
+        <ClerkProvider localization={ruRU}>
+          <DateRangeProvider>
             <Providers>
               <ThemeProvider
                 attribute="class"
@@ -88,12 +94,14 @@ export default function RootLayout({ children }: React.PropsWithChildren) {
                 disableTransitionOnChange
               >
                 <Toaster />
-                {children}
+                <div className="relative flex min-h-screen flex-col">
+                  <main className="flex-1">{children}</main>
+                </div>
               </ThemeProvider>
             </Providers>
-          </body>
-        </html>
-      </DateRangeProvider>
-    </ClerkProvider>
+          </DateRangeProvider>
+        </ClerkProvider>
+      </body>
+    </html>
   );
 }
