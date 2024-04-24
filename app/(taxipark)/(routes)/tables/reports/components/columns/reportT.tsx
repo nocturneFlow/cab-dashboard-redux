@@ -34,35 +34,43 @@ import {
 
 import { PanelBottomOpen } from "lucide-react";
 
-export interface getCarDetailModel {
-  id: number;
+interface CarDetail {
   plate_number: string;
-  total_cash_from_yandex: string;
-  total_cashless_from_yandex: string;
-  total_from_yandex: string;
-  total_applications: string;
-  total_hours_online: string;
-  yandex_commission: string;
-  total_cash_payments: string;
-  total_cashless_payments: string;
-  total_salary: string;
-  total_bonus_from_company: string;
-  total_salary_bonus: string;
-  total_gsm: string;
-  total_other: string;
-  total_expense: string;
-  fixed_costs: string;
-  total_variable_costs: string;
+  total_applications: number;
+  total_hours_online: number;
+  total_cash_from_yandex: number;
+  total_cashless_from_yandex: number;
+  total_from_yandex: number;
+  total_yandex_commission: number;
+  total_cash_payments: number;
+  total_cashless_payments: number;
+  total_salary: number;
+  total_bonus_from_company: number;
+  total_salary_bonus: number;
+  total_gsm: number;
+  total_other: number;
+  total_expense: number;
+  total_fixed_costs: number;
+  total_variable_costs: number;
 }
 
-export const columns: ColumnDef<getCarDetailModel>[] = [
+interface APIResponse {
+  start_date: string;
+  end_date: string;
+  // остальные поля на верхнем уровне...
+  getCarDetailModel: CarDetail[];
+}
+
+export const columns: ColumnDef<APIResponse>[] = [
   {
-    accessorKey: "car.plate_number",
+    accessorKey: "plate_number",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Номер Машины" />
     ),
     cell: ({ row }) => (
-      <div className="lowercase">{row.getValue("car.plate_number")}</div>
+      <div className="lowercase">
+        {row.original.getCarDetailModel[row.index].plate_number}
+      </div>
     ),
   },
   {
@@ -71,7 +79,9 @@ export const columns: ColumnDef<getCarDetailModel>[] = [
       <DataTableColumnHeader column={column} title="Кол-во заявок" />
     ),
     cell: ({ row }) => (
-      <div className="lowercase ">{row.getValue("total_applications")}</div>
+      <div className="lowercase ">
+        {row.original.getCarDetailModel[row.index].total_applications}
+      </div>
     ),
   },
   {
@@ -80,7 +90,9 @@ export const columns: ColumnDef<getCarDetailModel>[] = [
       <DataTableColumnHeader column={column} title="Время на линии" />
     ),
     cell: ({ row }) => (
-      <div className="lowercase ">{row.getValue("total_hours_online")}</div>
+      <div className="lowercase ">
+        {row.original.getCarDetailModel[row.index].total_hours_online}
+      </div>
     ),
   },
   {
@@ -90,7 +102,7 @@ export const columns: ColumnDef<getCarDetailModel>[] = [
     ),
     cell: ({ row }) => (
       <div className="lowercase ">
-        {row.getValue("total_yandex_commission")}
+        {row.original.getCarDetailModel[row.index].total_yandex_commission}
       </div>
     ),
   },
@@ -100,7 +112,9 @@ export const columns: ColumnDef<getCarDetailModel>[] = [
       <DataTableColumnHeader column={column} title="GP (постоянные расходы)" />
     ),
     cell: ({ row }) => (
-      <div className="lowercase ">{row.getValue("total_fixed_costs")}</div>
+      <div className="lowercase ">
+        {row.original.getCarDetailModel[row.index].total_fixed_costs}
+      </div>
     ),
   },
   {
@@ -109,7 +123,9 @@ export const columns: ColumnDef<getCarDetailModel>[] = [
       <DataTableColumnHeader column={column} title="GP (переменные расходы)" />
     ),
     cell: ({ row }) => (
-      <div className="lowercase ">{row.getValue("total_variable_costs")}</div>
+      <div className="lowercase ">
+        {row.original.getCarDetailModel[row.index].total_variable_costs}
+      </div>
     ),
   },
   {
@@ -146,13 +162,22 @@ export const columns: ColumnDef<getCarDetailModel>[] = [
                             <TableBody>
                               <TableRow>
                                 <TableCell>
-                                  {row.original.total_cash_from_yandex}
+                                  {
+                                    row.original.getCarDetailModel[row.index]
+                                      .total_cash_from_yandex
+                                  }
                                 </TableCell>
                                 <TableCell>
-                                  {row.original.total_cashless_from_yandex}
+                                  {
+                                    row.original.getCarDetailModel[row.index]
+                                      .total_cashless_from_yandex
+                                  }
                                 </TableCell>
                                 <TableCell className="text-right">
-                                  {row.original.total_from_yandex}
+                                  {
+                                    row.original.getCarDetailModel[row.index]
+                                      .total_from_yandex
+                                  }
                                 </TableCell>
                               </TableRow>
                             </TableBody>
@@ -178,45 +203,19 @@ export const columns: ColumnDef<getCarDetailModel>[] = [
                             <TableBody>
                               <TableRow>
                                 <TableCell>
-                                  {row.original.total_cash_payments}
+                                  {
+                                    row.original.getCarDetailModel[row.index]
+                                      .total_cash_payments
+                                  }
                                 </TableCell>
                                 <TableCell>
-                                  {row.original.total_cashless_payments}
+                                  {
+                                    row.original.getCarDetailModel[row.index]
+                                      .total_cashless_payments
+                                  }
                                 </TableCell>
                                 <TableCell className="text-right">
-                                  {row.original.total_salary}
-                                </TableCell>
-                              </TableRow>
-                            </TableBody>
-                          </Table>
-                        </AccordionContent>
-                      </AccordionItem>
-
-                      <AccordionItem value="item-3">
-                        <AccordionTrigger>
-                          <SheetTitle>Фонд оплаты труда</SheetTitle>
-                        </AccordionTrigger>
-                        <AccordionContent>
-                          <Table>
-                            <TableHeader>
-                              <TableRow>
-                                <TableHead>ЗП Начислено</TableHead>
-                                <TableHead>Оклад</TableHead>
-                                <TableHead className="text-right">
-                                  Бонус от компании
-                                </TableHead>
-                              </TableRow>
-                            </TableHeader>
-                            <TableBody>
-                              <TableRow>
-                                <TableCell>
-                                  {row.original.total_salary_bonus}
-                                </TableCell>
-                                <TableCell>
-                                  {row.original.total_salary}
-                                </TableCell>
-                                <TableCell className="text-right">
-                                  {row.original.total_bonus_from_company}
+                                  {/* {row.original.total_salary} */}
                                 </TableCell>
                               </TableRow>
                             </TableBody>
@@ -241,12 +240,23 @@ export const columns: ColumnDef<getCarDetailModel>[] = [
                             </TableHeader>
                             <TableBody>
                               <TableRow>
-                                <TableCell>{row.original.total_gsm}</TableCell>
                                 <TableCell>
-                                  {row.original.total_other}
+                                  {
+                                    row.original.getCarDetailModel[row.index]
+                                      .total_gsm
+                                  }
+                                </TableCell>
+                                <TableCell>
+                                  {
+                                    row.original.getCarDetailModel[row.index]
+                                      .total_other
+                                  }
                                 </TableCell>
                                 <TableCell className="text-right">
-                                  {row.original.total_expense}
+                                  {
+                                    row.original.getCarDetailModel[row.index]
+                                      .total_expense
+                                  }
                                 </TableCell>
                               </TableRow>
                             </TableBody>
@@ -266,7 +276,7 @@ export const columns: ColumnDef<getCarDetailModel>[] = [
 ];
 
 export default function GetAllReport() {
-  const [dataReport, setDataReport] = React.useState<getCarDetailModel[]>([]);
+  const [dataReport, setDataReport] = React.useState<APIResponse[]>([]);
   const [loading, setLoading] = useState(true);
 
   React.useEffect(() => {
