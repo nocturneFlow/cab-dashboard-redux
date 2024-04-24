@@ -2,7 +2,7 @@ import { Oil } from "../../components/columns/oil";
 
 export async function fetchOilData(): Promise<Oil[]> {
   const response = await fetch(
-    "https://taxi-service-34d2f59aac8f.herokuapp.comoilMaintenances",
+    "https://taxi-service-34d2f59aac8f.herokuapp.com/oilMaintenances",
     {
       next: { revalidate: 30 },
     }
