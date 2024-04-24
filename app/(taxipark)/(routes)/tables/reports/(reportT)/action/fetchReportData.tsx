@@ -1,6 +1,6 @@
-import { getCarDetailModel } from "../../components/columns/reportT";
+import { APIResponse } from "@/app/(taxipark)/(routes)/tables/reports/components/columns/reportT";
 
-export async function fetchReportData(): Promise<getCarDetailModel[]> {
+export async function fetchReportData(): Promise<APIResponse[]> {
   const response = await fetch(
     "https://taxi-service-34d2f59aac8f.herokuapp.com/reports/all",
     {

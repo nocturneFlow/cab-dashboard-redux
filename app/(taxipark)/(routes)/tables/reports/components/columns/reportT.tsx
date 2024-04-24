@@ -54,7 +54,7 @@ interface CarDetail {
   total_variable_costs: number;
 }
 
-interface APIResponse {
+export interface APIResponse {
   start_date: string;
   end_date: string;
   // остальные поля на верхнем уровне...
