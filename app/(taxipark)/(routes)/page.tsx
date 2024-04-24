@@ -1,28 +1,21 @@
 "use client";
 
 import React from "react";
-import { TbCurrencyTenge } from "react-icons/tb";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Overview } from "./components/overview";
+
 import { useState, useEffect } from "react";
-import { DatePickerWithRange } from "@/components/ui/date-range-picker";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Button } from "@/components/ui/button";
-import { Skeleton } from "@/components/ui/skeleton";
+
+import { Overview } from "./components/overview";
 import ReportsPage from "./dashboard/reports/page";
+import StaffPage from "./dashboard/staff/page";
+
+import { Skeleton } from "@/components/ui/skeleton";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+
 import Users from "@geist-ui/icons/users";
 import Grid from "@geist-ui/icons/grid";
 import BarChart2 from "@geist-ui/icons/barChart2";
-import StaffPage from "./dashboard/staff/page";
-import ExpenditureItemPage from "./dashboard/expense-item/page";
-import ExpenseItemPage from "./dashboard/expense-item/page";
-import { AddExpenseItemModal } from "@/components/modals/add-expense-item";
+import { TbCurrencyTenge } from "react-icons/tb";
 
 interface CarDetailModel {
   plate_number: string;
@@ -87,7 +80,7 @@ const DashboardPage = () => {
         }
         const jsonData = await response.json();
         if (jsonData && Array.isArray(jsonData) && jsonData.length > 0) {
-          setData(jsonData[0]); // Предполагаем, что нам нужен только первый элемент
+          setData(jsonData[0]);
         } else {
           throw new Error("Данные пусты или не в ожидаемом формате");
         }
@@ -346,15 +339,8 @@ const DashboardPage = () => {
                     </CardContent>
                   </Card>
                   <Card className="col-span-3">
-                    <CardHeader>
-                      <div className="flex items-center justify-between">
-                        <CardTitle>Статья Расходов</CardTitle>
-                        <AddExpenseItemModal />
-                      </div>
-                    </CardHeader>
-                    <CardContent>
-                      <ExpenseItemPage />
-                    </CardContent>
+                    <CardHeader></CardHeader>
+                    <CardContent></CardContent>
                   </Card>
                 </div>
               </TabsContent>

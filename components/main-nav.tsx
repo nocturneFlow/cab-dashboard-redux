@@ -12,6 +12,30 @@ import {
   NavigationMenuTrigger,
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import {
+  Menubar,
+  MenubarCheckboxItem,
+  MenubarContent,
+  MenubarItem,
+  MenubarMenu,
+  MenubarRadioGroup,
+  MenubarRadioItem,
+  MenubarSeparator,
+  MenubarShortcut,
+  MenubarSub,
+  MenubarSubContent,
+  MenubarSubTrigger,
+  MenubarTrigger,
+} from "@/components/ui/menubar";
+
 import { GanttChart, LayoutDashboard } from "lucide-react";
 
 export function MainNav({ className }: React.HTMLAttributes<HTMLElement>) {
@@ -150,10 +174,11 @@ export function MainNav({ className }: React.HTMLAttributes<HTMLElement>) {
         <NavigationMenuItem>
           <Link href={`/tables`} legacyBehavior passHref>
             <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-              Таблицы
+              Заявки
             </NavigationMenuLink>
           </Link>
         </NavigationMenuItem>
+<<<<<<< HEAD
         {/* <NavigationMenuItem>
           <NavigationMenuTrigger>Таблицы Отчетов</NavigationMenuTrigger>
           <NavigationMenuContent>
@@ -172,6 +197,10 @@ export function MainNav({ className }: React.HTMLAttributes<HTMLElement>) {
         </NavigationMenuItem> */}
         <NavigationMenuItem>
           <Link href={`/tables/reports`} legacyBehavior passHref>
+=======
+        <NavigationMenuItem>
+          <Link href={`/reports`} legacyBehavior passHref>
+>>>>>>> 0ba1815737fb893e4829623bd1b874eb963d1fdc
             <NavigationMenuLink className={navigationMenuTriggerStyle()}>
               Отчеты
             </NavigationMenuLink>
