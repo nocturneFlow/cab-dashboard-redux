@@ -20,26 +20,6 @@ import {
 } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 
-export interface CarDetailModel {
-  plate_number: string;
-  total_applications: number;
-  total_hours_online: number;
-  total_cash_from_yandex: number;
-  total_cashless_from_yandex: number;
-  total_from_yandex: number;
-  total_yandex_commission: number;
-  total_cash_payments: number;
-  total_cashless_payments: number;
-  total_salary: number;
-  total_bonus_from_company: number;
-  total_salary_bonus: number;
-  total_gsm: number;
-  total_other: number;
-  total_expense: number;
-  total_fixed_costs: number;
-  total_variable_costs: number;
-}
-
 export interface MyInterface {
   day_amount_profit?: number;
   night_amount_profit?: number;
@@ -67,7 +47,6 @@ export interface MyInterface {
   avg_cheque_day?: number;
   avg_cheque_night?: number;
   avg_cheque_total?: number;
-  getCarDetailModel: CarDetailModel[];
 }
 
 const ReportsPage = () => {

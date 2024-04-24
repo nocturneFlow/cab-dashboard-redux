@@ -138,6 +138,7 @@ export function MainNav({ className }: React.HTMLAttributes<HTMLElement>) {
             </a>
           </NavigationMenuLink>
         </NavigationMenuItem>
+
         <NavigationMenuItem>
           <NavigationMenuTrigger>Сводка</NavigationMenuTrigger>
           <NavigationMenuContent>
@@ -171,6 +172,7 @@ export function MainNav({ className }: React.HTMLAttributes<HTMLElement>) {
             </ul>
           </NavigationMenuContent>
         </NavigationMenuItem>
+
         <NavigationMenuItem>
           <Link href={`/tables`} legacyBehavior passHref>
             <NavigationMenuLink className={navigationMenuTriggerStyle()}>
@@ -178,29 +180,9 @@ export function MainNav({ className }: React.HTMLAttributes<HTMLElement>) {
             </NavigationMenuLink>
           </Link>
         </NavigationMenuItem>
-<<<<<<< HEAD
-        {/* <NavigationMenuItem>
-          <NavigationMenuTrigger>Таблицы Отчетов</NavigationMenuTrigger>
-          <NavigationMenuContent>
-            <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] ">
-              {reports.map((reports) => (
-                <ListItem
-                  key={reports.title}
-                  title={reports.title}
-                  href={reports.href}
-                >
-                  {reports.description}
-                </ListItem>
-              ))}
-            </ul>
-          </NavigationMenuContent>
-        </NavigationMenuItem> */}
+
         <NavigationMenuItem>
           <Link href={`/tables/reports`} legacyBehavior passHref>
-=======
-        <NavigationMenuItem>
-          <Link href={`/reports`} legacyBehavior passHref>
->>>>>>> 0ba1815737fb893e4829623bd1b874eb963d1fdc
             <NavigationMenuLink className={navigationMenuTriggerStyle()}>
               Отчеты
             </NavigationMenuLink>
