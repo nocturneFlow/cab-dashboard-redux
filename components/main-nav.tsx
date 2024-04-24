@@ -138,6 +138,7 @@ export function MainNav({ className }: React.HTMLAttributes<HTMLElement>) {
             </a>
           </NavigationMenuLink>
         </NavigationMenuItem>
+
         <NavigationMenuItem>
           <NavigationMenuTrigger>Сводка</NavigationMenuTrigger>
           <NavigationMenuContent>
@@ -171,6 +172,7 @@ export function MainNav({ className }: React.HTMLAttributes<HTMLElement>) {
             </ul>
           </NavigationMenuContent>
         </NavigationMenuItem>
+
         <NavigationMenuItem>
           <Link href={`/tables`} legacyBehavior passHref>
             <NavigationMenuLink className={navigationMenuTriggerStyle()}>
@@ -178,8 +180,9 @@ export function MainNav({ className }: React.HTMLAttributes<HTMLElement>) {
             </NavigationMenuLink>
           </Link>
         </NavigationMenuItem>
+
         <NavigationMenuItem>
-          <Link href={`/reports`} legacyBehavior passHref>
+          <Link href={`/tables/reports`} legacyBehavior passHref>
             <NavigationMenuLink className={navigationMenuTriggerStyle()}>
               Отчеты
             </NavigationMenuLink>

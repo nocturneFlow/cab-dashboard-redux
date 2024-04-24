@@ -7,6 +7,8 @@ import ManagersCashierTablePage from "./(kassa)/cashierTablePage";
 import SalariesTablePage from "./(salaries)/salariesTablePage";
 import CarsTablePage from "./(cars)/carsTablePage";
 import OilTablePage from "./(oil)/oilTablePage";
+import PenaltiesTablePage from "./(penalties)/penaltiesTablePage";
+import ExpensesTablePage from "./(expenses)/expensesTablePage";
 import { Tabs, Tab } from "@nextui-org/react";
 
 export default function TablesPage() {
@@ -69,6 +71,7 @@ export default function TablesPage() {
                   <TestModal />
                 </DialogContent>
               </Dialog> */}
+              <ExpensesTablePage />
             </Tab>
 
             <Tab
@@ -103,7 +106,9 @@ export default function TablesPage() {
                   <span>Штрафы</span>
                 </div>
               }
-            />
+            >
+              <PenaltiesTablePage />
+            </Tab>
             <Tab
               key="oil"
               title={

@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { ColumnDef } from "@tanstack/react-table";
-import { SalarySalariesDataTable } from "@/components/tables/salaries/salarySalaries-data-table-pagination";
+import { SalariesDataTable } from "@/components/tables/salaries/data-table";
 import { fetchSalariesSalariesData } from "../../(salaries)/action/fetchSalariesSalariesData";
 import { useDateRange } from "@/contexts/DateRangeContext"; // Импортируем хук для использования дат из контекста
 import { Skeleton } from "@/components/ui/skeleton";
@@ -111,7 +111,7 @@ export default function GetAllSalariesSalaries() {
   }, []);
 
   return (
-    <SalarySalariesDataTable
+    <SalariesDataTable
       columns={columns}
       data={dataSalariesSalaries.map((salarySalaries) => ({
         ...salarySalaries,

@@ -150,7 +150,7 @@ export const columns: ColumnDef<Application>[] = [
     cell: ({ row }) => {
       const dateFormatter = new Intl.DateTimeFormat("ru-RU", {
         day: "numeric",
-        month: "long",
+        month: "numeric",
         year: "numeric",
       });
 

@@ -21,7 +21,7 @@ export interface Oil {
   comment: string;
 }
 
-export const OilColumns: ColumnDef<Oil>[] = [
+export const columns: ColumnDef<Oil>[] = [
   {
     accessorKey: "car.plate_number",
     header: "Номер Машины",
@@ -84,7 +84,7 @@ export default function GetAllOil() {
 
   return (
     <OilDataTable
-      columns={OilColumns}
+      columns={columns}
       data={dataOil.map((oil) => ({
         ...oil,
       }))}
