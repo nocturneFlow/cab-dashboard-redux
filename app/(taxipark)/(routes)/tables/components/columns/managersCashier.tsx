@@ -41,6 +41,8 @@ import {
 import { EditApplicationModal } from "@/components/modals/edit-application-modal";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Separator } from "@/components/ui/separator";
+import { useSelector } from "react-redux";
+import { RootState } from "@/lib/store";
 
 export interface Manager {
   id: number;
@@ -174,11 +176,11 @@ export const columns: ColumnDef<Cash>[] = [
 export default function GetAllCash() {
   const [data, setDataKassa] = useState<Cash[]>([]);
   const [loading, setLoading] = useState(true);
-  const { dateRange } = useDateRange(); // Получаем диапазон дат из контекста
+  const dateRange = useSelector((state: RootState) => state.dateRange); // Используйте Redux для получения диапазона дат
 
   useEffect(() => {
     async function fetchDataKassa() {
-      if (dateRange && dateRange.from && dateRange.to) {
+      if (dateRange.from && dateRange.to) {
         try {
           const startDate = dateRange.from.toISOString().split("T")[0];
           const endDate = dateRange.to.toISOString().split("T")[0];
@@ -198,7 +200,7 @@ export default function GetAllCash() {
       }
     }
     fetchDataKassa();
-  }, [dateRange]);
+  }, [dateRange.from, dateRange.to]);
 
   return (
     <>
@@ -259,14 +261,7 @@ export default function GetAllCash() {
         </>
       )}
 
-      {!loading && (
-        <ManagersCashierDataTable
-          columns={columns}
-          data={data.map((cash) => ({
-            ...cash,
-          }))}
-        />
-      )}
+      {!loading && <ManagersCashierDataTable columns={columns} data={data} />}
     </>
   );
 }

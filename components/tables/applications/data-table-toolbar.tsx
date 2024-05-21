@@ -7,8 +7,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Input as InputNext } from "@nextui-org/react";
 import { DataTableViewOptions } from "@/components/tables/applications/data-table-view-options";
-import { AddApplicationModal } from "../../modals/add-application-modal";
-import { DatePickerWithRange } from "../../ui/date-range-picker";
+import { DatePickerWithRange } from "@/components/ui/date-range-picker";
+import { AddApplicationModal } from "@/components/modals/add-application-modal";
 
 import { Search } from "@geist-ui/icons";
 

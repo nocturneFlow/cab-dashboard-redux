@@ -1,5 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
+import { RootState } from "@/lib/store";
 import { useDateRange } from "@/contexts/DateRangeContext"; // Импортируем хук для использования дат из контекста
 import { ApplicationsDataTable } from "@/components/tables/applications/data-table";
 import { fetchApplicationsData } from "../../(applications)/action/fetchApplicationData";
@@ -434,11 +436,11 @@ export const columns: ColumnDef<Application>[] = [
 export default function GetAllApplications() {
   const [dataApplications, setDataApplications] = useState<Application[]>([]);
   const [loading, setLoading] = useState(true);
-  const { dateRange } = useDateRange();
+  const dateRange = useSelector((state: RootState) => state.dateRange); // Получаем диапазон дат из Redux
 
   useEffect(() => {
     async function fetchDataApplications() {
-      if (dateRange && dateRange.from && dateRange.to) {
+      if (dateRange.from && dateRange.to) {
         try {
           const startDate = dateRange.from.toISOString().split("T")[0];
           const endDate = dateRange.to.toISOString().split("T")[0];
@@ -458,12 +460,11 @@ export default function GetAllApplications() {
       }
     }
     fetchDataApplications();
-  }, [dateRange]);
+  }, [dateRange.from, dateRange.to]);
 
   const handleDelete = async (id: number) => {
     try {
       await deleteApplication(id);
-      // Обновляем список данных, исключая удаленный элемент
       setDataApplications((prevData) =>
         prevData.filter((app) => app.id !== id)
       );
