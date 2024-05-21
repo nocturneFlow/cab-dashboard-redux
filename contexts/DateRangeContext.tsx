@@ -1,12 +1,18 @@
 "use client";
 
-import React, { createContext, useContext, useState, ReactNode } from "react";
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useRef,
+  ReactNode,
+} from "react";
 import { DateRange } from "react-day-picker";
 import { startOfMonth, endOfMonth } from "date-fns";
 
 interface DateRangeContextType {
-  dateRange: DateRange | undefined; // Позволяет dateRange быть undefined
-  setDateRange: React.Dispatch<React.SetStateAction<DateRange | undefined>>; // Тип соответствует возможности быть undefined
+  dateRange: DateRange | undefined;
+  setDateRange: React.Dispatch<React.SetStateAction<DateRange | undefined>>;
 }
 
 const DateRangeContext = createContext<DateRangeContextType | undefined>(
@@ -14,14 +20,18 @@ const DateRangeContext = createContext<DateRangeContextType | undefined>(
 );
 
 export const DateRangeProvider = ({ children }: { children: ReactNode }) => {
-  // Установка начального значения, которое может быть undefined
   const [dateRange, setDateRange] = useState<DateRange | undefined>({
     from: startOfMonth(new Date()),
     to: endOfMonth(new Date()),
   });
 
+  // Используем useRef для сохранения ссылки на значение dateRange
+  const dateRangeRef = useRef<DateRange | undefined>(dateRange);
+
   return (
-    <DateRangeContext.Provider value={{ dateRange, setDateRange }}>
+    <DateRangeContext.Provider
+      value={{ dateRange: dateRangeRef.current, setDateRange }}
+    >
       {children}
     </DateRangeContext.Provider>
   );

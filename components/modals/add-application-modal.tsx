@@ -1,3 +1,14 @@
+import React, { useState, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import {
+  fetchData,
+  Manager,
+  Car,
+  Driver,
+  Schedule,
+  ExpenseItemApl,
+} from "@/lib/applicationSlice";
+import { RootState, AppDispatch } from "@/lib/store";
 import {
   Dialog,
   DialogClose,
@@ -29,41 +40,11 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { Plus } from "@geist-ui/icons";
-import * as React from "react";
-import { useState, useEffect } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import { z } from "zod";
 import { cn } from "@/lib/utils";
-import GetAllApplications from "@/app/(taxipark)/(routes)/tables/components/columns/applications";
-import { Skeleton } from "../ui/skeleton";
-
-interface Manager {
-  id: string;
-  firstName: string;
-  lastName: string;
-}
-interface Car {
-  id: string;
-  plate_number: string;
-  model: string;
-}
-
-interface Driver {
-  id: string;
-  firstName: string;
-  lastName: string;
-}
-
-interface Schedule {
-  id: string;
-  schedule: string;
-}
-
-interface ExpenseItemApl {
-  id: string;
-  expense_item_name: string;
-}
+import { Skeleton } from "@/components/ui/skeleton";
 
 const formSchema = z.object({
   manager: z.string().min(2, { message: "Поле должно выбрано." }),
@@ -72,80 +53,62 @@ const formSchema = z.object({
   schedule: z.string().min(2, { message: "Поле должно выбрано." }),
   timeLine: z
     .string()
-    .min(1, {
-      message: "Поле должно быть заполнено.",
-    })
+    .min(1, { message: "Поле должно быть заполнено." })
     .refine((val) => !isNaN(val as unknown as number), {
       message: "Поле должно быть числом.",
     }),
   yandexCash: z
     .string()
-    .min(1, {
-      message: "Поле должно быть заполнено.",
-    })
+    .min(1, { message: "Поле должно быть заполнено." })
     .refine((val) => !isNaN(val as unknown as number), {
       message: "Поле должно быть числом.",
     }),
   yandexNoncash: z
     .string()
-    .min(1, {
-      message: "Поле должно быть заполнено.",
-    })
+    .min(1, { message: "Поле должно быть заполнено." })
     .refine((val) => !isNaN(val as unknown as number), {
       message: "Поле должно быть числом.",
     }),
   cashierCash: z
     .string()
-    .min(1, {
-      message: "Поле должно быть заполнено.",
-    })
+    .min(1, { message: "Поле должно быть заполнено." })
     .refine((val) => !isNaN(val as unknown as number), {
       message: "Поле должно быть числом.",
     }),
   cashierKaspi: z
     .string()
-    .min(1, {
-      message: "Поле должно быть заполнено.",
-    })
+    .min(1, { message: "Поле должно быть заполнено." })
     .refine((val) => !isNaN(val as unknown as number), {
       message: "Поле должно быть числом.",
     }),
   costsGas: z
     .string()
-    .min(1, {
-      message: "Поле должно быть заполнено.",
-    })
+    .min(1, { message: "Поле должно быть заполнено." })
     .refine((val) => !isNaN(val as unknown as number), {
       message: "Поле должно быть числом.",
     }),
   costsOther: z
     .string()
-    .min(1, {
-      message: "Поле должно быть заполнено.",
-    })
+    .min(1, { message: "Поле должно быть заполнено." })
     .refine((val) => !isNaN(val as unknown as number), {
       message: "Поле должно быть числом.",
     }),
   costsAdvance: z
     .string()
-    .min(1, {
-      message: "Поле должно быть заполнено.",
-    })
+    .min(1, { message: "Поле должно быть заполнено." })
     .refine((val) => !isNaN(val as unknown as number), {
       message: "Поле должно быть числом.",
     }),
   expenseItemApl: z.string().min(2, { message: "Поле должно выбрано." }),
   bonus: z
     .string()
-    .min(1, {
-      message: "Поле должно быть заполнено.",
-    })
+    .min(1, { message: "Поле должно быть заполнено." })
     .refine((val) => !isNaN(val as unknown as number), {
       message: "Поле должно быть числом.",
     }),
 });
 
-// Схема для первой страницы
+// Схемы для страниц
 const firstPageSchema = z.object({
   manager: z.string().nonempty("Поле должно быть заполнено."),
   plateNumber: z.string().nonempty("Поле должно быть заполнено."),
@@ -153,7 +116,6 @@ const firstPageSchema = z.object({
   schedule: z.string().nonempty("Поле должно быть заполнено."),
 });
 
-// Схема для второй страницы
 const secondPageSchema = z.object({
   timeLine: z
     .string()
@@ -163,7 +125,6 @@ const secondPageSchema = z.object({
     }),
 });
 
-// Схема для третьей страницы
 const thirdPageSchema = z.object({
   yandexCash: z
     .string()
@@ -194,49 +155,27 @@ const fourthPageSchema = z.object({
     }),
 });
 
-const fifthPageSchema = z.object({
-  costsGas: z
-    .string()
-    .nonempty("Поле должно быть заполнено.")
-    .refine((val) => !isNaN(val as unknown as number), {
-      message: "Поле должно быть числом.",
-    }),
-  costsOther: z
-    .string()
-    .nonempty("Поле должно быть заполнено.")
-    .refine((val) => !isNaN(val as unknown as number), {
-      message: "Поле должно быть числом.",
-    }),
-  costsAdvance: z
-    .string()
-    .nonempty("Поле должно быть заполнено.")
-    .refine((val) => !isNaN(val as unknown as number), {
-      message: "Поле должно быть числом.",
-    }),
-  expenseItemApl: z
-    .string()
-    .nonempty("Поле должно быть заполнено.")
-    .refine((val) => !isNaN(val as unknown as number), {
-      message: "Поле должно быть числом.",
-    }),
-  bonus: z
-    .string()
-    .nonempty("Поле должно быть заполнено.")
-    .refine((val) => !isNaN(val as unknown as number), {
-      message: "Поле должно быть числом.",
-    }),
-});
+const AddApplicationModal: React.FC = () => {
+  const dispatch: AppDispatch = useDispatch(); // Убедитесь, что типизация dispatch корректна
+  const {
+    managers,
+    cars,
+    drivers,
+    schedules,
+    expenseItemApls,
+    loading,
+    error,
+  } = useSelector((state: RootState) => state.application);
 
-export const AddApplicationModal = () => {
-  const [managers, setManagers] = useState<Manager[]>([]);
-  const [cars, setCars] = useState<Car[]>([]);
-  const [drivers, setDrivers] = useState<Driver[]>([]);
-  const [schedules, setSchedules] = useState<Schedule[]>([]);
-  const [expenseItemApls, setExpenseItemApls] = useState<ExpenseItemApl[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [formStep, setFormStep] = React.useState(0);
+  useEffect(() => {
+    dispatch(fetchData());
+  }, [dispatch]);
 
-  const form = useForm<z.infer<typeof formSchema>>({
+  const { toast } = useToast();
+
+  const [page, setPage] = useState(1);
+
+  const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
       manager: "",
@@ -255,112 +194,6 @@ export const AddApplicationModal = () => {
       bonus: "",
     },
   });
-
-  // Функция для проверки заполненности полей первой страницы
-  const checkFirstPageFieldsFilled = () => {
-    try {
-      // Проверка данных формы по схеме первой страницы
-      firstPageSchema.parse({
-        manager: form.getValues("manager"),
-        plateNumber: form.getValues("plateNumber"),
-        driver: form.getValues("driver"),
-        schedule: form.getValues("schedule"),
-      });
-      return true; // Вернуть true, если данные соответствуют схеме
-    } catch (error) {
-      return false; // Вернуть false, если есть ошибки при проверке по схеме
-    }
-  };
-
-  // Функция для проверки заполненности полей второй страницы
-  const checkSecondPageFieldsFilled = () => {
-    try {
-      // Проверка данных формы по схеме второй страницы
-      secondPageSchema.parse({
-        timeLine: form.getValues("timeLine"),
-      });
-      return true; // Вернуть true, если данные соответствуют схеме
-    } catch (error) {
-      return false; // Вернуть false, если есть ошибки при проверке по схеме
-    }
-  };
-
-  const checkThirdPageFieldsFilled = () => {
-    try {
-      // Проверка данных формы по схеме третьей страницы
-      thirdPageSchema.parse({
-        yandexCash: form.getValues("yandexCash"),
-        yandexNoncash: form.getValues("yandexNoncash"),
-      });
-      return true; // Вернуть true, если данные соответствуют схеме
-    } catch (error) {
-      return false; // Вернуть false, если есть ошибки при проверке по схеме
-    }
-  };
-
-  const checkFourthPageFieldsFilled = () => {
-    try {
-      // Проверка данных формы по схеме третьей страницы
-      fourthPageSchema.parse({
-        cashierCash: form.getValues("cashierCash"),
-        cashierKaspi: form.getValues("cashierKaspi"),
-      });
-      return true; // Вернуть true, если данные соответствуют схеме
-    } catch (error) {
-      return false; // Вернуть false, если есть ошибки при проверке по схеме
-    }
-  };
-
-  const checkFifthPageFieldsFilled = () => {
-    try {
-      // Проверка данных формы по схеме третьей страницы
-      fifthPageSchema.parse({
-        costsGas: form.getValues("costsGas"),
-        costsOther: form.getValues("costsOther"),
-        costsAdvance: form.getValues("costsAdvance"),
-        expenseItemApl: form.getValues("expenseItemApl"),
-        bonus: form.getValues("bonus"),
-      });
-      return true; // Вернуть true, если данные соответствуют схеме
-    } catch (error) {
-      return false; // Вернуть false, если есть ошибки при проверке по схеме
-    }
-  };
-
-  const { toast } = useToast();
-
-  useEffect(() => {
-    fetchData();
-  }, []);
-
-  const fetchData = async () => {
-    try {
-      const response = await fetch(
-        "https://taxi-service-34d2f59aac8f.herokuapp.com/applications/addApplication"
-      );
-      if (!response.ok) {
-        throw new Error("Failed to fetch data");
-      }
-      const data = await response.json();
-      setManagers(data.managers);
-      setCars(data.cars);
-      setDrivers(data.drivers);
-      setSchedules(data.schedules);
-      setExpenseItemApls(data.expenseItemApls);
-      setLoading(false);
-      console.log("Received data:", data);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
-  };
-
-  if (loading) {
-    return (
-      <div>
-        <Skeleton className="w-[178px] h-10 mt-6" />
-      </div>
-    );
-  }
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
@@ -422,8 +255,6 @@ export const AddApplicationModal = () => {
       });
       console.log(dataToSend);
       form.reset();
-      setFormStep(0);
-      <GetAllApplications />;
     } catch (error) {
       console.error("Error submitting form:", error);
       toast({
@@ -434,6 +265,46 @@ export const AddApplicationModal = () => {
       });
     }
   }
+
+  const handleNext = () => {
+    if (page === 1) {
+      const result = firstPageSchema.safeParse(form.getValues());
+      if (result.success) {
+        setPage(page + 1);
+      } else {
+        form.setError("manager", { message: result.error.errors[0].message });
+      }
+    } else if (page === 2) {
+      const result = secondPageSchema.safeParse(form.getValues());
+      if (result.success) {
+        setPage(page + 1);
+      } else {
+        form.setError("timeLine", { message: result.error.errors[0].message });
+      }
+    } else if (page === 3) {
+      const result = thirdPageSchema.safeParse(form.getValues());
+      if (result.success) {
+        setPage(page + 1);
+      } else {
+        form.setError("yandexCash", {
+          message: result.error.errors[0].message,
+        });
+      }
+    } else if (page === 4) {
+      const result = fourthPageSchema.safeParse(form.getValues());
+      if (result.success) {
+        setPage(page + 1);
+      } else {
+        form.setError("cashierCash", {
+          message: result.error.errors[0].message,
+        });
+      }
+    }
+  };
+
+  const handlePrevious = () => {
+    setPage(page - 1);
+  };
 
   return (
     <Dialog>
@@ -449,436 +320,319 @@ export const AddApplicationModal = () => {
       </DialogTrigger>
       <DialogContent className="h-auto">
         <DialogHeader>
-          <DialogTitle>Добавление заявки</DialogTitle>
-          <DialogDescription>
-            Заполните все поля для добавления новой заявки.
-          </DialogDescription>
+          <DialogTitle>Новая заявка</DialogTitle>
+          <DialogDescription>Заполните форму</DialogDescription>
         </DialogHeader>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-            <div
-              className={cn("space-y-4", {
-                hidden: formStep != 0,
-              })}
-            >
-              {/* manager */}
-              <FormField
-                control={form.control}
-                name="manager"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Менеджер</FormLabel>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
+          <form onSubmit={form.handleSubmit(onSubmit)}>
+            {page === 1 && (
+              <div className="space-y-3">
+                <Controller
+                  name="manager"
+                  control={form.control}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Менеджер</FormLabel>
                       <FormControl>
-                        <SelectTrigger id="manager">
-                          <SelectValue placeholder="Выбрать" />
-                        </SelectTrigger>
+                        <Select
+                          onValueChange={field.onChange}
+                          value={field.value}
+                        >
+                          <SelectTrigger>
+                            <SelectValue placeholder="Выберите менеджера" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {managers.map((manager) => (
+                              <SelectItem
+                                key={manager.id}
+                                value={manager.id.toString()}
+                              >
+                                {`${manager.firstName} ${manager.lastName}`}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
                       </FormControl>
-                      <SelectContent position="popper">
-                        {managers.map((manager) => (
-                          <SelectItem
-                            key={manager.id}
-                            value={`${manager.id} ${manager.firstName} ${manager.lastName}`}
-                          >
-                            {`${manager.firstName} ${manager.lastName}`}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    <FormDescription></FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              {/* car number */}
-              <FormField
-                control={form.control}
-                name="plateNumber"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Номер машины</FormLabel>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <Controller
+                  name="plateNumber"
+                  control={form.control}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Номер автомобиля</FormLabel>
                       <FormControl>
-                        <SelectTrigger id="carNumber">
-                          <SelectValue placeholder="Выбрать" />
-                        </SelectTrigger>
+                        <Select
+                          onValueChange={field.onChange}
+                          value={field.value}
+                        >
+                          <SelectTrigger>
+                            <SelectValue placeholder="Выберите номер автомобиля" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {cars.map((car) => (
+                              <SelectItem
+                                key={car.id}
+                                value={car.id.toString()}
+                              >
+                                {`${car.plate_number} - ${car.model}`}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
                       </FormControl>
-                      <SelectContent position="popper">
-                        {cars.map((car) => (
-                          <SelectItem
-                            key={car.id}
-                            value={`${car.id} ${car.plate_number}`}
-                          >
-                            {`${car.plate_number}`}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    <FormDescription></FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              {/* driver */}
-              <FormField
-                control={form.control}
-                name="driver"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Водитель</FormLabel>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <Controller
+                  name="driver"
+                  control={form.control}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Водитель</FormLabel>
                       <FormControl>
-                        <SelectTrigger id="driver">
-                          <SelectValue placeholder="Выбрать" />
-                        </SelectTrigger>
+                        <Select
+                          onValueChange={field.onChange}
+                          value={field.value}
+                        >
+                          <SelectTrigger>
+                            <SelectValue placeholder="Выберите водителя" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {drivers.map((driver) => (
+                              <SelectItem
+                                key={driver.id}
+                                value={driver.id.toString()}
+                              >
+                                {`${driver.firstName} ${driver.lastName}`}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
                       </FormControl>
-                      <SelectContent position="popper">
-                        {drivers.map((driver) => (
-                          <SelectItem
-                            key={driver.id}
-                            value={`${driver.id} ${driver.firstName} ${driver.lastName}`}
-                          >
-                            {`${driver.firstName} ${driver.lastName}`}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    <FormDescription></FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              {/* schedule */}
-              <FormField
-                control={form.control}
-                name="schedule"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>График</FormLabel>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <Controller
+                  name="schedule"
+                  control={form.control}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>График</FormLabel>
                       <FormControl>
-                        <SelectTrigger id="schedule">
-                          <SelectValue placeholder="Выбрать" />
-                        </SelectTrigger>
+                        <Select
+                          onValueChange={field.onChange}
+                          value={field.value}
+                        >
+                          <SelectTrigger>
+                            <SelectValue placeholder="Выберите график" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {schedules.map((schedule) => (
+                              <SelectItem
+                                key={schedule.id}
+                                value={schedule.id.toString()}
+                              >
+                                {schedule.schedule}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
                       </FormControl>
-                      <SelectContent position="popper">
-                        {schedules.map((schedule) => (
-                          <SelectItem
-                            key={schedule.id}
-                            value={`${schedule.id} ${schedule.schedule}`}
-                          >
-                            {`${schedule.schedule}`}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    <FormDescription></FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-            <div
-              className={cn("space-y-3", {
-                hidden: formStep != 1,
-              })}
-            >
-              {/* time on line */}
-              <FormField
-                control={form.control}
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+            )}
+            {page === 2 && (
+              <Controller
                 name="timeLine"
+                control={form.control}
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Время на линии</FormLabel>
+                    <FormLabel>Время выполнения</FormLabel>
                     <FormControl>
                       <Input
-                        placeholder="Пример: 20"
+                        placeholder="Введите время выполнения"
                         {...field}
-                        autoComplete="off"
                       />
                     </FormControl>
-                    <FormDescription></FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}
               />
-            </div>
-            <div
-              className={cn("space-y-3", {
-                hidden: formStep != 2,
-              })}
-            >
-              {/* yandex.cash */}
-              <FormField
-                control={form.control}
-                name="yandexCash"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Яндекс.наличные</FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder="Введите количество"
-                        {...field}
-                        autoComplete="off"
-                      />
-                    </FormControl>
-                    <FormDescription></FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              {/* yandex.noncash */}
-              <FormField
-                control={form.control}
-                name="yandexNoncash"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Яндекс.безналичные</FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder="Введите количество"
-                        {...field}
-                        autoComplete="off"
-                      />
-                    </FormControl>
-                    <FormDescription></FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-            <div
-              className={cn("space-y-3", {
-                hidden: formStep != 3,
-              })}
-            >
-              {/* cashier cash */}
-              <FormField
-                control={form.control}
-                name="cashierCash"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Касса - наличные</FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder="Введите количество"
-                        {...field}
-                        autoComplete="off"
-                      />
-                    </FormControl>
-                    <FormDescription></FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              {/* cashier noncash/kaspi */}
-              <FormField
-                control={form.control}
-                name="cashierKaspi"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Касса - kaspi</FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder="Введите количество"
-                        {...field}
-                        autoComplete="off"
-                      />
-                    </FormControl>
-                    <FormDescription></FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-            <div
-              className={cn("space-y-3", {
-                hidden: formStep != 4,
-              })}
-            >
-              {/* costs gas */}
-              <FormField
-                control={form.control}
-                name="costsGas"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Расходы - Газ</FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder="Введите количество"
-                        {...field}
-                        autoComplete="off"
-                      />
-                    </FormControl>
-                    <FormDescription></FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              {/* costs advance */}
-              <FormField
-                control={form.control}
-                name="costsAdvance"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Расходы - Аванс</FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder="Введите к оличество"
-                        {...field}
-                        autoComplete="off"
-                      />
-                    </FormControl>
-                    <FormDescription></FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              {/* costs other */}
-              <FormField
-                control={form.control}
-                name="costsOther"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Расходы - Прочие</FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder="Введите количество"
-                        {...field}
-                        autoComplete="off"
-                      />
-                    </FormControl>
-                    <FormDescription></FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="expenseItemApl"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Статья расходов</FormLabel>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
+            )}
+            {page === 3 && (
+              <div className="space-y-3">
+                <Controller
+                  name="yandexCash"
+                  control={form.control}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Касса Яндекс (наличные)</FormLabel>
                       <FormControl>
-                        <SelectTrigger id="expenseitemApl">
-                          <SelectValue placeholder="Выбрать" />
-                        </SelectTrigger>
+                        <Input placeholder="Введите сумму" {...field} />
                       </FormControl>
-                      <SelectContent position="popper">
-                        {expenseItemApls.map((expenseItemApl) => (
-                          <SelectItem
-                            key={expenseItemApl.id}
-                            value={`${expenseItemApl.id} ${expenseItemApl.expense_item_name}`}
-                          >
-                            {`${expenseItemApl.expense_item_name}`}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    <FormDescription></FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="bonus"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Бонус от компании</FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder="Введите количество"
-                        {...field}
-                        autoComplete="off"
-                      />
-                    </FormControl>
-                    <FormDescription></FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              {/* costs item */}
-            </div>
-            <DialogFooter>
-              <div className="flex gap-2 justify-end">
-                <Button
-                  type="button"
-                  variant={"ghost"}
-                  onClick={() => {
-                    setFormStep((prevStep) => Math.max(0, prevStep - 1));
-                  }}
-                  className={cn({ hidden: formStep == 0 })}
-                >
-                  <ArrowLeft className="w-4 h-4 mr-2" />
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <Controller
+                  name="yandexNoncash"
+                  control={form.control}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Касса Яндекс (безналичные)</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Введите сумму" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+            )}
+            {page === 4 && (
+              <div className="space-y-3">
+                <Controller
+                  name="cashierCash"
+                  control={form.control}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Касса (наличные)</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Введите сумму" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <Controller
+                  name="cashierKaspi"
+                  control={form.control}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Касса (Kaspi)</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Введите сумму" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+            )}
+            {page === 5 && (
+              <div className="space-y-3">
+                <Controller
+                  name="costsGas"
+                  control={form.control}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Затраты на бензин</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Введите сумму" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <Controller
+                  name="costsOther"
+                  control={form.control}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Прочие затраты</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Введите сумму" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <Controller
+                  name="costsAdvance"
+                  control={form.control}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Аванс</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Введите сумму" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <Controller
+                  name="expenseItemApl"
+                  control={form.control}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Статья расходов</FormLabel>
+                      <FormControl>
+                        <Select
+                          onValueChange={field.onChange}
+                          value={field.value}
+                        >
+                          <SelectTrigger>
+                            <SelectValue placeholder="Выберите статью расходов" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {expenseItemApls.map((item) => (
+                              <SelectItem
+                                key={item.id}
+                                value={item.id.toString()}
+                              >
+                                {item.expense_item_name}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <Controller
+                  name="bonus"
+                  control={form.control}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Бонус</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Введите сумму" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+            )}
+            <DialogFooter className="mt-5">
+              {page > 1 && (
+                <Button variant="outline" onClick={handlePrevious}>
                   Назад
                 </Button>
-                <Button
-                  type="button"
-                  className={cn({
-                    hidden: formStep == 4,
-                  })}
-                  variant={"ghost"}
-                  onClick={() => {
-                    if (
-                      formStep === 0 &&
-                      checkFirstPageFieldsFilled() // Проверка заполненности полей первой страницы
-                    ) {
-                      setFormStep((prevStep) => prevStep + 1);
-                    } else if (
-                      formStep === 1 &&
-                      checkSecondPageFieldsFilled() // Проверка заполненности полей второй страницы
-                    ) {
-                      setFormStep((prevStep) => prevStep + 1);
-                    } else if (
-                      formStep === 2 &&
-                      checkThirdPageFieldsFilled() // Проверка заполненности полей третьей страницы
-                    ) {
-                      setFormStep((prevStep) => prevStep + 1);
-                    } else if (
-                      formStep === 3 &&
-                      checkFourthPageFieldsFilled() // Проверка заполненности полей четвертой страницы
-                    ) {
-                      setFormStep((prevStep) => prevStep + 1);
-                    } else {
-                      // Если условие не выполнено, отображаем toast с сообщением об ошибке
-                      toast({
-                        title: "Ошибка заполнения",
-                        description: "Поля не заполнены или заполнены неверно.",
-                        variant: "destructive",
-                      });
-                    }
-                  }}
-                >
-                  Далее
-                  <ArrowRight className="w-4 h-4 ml-2" />
-                </Button>
-              </div>
-              <DialogClose>
-                <Button type="submit" className={cn({ hidden: formStep != 4 })}>
-                  Добавить
-                </Button>
-              </DialogClose>
+              )}
+              {page < 5 ? (
+                <Button onClick={handleNext}>Далее</Button>
+              ) : (
+                <Button type="submit">Сохранить</Button>
+              )}
             </DialogFooter>
           </form>
         </Form>
+        {loading && <Skeleton />}
+        {error && <div className="error-message">{error}</div>}
       </DialogContent>
+      <DialogClose />
     </Dialog>
   );
 };
+
+export default AddApplicationModal;
