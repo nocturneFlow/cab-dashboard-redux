@@ -6,7 +6,7 @@ import { Table } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { DataTableViewOptions } from "@/components/tables/applications/data-table-view-options";
-import { AddApplicationModal } from "../../modals/add-application-modal";
+import AddApplicationModal from "../../modals/add-application-modal";
 import { DatePickerWithRange } from "../../ui/date-range-picker";
 
 interface DataTableToolbarProps<TData> {

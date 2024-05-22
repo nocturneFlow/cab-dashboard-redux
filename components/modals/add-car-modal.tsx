@@ -1,3 +1,4 @@
+// AddCarModal.tsx
 import {
   Dialog,
   DialogClose,
@@ -21,30 +22,27 @@ import { useToast } from "@/components/ui/use-toast";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import Plus from "@geist-ui/icons/plus";
-import * as React from "react";
-import { useState, useEffect } from "react";
-import { zodResolver } from "@hookform/resolvers/zod";
+import React from "react";
 import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-
-interface Car {
-  id: string;
-  car_plate_number: string;
-  car_model: string;
-}
+import { useAppDispatch, useAppSelector } from "@/lib/hooks";
+import { addCar } from "@/lib/carFormSlice";
+import { RootState } from "@/lib/store";
 
 const formSchema = z.object({
-  car_plate_number: z.string().min(1, {
-    message: "Поле должно быть заполнено.",
-  }),
-  car_model: z.string().min(1, {
-    message: "Поле должно быть заполнено.",
-  }),
+  car_plate_number: z
+    .string()
+    .min(1, { message: "Поле должно быть заполнено." }),
+  car_model: z.string().min(1, { message: "Поле должно быть заполнено." }),
 });
 
 export const AddCarModal = () => {
-  const [cars, setCars] = useState<Car[]>([]);
+  const dispatch = useAppDispatch();
   const { toast } = useToast();
+  const { loading, error } = useAppSelector(
+    (state: RootState) => state.carForm
+  );
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -54,51 +52,14 @@ export const AddCarModal = () => {
     },
   });
 
-  const checkFieldsFilled = () => {
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      // Проверка данных формы по схеме первой страницы
-      formSchema.parse({
-        plate_number: form.getValues("car_plate_number"),
-        model: form.getValues("car_model"),
-      });
-      return true; // Вернуть true, если данные соответствуют схеме
-    } catch (error) {
-      return false; // Вернуть false, если есть ошибки при проверке по схеме
-    }
-  };
-
-  async function onSubmit(values: z.infer<typeof formSchema>) {
-    try {
-      const car_plate_number = values.car_plate_number;
-      const car_model = values.car_model;
-
-      const dataToSend = {
-        car_plate_number: car_plate_number,
-        car_model: car_model,
-      };
-
-      console.log("Отправка данных на сервер:", dataToSend);
-
-      const response = await fetch(
-        "https://taxi-service-34d2f59aac8f.herokuapp.com/cars/addCar",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(dataToSend), // Отправка только необходимых данных
-        }
-      );
-      if (!response.ok) {
-        throw new Error("Failed to add car");
-      }
+      await dispatch(addCar(values)).unwrap();
       toast({
         description: "Машина добавлена.",
       });
-      console.log(dataToSend);
       form.reset();
     } catch (error) {
-      console.error("Error submitting form:", error);
       toast({
         variant: "destructive",
         title: "О нет! Что-то пошло не так.",
@@ -106,7 +67,7 @@ export const AddCarModal = () => {
           "Не удалось добавить машину. Пожалуйста, повторите попытку позже.",
       });
     }
-  }
+  };
 
   return (
     <Dialog>
@@ -172,7 +133,9 @@ export const AddCarModal = () => {
               />
             </div>
             <DialogFooter>
-              <Button type="submit">Добавить</Button>
+              <Button type="submit" disabled={loading}>
+                {loading ? "Добавление..." : "Добавить"}
+              </Button>
             </DialogFooter>
           </form>
         </Form>

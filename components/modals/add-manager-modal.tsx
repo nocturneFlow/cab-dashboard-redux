@@ -1,3 +1,4 @@
+// AddManagerModal.tsx
 "use client";
 
 import {
@@ -24,29 +25,24 @@ import { Input } from "@/components/ui/input";
 import Plus from "@geist-ui/icons/plus";
 import { Button } from "@/components/ui/button";
 import * as React from "react";
-import { useState, useEffect } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-
-interface Manager {
-  id: string;
-  first_name: string;
-  last_name: string;
-}
+import { useAppDispatch, useAppSelector } from "@/lib/hooks";
+import { addManager } from "@/lib/managerSlice";
+import { RootState } from "@/lib/store";
 
 const formSchema = z.object({
-  first_name: z.string().min(1, {
-    message: "Поле должно быть заполнено.",
-  }),
-  last_name: z.string().min(1, {
-    message: "Поле должно быть заполнено.",
-  }),
+  first_name: z.string().min(1, { message: "Поле должно быть заполнено." }),
+  last_name: z.string().min(1, { message: "Поле должно быть заполнено." }),
 });
 
 export const AddManagerModal = () => {
-  const [managers, setManagers] = useState<Manager[]>([]);
+  const dispatch = useAppDispatch();
   const { toast } = useToast();
+  const { loading, error } = useAppSelector(
+    (state: RootState) => state.manager
+  );
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -56,57 +52,22 @@ export const AddManagerModal = () => {
     },
   });
 
-  const checkFieldsFilled = () => {
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      // Проверка данных формы по схеме первой страницы
-      formSchema.parse({
-        first_name: form.getValues("first_name"),
-        last_name: form.getValues("last_name"),
-      });
-      return true; // Вернуть true, если данные соответствуют схеме
-    } catch (error) {
-      return false; // Вернуть false, если есть ошибки при проверке по схеме
-    }
-  };
-
-  async function onSubmit(values: z.infer<typeof formSchema>) {
-    try {
-      const first_name = values.first_name;
-      const last_name = values.last_name;
-
-      const dataToSend = {
-        first_name: first_name,
-        last_name: last_name,
-      };
-
-      const response = await fetch(
-        "https://taxi-service-34d2f59aac8f.herokuapp.com/managers/addManager",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(dataToSend), // Отправка только необходимых данных
-        }
-      );
-      if (!response.ok) {
-        throw new Error("Failed to add driver");
-      }
+      await dispatch(addManager(values)).unwrap();
       toast({
-        description: "Водитель добавлен.",
+        description: "Менеджер добавлен.",
       });
-      console.log(dataToSend);
       form.reset();
     } catch (error) {
-      console.error("Error submitting form:", error);
       toast({
         variant: "destructive",
         title: "О нет! Что-то пошло не так.",
         description:
-          "Не удалось добавить водителя. Пожалуйста, повторите попытку позже.",
+          "Не удалось добавить менеджера. Пожалуйста, повторите попытку позже.",
       });
     }
-  }
+  };
 
   return (
     <Dialog>
@@ -166,7 +127,9 @@ export const AddManagerModal = () => {
               />
             </div>
             <DialogFooter>
-              <Button type="submit">Добавить</Button>
+              <Button type="submit" disabled={loading}>
+                {loading ? "Добавление..." : "Добавить"}
+              </Button>
             </DialogFooter>
           </form>
         </Form>

@@ -1,37 +1,82 @@
-// src/redux/actions.js
-export const SET_MANAGERS = "SET_MANAGERS";
-export const SET_CARS = "SET_CARS";
-export const SET_DRIVERS = "SET_DRIVERS";
-export const SET_SCHEDULES = "SET_SCHEDULES";
-export const SET_EXPENSE_ITEM_APLS = "SET_EXPENSE_ITEM_APLS";
-export const SET_LOADING = "SET_LOADING";
+// Define the action type enum
+export enum ActionType {
+  SET_MANAGERS = "SET_MANAGERS",
+  SET_CARS = "SET_CARS",
+  SET_DRIVERS = "SET_DRIVERS",
+  SET_SCHEDULES = "SET_SCHEDULES",
+  SET_EXPENSE_ITEM_APLS = "SET_EXPENSE_ITEM_APLS",
+  SET_LOADING = "SET_LOADING",
+}
 
-export const setManagers = (managers: string) => ({
-  type: SET_MANAGERS,
+// Define interfaces for each action
+interface SetManagersAction {
+  type: ActionType.SET_MANAGERS;
+  payload: string;
+}
+
+interface SetCarsAction {
+  type: ActionType.SET_CARS;
+  payload: string;
+}
+
+interface SetDriversAction {
+  type: ActionType.SET_DRIVERS;
+  payload: string;
+}
+
+interface SetSchedulesAction {
+  type: ActionType.SET_SCHEDULES;
+  payload: string;
+}
+
+interface SetExpenseItemAplsAction {
+  type: ActionType.SET_EXPENSE_ITEM_APLS;
+  payload: any;
+}
+
+interface SetLoadingAction {
+  type: ActionType.SET_LOADING;
+  payload: any;
+}
+
+// Union type for all actions
+export type Action =
+  | SetManagersAction
+  | SetCarsAction
+  | SetDriversAction
+  | SetSchedulesAction
+  | SetExpenseItemAplsAction
+  | SetLoadingAction;
+
+// Action creators
+export const setManagers = (managers: string): SetManagersAction => ({
+  type: ActionType.SET_MANAGERS,
   payload: managers,
 });
 
-export const setCars = (cars: string) => ({
-  type: SET_CARS,
+export const setCars = (cars: string): SetCarsAction => ({
+  type: ActionType.SET_CARS,
   payload: cars,
 });
 
-export const setDrivers = (drivers: string) => ({
-  type: SET_DRIVERS,
+export const setDrivers = (drivers: string): SetDriversAction => ({
+  type: ActionType.SET_DRIVERS,
   payload: drivers,
 });
 
-export const setSchedules = (schedules: string) => ({
-  type: SET_SCHEDULES,
+export const setSchedules = (schedules: string): SetSchedulesAction => ({
+  type: ActionType.SET_SCHEDULES,
   payload: schedules,
 });
 
-export const setExpenseItemApls = (expenseItemApls: any) => ({
-  type: SET_EXPENSE_ITEM_APLS,
+export const setExpenseItemApls = (
+  expenseItemApls: any
+): SetExpenseItemAplsAction => ({
+  type: ActionType.SET_EXPENSE_ITEM_APLS,
   payload: expenseItemApls,
 });
 
-export const setLoading = (loading: any) => ({
-  type: SET_LOADING,
+export const setLoading = (loading: any): SetLoadingAction => ({
+  type: ActionType.SET_LOADING,
   payload: loading,
 });
